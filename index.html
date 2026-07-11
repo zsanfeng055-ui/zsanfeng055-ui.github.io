@@ -1,0 +1,2051 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="文案工作台">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="./icon-192.png">
+  <title>小红书文案工作台</title>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --surface-soft: #f9fafb;
+      --line: #e3e6eb;
+      --line-strong: #ccd1d9;
+      --text: #17191d;
+      --muted: #667085;
+      --primary: #ff2442;
+      --primary-dark: #df1f39;
+      --primary-soft: #fff0f2;
+      --green: #157a55;
+      --green-soft: #e9f8f1;
+      --blue: #2563eb;
+      --blue-soft: #eef4ff;
+      --amber: #a15c00;
+      --amber-soft: #fff7e6;
+      --danger: #b42318;
+      --radius: 8px;
+      --shadow: 0 10px 28px rgba(17, 24, 39, 0.07);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: var(--bg);
+      color: var(--text);
+      overscroll-behavior-y: contain;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible,
+    [contenteditable="true"]:focus-visible {
+      outline: 3px solid rgba(37, 99, 235, 0.22);
+      outline-offset: 1px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner {
+      width: min(1420px, calc(100% - 32px));
+      min-height: 64px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .brand {
+      min-width: 228px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 7px;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .brand-copy {
+      line-height: 1.2;
+    }
+
+    .brand-copy small {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .mode-switch {
+      height: 38px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface-soft);
+    }
+
+    .mode-switch button {
+      min-width: 104px;
+      padding: 0 14px;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .mode-switch button.active {
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: 0 1px 4px rgba(17, 24, 39, 0.1);
+    }
+
+    .top-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .local-status {
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 10px;
+      border-radius: 7px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .top-button,
+    .text-button,
+    .mini-button,
+    .copy-button {
+      min-height: 34px;
+      padding: 0 11px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--surface);
+      color: #344054;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .top-button:hover,
+    .text-button:hover,
+    .mini-button:hover {
+      border-color: var(--line-strong);
+      background: var(--surface-soft);
+    }
+
+    .app-shell {
+      width: min(1420px, calc(100% - 32px));
+      margin: 20px auto 36px;
+      display: grid;
+      grid-template-columns: minmax(330px, 0.82fr) minmax(0, 1.25fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .input-panel {
+      position: sticky;
+      top: 84px;
+      max-height: calc(100dvh - 104px);
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      scrollbar-width: thin;
+    }
+
+    .panel-head,
+    .results-head,
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .panel-head {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.97);
+    }
+
+    .panel-head h1,
+    .results-head h1,
+    .section-head h2 {
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    .panel-head h1,
+    .results-head h1 {
+      font-size: 19px;
+    }
+
+    .section-head h2 {
+      font-size: 16px;
+    }
+
+    .form-body {
+      padding: 18px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    label,
+    .field-label {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 7px;
+      color: #344054;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .optional {
+      color: #98a2b3;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--text);
+      transition: border-color 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    input,
+    select {
+      min-height: 42px;
+      padding: 0 11px;
+    }
+
+    textarea {
+      min-height: 84px;
+      padding: 10px 11px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    input:hover,
+    select:hover,
+    textarea:hover {
+      border-color: #aeb5c0;
+    }
+
+    input[aria-invalid="true"] {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.1);
+    }
+
+    ::placeholder {
+      color: #a0a7b2;
+    }
+
+    .error {
+      display: none;
+      margin-top: 6px;
+      color: var(--danger);
+      font-size: 12px;
+    }
+
+    .error.show {
+      display: block;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .chip {
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--surface);
+      color: #475467;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .chip.active {
+      border-color: rgba(255, 36, 66, 0.35);
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+    }
+
+    .switch-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .check-row {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--surface-soft);
+      color: #475467;
+      font-size: 12px;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    .check-row input {
+      width: 17px;
+      min-height: 17px;
+      height: 17px;
+      margin: 0;
+      accent-color: var(--primary);
+    }
+
+    .form-actions {
+      position: sticky;
+      bottom: 0;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.97);
+    }
+
+    .primary-button {
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 7px;
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 800;
+    }
+
+    .primary-button:hover {
+      background: var(--primary-dark);
+    }
+
+    .secondary-button {
+      min-height: 44px;
+      padding: 0 15px;
+      border: 1px solid var(--line-strong);
+      border-radius: 7px;
+      background: var(--surface);
+      color: #344054;
+      font-weight: 750;
+    }
+
+    .results-area {
+      min-width: 0;
+    }
+
+    .results-head {
+      min-height: 48px;
+      margin-bottom: 12px;
+    }
+
+    .result-meta {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .mini-button.primary {
+      border-color: rgba(255, 36, 66, 0.28);
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+    }
+
+    .privacy-strip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      border: 1px solid #cdebdc;
+      border-radius: 7px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .output-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .output-card {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 5px 18px rgba(17, 24, 39, 0.045);
+    }
+
+    .output-card.wide {
+      grid-column: 1 / -1;
+    }
+
+    .card-head {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 13px;
+      border-bottom: 1px solid var(--line);
+      background: var(--surface-soft);
+    }
+
+    .card-head h2 {
+      margin: 0;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    .edit-hint {
+      margin-left: 6px;
+      color: #98a2b3;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .copy-button {
+      border-color: #cfe0ff;
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .output-content {
+      min-height: 138px;
+      max-height: 330px;
+      overflow: auto;
+      padding: 14px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      color: #273142;
+      font-size: 14px;
+      line-height: 1.72;
+    }
+
+    .output-card.wide .output-content {
+      min-height: 260px;
+      max-height: 500px;
+    }
+
+    .output-content.placeholder {
+      color: #98a2b3;
+    }
+
+    .history-section {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line-strong);
+    }
+
+    .history-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .history-item {
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--surface);
+    }
+
+    .history-item strong {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    .history-item span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .history-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .history-actions button {
+      min-height: 32px;
+      padding: 0 9px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface-soft);
+      color: #475467;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      padding: 18px;
+      border: 1px dashed var(--line-strong);
+      border-radius: 7px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .mobile-action {
+      display: none;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: max(22px, env(safe-area-inset-bottom));
+      z-index: 50;
+      min-width: 220px;
+      max-width: calc(100% - 32px);
+      padding: 11px 15px;
+      border-radius: 8px;
+      background: #111827;
+      color: #ffffff;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 12px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 1080px) {
+      .topbar {
+        position: relative;
+      }
+
+      .topbar-inner {
+        flex-wrap: wrap;
+        padding: 12px 0;
+      }
+
+      .brand {
+        min-width: 0;
+      }
+
+      .mode-switch {
+        order: 3;
+        width: 100%;
+      }
+
+      .mode-switch button {
+        min-width: 0;
+      }
+
+      .app-shell {
+        grid-template-columns: minmax(310px, 0.78fr) minmax(0, 1fr);
+      }
+
+      .input-panel {
+        top: 20px;
+        max-height: calc(100dvh - 40px);
+      }
+
+      .output-grid,
+      .history-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 820px) {
+      body {
+        padding-bottom: calc(72px + env(safe-area-inset-bottom));
+      }
+
+      .topbar {
+        position: relative;
+      }
+
+      .topbar-inner,
+      .app-shell {
+        width: min(100% - 24px, 720px);
+      }
+
+      .top-actions .local-status,
+      .top-actions [data-export] {
+        display: none;
+      }
+
+      .app-shell {
+        margin-top: 12px;
+        grid-template-columns: 1fr;
+      }
+
+      .input-panel {
+        position: static;
+        max-height: none;
+        overflow: visible;
+      }
+
+      .panel-head,
+      .form-actions {
+        position: static;
+      }
+
+      .results-head {
+        align-items: flex-start;
+      }
+
+      .toolbar {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .mobile-action {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 30;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: 8px;
+        padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+        border-top: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.97);
+        backdrop-filter: blur(12px);
+      }
+
+      .toast {
+        bottom: calc(82px + env(safe-area-inset-bottom));
+      }
+
+      body.keyboard-open .mobile-action {
+        display: none;
+      }
+
+      body.keyboard-open .toast {
+        bottom: 18px;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .brand-copy small {
+        display: none;
+      }
+
+      .top-actions {
+        gap: 4px;
+      }
+
+      .top-button {
+        padding: 0 9px;
+      }
+
+      .field-row,
+      .switch-list,
+      .form-actions {
+        grid-template-columns: 1fr;
+      }
+
+      input,
+      select,
+      textarea {
+        font-size: 16px;
+      }
+
+      .output-card.wide .output-content,
+      .output-content {
+        min-height: 120px;
+        max-height: none;
+      }
+
+      .results-head {
+        display: block;
+      }
+
+      .toolbar {
+        margin-top: 10px;
+        justify-content: flex-start;
+      }
+
+      .edit-hint {
+        display: none;
+      }
+    }
+
+    @media (display-mode: standalone) {
+      .topbar {
+        padding-top: env(safe-area-inset-top);
+      }
+    }
+
+    @supports (-webkit-touch-callout: none) {
+      .input-panel,
+      .output-content {
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">文</div>
+        <div class="brand-copy">
+          小红书文案工作台
+          <small>V3 苹果网页版</small>
+        </div>
+      </div>
+
+      <div class="mode-switch" role="tablist" aria-label="文案模式">
+        <button class="active" type="button" role="tab" aria-selected="true" data-mode="rednote">小红书笔记</button>
+        <button type="button" role="tab" aria-selected="false" data-mode="xianyu">闲鱼卖货</button>
+      </div>
+
+      <div class="top-actions">
+        <span class="local-status"><span class="status-dot"></span>本地运行</span>
+        <button class="top-button" type="button" data-scroll="#history">历史</button>
+        <button class="top-button" type="button" data-share-app>分享网址</button>
+        <button class="top-button" type="button" data-export>导出</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <form class="input-panel" id="copyForm">
+      <div class="panel-head">
+        <h1>输入素材</h1>
+        <button class="text-button" type="button" data-clear>清空</button>
+      </div>
+
+      <div class="form-body">
+        <div class="field">
+          <div class="field-label">内容赛道</div>
+          <div class="chips" id="categoryChips">
+            <button class="chip active" type="button" data-category="AI工具">AI工具</button>
+            <button class="chip" type="button" data-category="职场">职场</button>
+            <button class="chip" type="button" data-category="学习">学习</button>
+            <button class="chip" type="button" data-category="美妆">美妆</button>
+            <button class="chip" type="button" data-category="探店">探店</button>
+            <button class="chip" type="button" data-category="家居">家居</button>
+            <button class="chip" type="button" data-category="闲置">闲置</button>
+          </div>
+          <input type="hidden" id="category" value="AI工具">
+        </div>
+
+        <div class="field">
+          <label for="topic">主题或商品名称</label>
+          <input id="topic" autocomplete="off" placeholder="例如：用AI整理小红书文案">
+          <div class="error" id="topicError">请先填写主题或商品名称。</div>
+        </div>
+
+        <div data-mode-only="rednote">
+          <div class="field-row">
+            <div class="field">
+              <label for="audience">目标读者</label>
+              <input id="audience" autocomplete="off" placeholder="例如：刚开始做小红书的新手">
+            </div>
+            <div class="field">
+              <label for="goal">内容目标</label>
+              <select id="goal">
+                <option>干货教程</option>
+                <option>经验分享</option>
+                <option>避坑提醒</option>
+                <option>产品种草</option>
+                <option>使用测评</option>
+                <option>商品介绍</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="points">核心要点 <span class="optional">逗号或换行分隔</span></label>
+          <textarea id="points" placeholder="例如：先定目标人群；AI只写结构；加入真实细节；发布前删除空话"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="details">真实信息 <span class="optional">不虚构经历</span></label>
+          <textarea id="details" placeholder="例如：整理包包含标题、开头、正文和结尾模板，可以编辑"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="cautions">限制或注意事项 <span class="optional">选填</span></label>
+          <textarea id="cautions" placeholder="例如：模板不能保证爆款，需要替换成自己的细节"></textarea>
+        </div>
+
+        <div data-mode-only="rednote">
+          <div class="field-row">
+            <div class="field">
+              <label for="tone">表达风格</label>
+              <select id="tone">
+                <option>真实自然</option>
+                <option>清单干货</option>
+                <option>简洁专业</option>
+                <option>轻松口语</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="length">笔记长度</label>
+              <select id="length">
+                <option value="short">简短</option>
+                <option value="standard" selected>标准</option>
+                <option value="detailed">详细</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="cta">结尾动作</label>
+              <select id="cta">
+                <option>收藏备用</option>
+                <option>评论交流</option>
+                <option selected>查看店铺商品</option>
+                <option>不加引导</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="price">商品价格 <span class="optional">选填</span></label>
+              <input id="price" inputmode="decimal" autocomplete="off" placeholder="例如：19.9">
+            </div>
+          </div>
+        </div>
+
+        <div data-mode-only="xianyu" hidden>
+          <div class="field-row">
+            <div class="field">
+              <label for="condition">成色</label>
+              <select id="condition">
+                <option>全新未拆</option>
+                <option>99新</option>
+                <option selected>95新</option>
+                <option>9成新</option>
+                <option>正常使用痕迹</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="sellPrice">出售价格</label>
+              <input id="sellPrice" inputmode="decimal" autocomplete="off" placeholder="例如：1399">
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="city">所在城市 <span class="optional">选填</span></label>
+              <input id="city" autocomplete="off" placeholder="例如：上海">
+            </div>
+            <div class="field">
+              <label for="trade">交易方式</label>
+              <select id="trade">
+                <option>只走平台，支持邮寄</option>
+                <option>同城面交优先</option>
+                <option>包邮，偏远地区另算</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="switch-list">
+          <label class="check-row">
+            <input id="naturalMode" type="checkbox" checked>
+            清理常见AI空话
+          </label>
+          <label class="check-row">
+            <input id="safeMode" type="checkbox" checked>
+            过滤夸张承诺
+          </label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="primary-button" type="button" data-generate>生成整套文案</button>
+        <button class="secondary-button" type="button" data-fill-sample>填入示例</button>
+      </div>
+    </form>
+
+    <section class="results-area" aria-label="生成结果">
+      <div class="results-head">
+        <div>
+          <h1>生成结果</h1>
+          <div class="result-meta" id="resultMeta">等待输入素材</div>
+        </div>
+        <div class="toolbar">
+          <button class="mini-button primary" type="button" data-generate>换一版</button>
+          <button class="mini-button" type="button" data-copy-all>复制全部</button>
+          <button class="mini-button" type="button" data-share-result>分享文案</button>
+          <button class="mini-button" type="button" data-export>导出TXT</button>
+        </div>
+      </div>
+
+      <div class="privacy-strip">
+        <span class="status-dot"></span>
+        内容在当前设备生成和保存
+      </div>
+
+      <div class="output-grid">
+        <article class="output-card wide">
+          <div class="card-head">
+            <h2><span id="titlesLabel">标题方案</span><span class="edit-hint">结果可直接修改</span></h2>
+            <button class="copy-button" type="button" data-copy-target="titles">复制</button>
+          </div>
+          <div class="output-content placeholder" id="titles" contenteditable="true" role="textbox" aria-label="标题方案">生成后显示5个标题方案。</div>
+        </article>
+
+        <article class="output-card">
+          <div class="card-head">
+            <h2 id="hooksLabel">开头方案</h2>
+            <button class="copy-button" type="button" data-copy-target="hooks">复制</button>
+          </div>
+          <div class="output-content placeholder" id="hooks" contenteditable="true" role="textbox" aria-label="开头方案">生成后显示3个开头方案。</div>
+        </article>
+
+        <article class="output-card">
+          <div class="card-head">
+            <h2 id="extrasLabel">标签与搜索词</h2>
+            <button class="copy-button" type="button" data-copy-target="extras">复制</button>
+          </div>
+          <div class="output-content placeholder" id="extras" contenteditable="true" role="textbox" aria-label="标签与搜索词">生成后显示相关标签。</div>
+        </article>
+
+        <article class="output-card wide">
+          <div class="card-head">
+            <h2 id="bodyLabel">完整笔记</h2>
+            <button class="copy-button" type="button" data-copy-target="body">复制</button>
+          </div>
+          <div class="output-content placeholder" id="body" contenteditable="true" role="textbox" aria-label="完整笔记">生成后显示可直接编辑的完整文案。</div>
+        </article>
+
+        <article class="output-card wide">
+          <div class="card-head">
+            <h2 id="commentLabel">置顶评论</h2>
+            <button class="copy-button" type="button" data-copy-target="comment">复制</button>
+          </div>
+          <div class="output-content placeholder" id="comment" contenteditable="true" role="textbox" aria-label="置顶评论">生成后显示自然的评论区承接话术。</div>
+        </article>
+      </div>
+
+      <section class="history-section" id="history">
+        <div class="section-head">
+          <h2>本地历史</h2>
+          <button class="mini-button" type="button" data-clear-history>清空历史</button>
+        </div>
+        <div class="history-list" id="historyList"></div>
+      </section>
+    </section>
+  </main>
+
+  <div class="mobile-action">
+    <button class="primary-button" type="button" data-generate>生成文案</button>
+    <button class="secondary-button" type="button" data-copy-all>复制全部</button>
+    <button class="secondary-button" type="button" data-share-result>分享</button>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">操作完成</div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var STORAGE_KEY = "rednoteCopywriterV2History";
+      var DRAFT_KEY = "rednoteCopywriterV2Draft";
+      var state = {
+        mode: "rednote",
+        category: "AI工具",
+        current: null,
+        generation: 0
+      };
+
+      var categoryData = {
+        "AI工具": {
+          audience: "刚开始用AI做内容的新手",
+          tags: ["AI工具", "AI写作", "内容创作", "自媒体新手"]
+        },
+        "职场": {
+          audience: "想提高工作效率的上班族",
+          tags: ["职场干货", "工作效率", "职场成长", "实用技巧"]
+        },
+        "学习": {
+          audience: "需要更高效学习方法的学生",
+          tags: ["学习方法", "自我提升", "学习效率", "经验分享"]
+        },
+        "美妆": {
+          audience: "正在挑选适合自己产品的人",
+          tags: ["美妆分享", "真实测评", "护肤心得", "新手化妆"]
+        },
+        "探店": {
+          audience: "正在找真实消费参考的人",
+          tags: ["探店分享", "真实体验", "本地生活", "消费参考"]
+        },
+        "家居": {
+          audience: "想改善居住体验的人",
+          tags: ["家居好物", "生活经验", "实用分享", "居家生活"]
+        },
+        "闲置": {
+          audience: "正在寻找高性价比闲置的人",
+          tags: ["闲置转让", "断舍离", "二手好物", "省钱生活"]
+        }
+      };
+
+      var labels = {
+        rednote: {
+          titles: "标题方案",
+          hooks: "开头方案",
+          extras: "标签与搜索词",
+          body: "完整笔记",
+          comment: "置顶评论"
+        },
+        xianyu: {
+          titles: "闲鱼标题",
+          hooks: "卖点摘要",
+          extras: "买家问答",
+          body: "闲鱼详情",
+          comment: "交易回复"
+        }
+      };
+
+      var placeholders = {
+        rednote: {
+          titles: "生成后显示5个标题方案。",
+          hooks: "生成后显示3个开头方案。",
+          extras: "生成后显示相关标签。",
+          body: "生成后显示可直接编辑的完整文案。",
+          comment: "生成后显示自然的评论区承接话术。"
+        },
+        xianyu: {
+          titles: "生成后显示5个闲鱼标题。",
+          hooks: "生成后显示3种卖点摘要。",
+          extras: "生成后显示常见买家问答。",
+          body: "生成后显示结构完整的闲鱼详情。",
+          comment: "生成后显示交易说明与回复。"
+        }
+      };
+
+      function $(selector, root) {
+        return (root || document).querySelector(selector);
+      }
+
+      function $$(selector, root) {
+        return Array.from((root || document).querySelectorAll(selector));
+      }
+
+      function value(id) {
+        var node = $("#" + id);
+        return node ? String(node.value || "").trim() : "";
+      }
+
+      function cleanSpaces(input) {
+        return String(input || "").replace(/\s+/g, " ").trim();
+      }
+
+      function pointsFrom(input, limit) {
+        return String(input || "")
+          .split(/[，,、；;\n]+/)
+          .map(function (item) { return cleanSpaces(item); })
+          .filter(Boolean)
+          .slice(0, limit || 6);
+      }
+
+      function numberValue(input) {
+        var cleaned = String(input || "").replace(/[^\d.]/g, "");
+        if (!cleaned || !Number.isFinite(Number(cleaned))) return "";
+        return String(Number(cleaned));
+      }
+
+      function hash(input) {
+        var total = 0;
+        var text = String(input || "");
+        for (var i = 0; i < text.length; i += 1) {
+          total = (total * 31 + text.charCodeAt(i)) >>> 0;
+        }
+        return total;
+      }
+
+      function pick(list, offset, seed) {
+        if (!list.length) return "";
+        return list[(seed + state.generation + (offset || 0)) % list.length];
+      }
+
+      function compact(input, max) {
+        var text = cleanSpaces(input);
+        return text.length > max ? text.slice(0, max - 1) + "…" : text;
+      }
+
+      function naturalize(input) {
+        var text = String(input || "");
+        var replacements = [
+          [/在这个快节奏的时代[，,]?/g, ""],
+          [/随着[^，。；]{0,18}(?:发展|普及)[，,]?/g, ""],
+          [/今天(?:就)?来为大家分享/g, "这次整理"],
+          [/众所周知[，,]?/g, ""],
+          [/总而言之[，,]?/g, "最后"],
+          [/不容错过/g, "可以参考"],
+          [/赋能/g, "帮助"],
+          [/助力/g, "帮助"],
+          [/首先([^。]{0,60})其次/g, "$1接着"]
+        ];
+        replacements.forEach(function (entry) {
+          text = text.replace(entry[0], entry[1]);
+        });
+        return text.replace(/[ \t]{2,}/g, " ").replace(/\n{3,}/g, "\n\n").trim();
+      }
+
+      function filterClaims(input) {
+        var text = String(input || "");
+        text = text.replace(/不能保证爆款/g, "__SAFE_NO_VIRAL__");
+        var replacements = [
+          [/保证爆款/g, "不能保证爆款"],
+          [/轻松月入[^\s，。；]*/g, "实际效果因人而异"],
+          [/百分百/g, "尽量"],
+          [/100%/g, "尽量"],
+          [/全网最低/g, "当前标价"],
+          [/闭眼入/g, "按需选择"],
+          [/必买/g, "可以考虑"],
+          [/绝对有效/g, "可以尝试"]
+        ];
+        replacements.forEach(function (entry) {
+          text = text.replace(entry[0], entry[1]);
+        });
+        return text.replace(/__SAFE_NO_VIRAL__/g, "不能保证爆款");
+      }
+
+      function polish(input, data) {
+        var text = String(input || "");
+        if (data.naturalMode) text = naturalize(text);
+        if (data.safeMode) text = filterClaims(text);
+        return text.trim();
+      }
+
+      function collectData() {
+        var preset = categoryData[state.category] || categoryData["AI工具"];
+        return {
+          mode: state.mode,
+          category: state.category,
+          topic: value("topic"),
+          audience: value("audience") || preset.audience,
+          goal: value("goal") || "干货教程",
+          points: pointsFrom(value("points"), value("length") === "short" ? 3 : 6),
+          details: value("details"),
+          cautions: value("cautions"),
+          tone: value("tone") || "真实自然",
+          length: value("length") || "standard",
+          cta: value("cta") || "不加引导",
+          price: numberValue(value("price")),
+          condition: value("condition") || "正常使用痕迹",
+          sellPrice: numberValue(value("sellPrice")),
+          city: value("city"),
+          trade: value("trade") || "只走平台，支持邮寄",
+          naturalMode: $("#naturalMode").checked,
+          safeMode: $("#safeMode").checked,
+          tags: preset.tags.slice()
+        };
+      }
+
+      function defaultPoints(data) {
+        if (data.points.length) return data.points;
+        if (data.mode === "xianyu") {
+          return ["商品信息按实物填写", "使用状态已经说明", "支持平台内沟通交易"];
+        }
+        return ["先明确写给谁看", "用具体细节替代空话", "发布前检查承诺和边界"];
+      }
+
+      function rednoteTitles(data, seed) {
+        var count = Math.max(3, defaultPoints(data).length);
+        var groups = {
+          "干货教程": [
+            data.topic + "怎么做？先拆成这" + count + "步",
+            data.audience + "看" + data.topic + "，先看这份清单",
+            "把" + data.topic + "讲清楚：方法、细节和注意事项",
+            data.topic + "新手最容易忽略的" + count + "个细节",
+            "别急着照抄，" + data.topic + "应该这样整理",
+            data.topic + "写不出来？从这" + count + "个位置开始"
+          ],
+          "经验分享": [
+            "关于" + data.topic + "，我更建议先想清这" + count + "点",
+            data.topic + "实际做起来，最重要的是这些细节",
+            "把" + data.topic + "拆开以后，事情简单多了",
+            data.audience + "可以参考的" + data.topic + "整理法",
+            data.topic + "别只看结果，过程里还有这些问题"
+          ],
+          "避坑提醒": [
+            data.topic + "先别急着做，这" + count + "个坑要避开",
+            data.audience + "注意：" + data.topic + "最容易错在这里",
+            data.topic + "看起来简单，真正容易忽略的是这些",
+            data.topic + "之前，先检查这份避坑清单",
+            data.topic + "常见问题整理，不要再重复踩坑"
+          ],
+          "产品种草": [
+            data.topic + "适合谁？优点和限制一次说清",
+            "不夸张种草，聊聊" + data.topic + "的真实使用场景",
+            data.audience + "要不要选" + data.topic + "？先看这几点",
+            data.topic + "值不值得选，重点不是参数多少",
+            "关于" + data.topic + "，优点和注意事项都在这里"
+          ],
+          "使用测评": [
+            data.topic + "真实测评：优点、限制和适用人群",
+            data.topic + "到底好不好用？先看这" + count + "点",
+            "不只说优点，" + data.topic + "的使用边界也讲清",
+            data.audience + "看" + data.topic + "，重点关注这些",
+            data.topic + "使用感受整理，买前可以先参考"
+          ],
+          "商品介绍": [
+            data.topic + "内容一页讲清，先看适用场景",
+            data.topic + "适合谁？信息和限制都整理好了",
+            data.audience + "了解" + data.topic + "，先看这份说明",
+            data.topic + "主要信息整理，按需求选择",
+            "关于" + data.topic + "，买前先确认这些细节"
+          ]
+        };
+        var pool = groups[data.goal] || groups["干货教程"];
+        var result = [];
+        for (var i = 0; i < 5; i += 1) {
+          result.push(compact(pick(pool, i, seed), 32));
+        }
+        return Array.from(new Set(result)).slice(0, 5);
+      }
+
+      function rednoteHooks(data, seed) {
+        var points = defaultPoints(data);
+        var first = points[0];
+        var detailLead = data.details
+          ? "先把真实信息放在前面：" + compact(data.details, 70) + "。"
+          : "这篇不堆空话，只整理可以直接执行的部分。";
+        var pool = [
+          "如果你正在为" + data.topic + "发愁，先别急着把所有信息塞进一篇内容。真正需要先说清的是：" + first + "。",
+          data.topic + "看起来复杂，拆开以后主要是" + points.length + "件事。第一步先处理：" + first + "。",
+          detailLead,
+          "围绕" + data.topic + "写内容时，最容易出现的问题不是内容太少，而是读者看不出这篇和自己有什么关系。",
+          "先说结论：" + first + "。剩下的内容都应该围绕这件事展开。"
+        ];
+        var result = [];
+        for (var i = 0; i < 3; i += 1) {
+          result.push(pick(pool, i * 2, seed));
+        }
+        return Array.from(new Set(result)).slice(0, 3);
+      }
+
+      function rednoteBody(data, titles, hooks) {
+        var points = defaultPoints(data);
+        var sections = [];
+        var toneLead = {
+          "真实自然": hooks[0],
+          "清单干货": "这篇把" + data.topic + "拆成一份可以直接检查的清单。",
+          "简洁专业": "以下内容围绕" + data.topic + "的目标、要点和边界展开。",
+          "轻松口语": data.topic + "不用想得太复杂，先把下面几件事做好。"
+        }[data.tone] || hooks[0];
+
+        sections.push("标题：" + titles[0]);
+        sections.push(toneLead);
+        sections.push("先看重点：\n" + points.map(function (item, index) {
+          return (index + 1) + ". " + item;
+        }).join("\n"));
+
+        if (data.length !== "short") {
+          sections.push("具体怎么处理：\n" + points.map(function (item, index) {
+            var endings = [
+              "先把它写成一句读者能理解的话，再补充必要细节。",
+              "不要只给结论，最好补一个真实场景或可核对的信息。",
+              "保留和主题有关的内容，无关信息可以删掉。",
+              "发布前重新读一遍，确认没有虚构经历或夸张承诺。"
+            ];
+            return "第" + (index + 1) + "点，" + item + "。\n" + endings[index % endings.length];
+          }).join("\n\n"));
+        }
+
+        if (data.details) {
+          sections.push("真实信息：\n" + data.details);
+        }
+
+        if (data.cautions) {
+          sections.push("需要提前说明：\n" + data.cautions);
+        }
+
+        if (data.length === "detailed") {
+          sections.push("发布前检查：\n- 标题是否写清目标读者\n- 开头是否直接进入问题\n- 正文是否包含具体信息\n- 结尾是否给出明确下一步\n- 是否删除无法兑现的承诺");
+        }
+
+        var ctaText = {
+          "收藏备用": "可以先收藏，下一次写同类内容时按顺序替换。",
+          "评论交流": "你现在最卡哪一步？可以在评论里说具体情况。",
+          "查看店铺商品": "完整分类模板已经放在店铺商品页，可以先看目录和预览，适合再选。",
+          "不加引导": ""
+        }[data.cta] || "";
+        if (ctaText) sections.push(ctaText);
+
+        return sections.join("\n\n");
+      }
+
+      function rednoteExtras(data) {
+        var topicTag = cleanSpaces(data.topic).replace(/[^\u4e00-\u9fa5A-Za-z0-9]/g, "").slice(0, 12);
+        var tags = [topicTag].concat(data.tags).filter(Boolean);
+        return Array.from(new Set(tags)).slice(0, 6).map(function (tag) {
+          return "#" + tag;
+        }).join(" ");
+      }
+
+      function rednoteComment(data) {
+        var price = data.price ? "，当前价格" + data.price + "元" : "";
+        if (data.cta === "查看店铺商品") {
+          return "完整目录和部分预览已经放在店铺商品页" + price + "。先看内容是否适合自己再决定。模板不能保证爆款，主要用于减少每次从零开始写文案的时间。";
+        }
+        if (data.cta === "评论交流") {
+          return "大家最容易卡在标题、开头、正文还是结尾？把具体问题留在评论里，我会优先整理高频问题。";
+        }
+        if (data.cta === "收藏备用") {
+          return "这份结构可以先收藏。真正发布时，请把示例替换成自己的信息和细节，不要直接照抄。";
+        }
+        return "补充说明：" + (data.cautions || "示例结构需要结合自己的真实信息修改。");
+      }
+
+      function generateRednote(data) {
+        var seed = hash(data.topic + data.goal + data.category);
+        var titles = rednoteTitles(data, seed);
+        var hooks = rednoteHooks(data, seed);
+        return {
+          titles: titles.map(function (item, index) { return (index + 1) + ". " + item; }).join("\n"),
+          hooks: hooks.map(function (item, index) { return "方案" + (index + 1) + "\n" + item; }).join("\n\n"),
+          extras: rednoteExtras(data),
+          body: rednoteBody(data, titles, hooks),
+          comment: rednoteComment(data)
+        };
+      }
+
+      function generateXianyu(data) {
+        var points = defaultPoints(data);
+        var price = data.sellPrice ? data.sellPrice + "元" : "价格可聊";
+        var city = data.city ? data.city + "同城" : "";
+        var seed = hash(data.topic + data.condition);
+        var titlePool = [
+          data.topic + " " + data.condition + " " + price + "自用转让",
+          "自用闲置 " + data.topic + " 瑕疵已说明",
+          city + " " + data.topic + " 状态如实可直接拍",
+          data.topic + " " + points[0] + " " + price,
+          "诚心出" + data.topic + " " + data.condition + "走平台",
+          data.topic + "闲置转让 配件和细节可补图"
+        ];
+        var titles = [];
+        for (var i = 0; i < 5; i += 1) {
+          titles.push(compact(pick(titlePool, i, seed), 40));
+        }
+        titles = Array.from(new Set(titles)).slice(0, 5);
+
+        var hooks = [
+          "自用闲置，" + data.condition + "，主要特点是：" + points.join("、") + "。",
+          "商品信息、使用状态和注意事项都按实物填写，价格" + price + "。",
+          data.topic + "还在，支持平台内沟通，想看细节可以补图。"
+        ];
+
+        var detail = [
+          "【商品】" + data.topic,
+          "【成色】" + data.condition,
+          "【价格】" + price,
+          "【卖点】\n" + points.map(function (item, index) {
+            return (index + 1) + ". " + item;
+          }).join("\n"),
+          "【真实情况】\n" + (data.details || "商品状态以实物图片和沟通内容为准。"),
+          "【瑕疵或注意事项】\n" + (data.cautions || "正常使用痕迹，细节可以提前确认。"),
+          "【交易方式】\n" + data.trade + (data.city ? "，" + data.city + "同城可沟通面交。" : "。"),
+          "默认只走平台，不接受私下转账。介意成色、价格或细节的请先确认清楚。"
+        ].join("\n\n");
+
+        var extras = [
+          "问：还在吗？\n答：在的，" + data.topic + "还在，可以先确认细节再拍。",
+          "问：能便宜吗？\n答：" + (data.sellPrice ? "价格已经结合成色定过，诚心要可以正常沟通。" : "可以正常沟通价格，希望是诚心要。"),
+          "问：有什么瑕疵？\n答：" + (data.cautions || "正常使用痕迹，可以补细节图。"),
+          "问：可以面交吗？\n答：" + (data.city ? data.city + "可以沟通面交时间和地点。" : "需要看双方距离，邮寄也只走平台。")
+        ].join("\n\n");
+
+        var comment = "交易说明：" + data.trade + "。不私下转账，不脱离平台交易；商品状态以详情、图片和双方沟通内容为准。";
+
+        return {
+          titles: titles.map(function (item, index) { return (index + 1) + ". " + item; }).join("\n"),
+          hooks: hooks.map(function (item, index) { return "方案" + (index + 1) + "\n" + item; }).join("\n\n"),
+          extras: extras,
+          body: detail,
+          comment: comment
+        };
+      }
+
+      function applyPolish(generated, data) {
+        Object.keys(generated).forEach(function (key) {
+          generated[key] = polish(generated[key], data);
+        });
+        return generated;
+      }
+
+      function buildAll(generated) {
+        var currentLabels = labels[state.mode];
+        return [
+          "【" + currentLabels.titles + "】\n" + generated.titles,
+          "【" + currentLabels.hooks + "】\n" + generated.hooks,
+          "【" + currentLabels.body + "】\n" + generated.body,
+          "【" + currentLabels.extras + "】\n" + generated.extras,
+          "【" + currentLabels.comment + "】\n" + generated.comment
+        ].join("\n\n");
+      }
+
+      function renderGenerated(generated) {
+        ["titles", "hooks", "extras", "body", "comment"].forEach(function (key) {
+          var node = $("#" + key);
+          node.textContent = generated[key];
+          node.classList.remove("placeholder");
+        });
+      }
+
+      function generate() {
+        var topicNode = $("#topic");
+        var topic = value("topic");
+        topicNode.setAttribute("aria-invalid", topic ? "false" : "true");
+        $("#topicError").classList.toggle("show", !topic);
+        if (!topic) {
+          topicNode.focus();
+          showToast("先填写主题或商品名称");
+          return;
+        }
+
+        state.generation += 1;
+        var data = collectData();
+        var generated = state.mode === "rednote" ? generateRednote(data) : generateXianyu(data);
+        generated = applyPolish(generated, data);
+        generated.all = buildAll(generated);
+
+        state.current = {
+          id: Date.now(),
+          mode: state.mode,
+          category: state.category,
+          data: data,
+          form: serializeForm(),
+          generated: generated,
+          createdAt: new Date().toISOString()
+        };
+
+        renderGenerated(generated);
+        $("#resultMeta").textContent = data.topic + " · " + (state.mode === "rednote" ? data.goal : data.condition) + " · 刚刚生成";
+        saveHistory(state.current);
+        renderHistory();
+        saveDraft();
+        showToast(state.mode === "rednote" ? "小红书文案已生成" : "闲鱼文案已生成");
+
+        if (window.innerWidth <= 820) {
+          $(".results-area").scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+
+      function updateLabels() {
+        var currentLabels = labels[state.mode];
+        $("#titlesLabel").textContent = currentLabels.titles;
+        $("#hooksLabel").textContent = currentLabels.hooks;
+        $("#extrasLabel").textContent = currentLabels.extras;
+        $("#bodyLabel").textContent = currentLabels.body;
+        $("#commentLabel").textContent = currentLabels.comment;
+      }
+
+      function resetOutputs() {
+        var currentPlaceholders = placeholders[state.mode];
+        Object.keys(currentPlaceholders).forEach(function (key) {
+          var node = $("#" + key);
+          node.textContent = currentPlaceholders[key];
+          node.classList.add("placeholder");
+        });
+        $("#resultMeta").textContent = "等待输入素材";
+        state.current = null;
+      }
+
+      function setMode(mode, options) {
+        state.mode = mode === "xianyu" ? "xianyu" : "rednote";
+        $$("[data-mode]").forEach(function (button) {
+          var active = button.dataset.mode === state.mode;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-selected", active ? "true" : "false");
+        });
+        $$("[data-mode-only]").forEach(function (node) {
+          node.hidden = node.dataset.modeOnly !== state.mode;
+        });
+        updateLabels();
+        if (!options || !options.keepResults) resetOutputs();
+        if (!options || !options.skipSave) saveDraft();
+      }
+
+      function setCategory(category) {
+        state.category = categoryData[category] ? category : "AI工具";
+        $("#category").value = state.category;
+        $$("#categoryChips .chip").forEach(function (chip) {
+          chip.classList.toggle("active", chip.dataset.category === state.category);
+        });
+      }
+
+      function fillSample() {
+        if (state.mode === "rednote") {
+          setCategory("AI工具");
+          $("#topic").value = "用AI整理小红书文案";
+          $("#audience").value = "刚开始做小红书、每次写文案都卡住的新手";
+          $("#goal").value = "干货教程";
+          $("#points").value = "先确定目标读者\n让AI只生成标题和结构\n加入自己的真实信息\n删除空话和夸张承诺";
+          $("#details").value = "资料包按照标题、开头、正文结构和结尾互动分类，可直接编辑；完整版本放在店铺商品页";
+          $("#cautions").value = "模板不能保证爆款，需要替换成自己的信息和细节";
+          $("#tone").value = "真实自然";
+          $("#length").value = "standard";
+          $("#cta").value = "查看店铺商品";
+          $("#price").value = "19.9";
+        } else {
+          setCategory("闲置");
+          $("#topic").value = "Sony WH-1000XM5降噪耳机";
+          $("#points").value = "自用为主\n降噪和连接正常\n盒子和充电线都在";
+          $("#details").value = "去年双11入手，主要用于上下班通勤";
+          $("#cautions").value = "外壳有轻微使用痕迹，不影响连接和降噪";
+          $("#condition").value = "95新";
+          $("#sellPrice").value = "1399";
+          $("#city").value = "上海";
+          $("#trade").value = "只走平台，支持邮寄";
+        }
+        $("#topic").setAttribute("aria-invalid", "false");
+        $("#topicError").classList.remove("show");
+        generate();
+      }
+
+      function serializeForm() {
+        var ids = [
+          "topic", "audience", "goal", "points", "details", "cautions", "tone",
+          "length", "cta", "price", "condition", "sellPrice", "city", "trade"
+        ];
+        var form = {
+          mode: state.mode,
+          category: state.category,
+          naturalMode: $("#naturalMode").checked,
+          safeMode: $("#safeMode").checked
+        };
+        ids.forEach(function (id) {
+          form[id] = $("#" + id).value;
+        });
+        return form;
+      }
+
+      function restoreForm(form) {
+        if (!form) return;
+        setMode(form.mode || "rednote", { keepResults: true, skipSave: true });
+        setCategory(form.category || "AI工具");
+        Object.keys(form).forEach(function (key) {
+          var node = $("#" + key);
+          if (!node || key === "naturalMode" || key === "safeMode") return;
+          node.value = form[key] == null ? "" : form[key];
+        });
+        $("#naturalMode").checked = form.naturalMode !== false;
+        $("#safeMode").checked = form.safeMode !== false;
+        saveDraft();
+      }
+
+      function clearForm() {
+        $("#copyForm").reset();
+        setCategory("AI工具");
+        $("#naturalMode").checked = true;
+        $("#safeMode").checked = true;
+        $("#topic").setAttribute("aria-invalid", "false");
+        $("#topicError").classList.remove("show");
+        resetOutputs();
+        try {
+          localStorage.removeItem(DRAFT_KEY);
+        } catch (error) {
+          // Local storage may be unavailable in restrictive local-file modes.
+        }
+        showToast("输入内容已清空");
+      }
+
+      function saveDraft() {
+        try {
+          localStorage.setItem(DRAFT_KEY, JSON.stringify(serializeForm()));
+        } catch (error) {
+          // The tool still works without draft persistence.
+        }
+      }
+
+      function loadDraft() {
+        try {
+          var draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null");
+          if (draft) restoreForm(draft);
+        } catch (error) {
+          // Ignore malformed or unavailable storage.
+        }
+      }
+
+      function getHistory() {
+        try {
+          return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function saveHistory(item) {
+        try {
+          var list = getHistory();
+          var next = [item].concat(list).slice(0, 9);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+        } catch (error) {
+          showToast("当前浏览器未保存历史，但不影响生成");
+        }
+      }
+
+      function renderHistory() {
+        var root = $("#historyList");
+        var list = getHistory();
+        root.innerHTML = "";
+        if (!list.length) {
+          var empty = document.createElement("div");
+          empty.className = "empty-state";
+          empty.textContent = "生成后会在当前浏览器保存最近9条记录";
+          root.appendChild(empty);
+          return;
+        }
+
+        list.forEach(function (item) {
+          var card = document.createElement("article");
+          card.className = "history-item";
+
+          var title = document.createElement("strong");
+          title.textContent = item.data && item.data.topic ? item.data.topic : "未命名文案";
+
+          var meta = document.createElement("span");
+          var time = new Date(item.createdAt).toLocaleString("zh-CN", {
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit"
+          });
+          meta.textContent = (item.mode === "xianyu" ? "闲鱼" : "小红书") + " · " + (item.category || "") + " · " + time;
+
+          var actions = document.createElement("div");
+          actions.className = "history-actions";
+
+          var restore = document.createElement("button");
+          restore.type = "button";
+          restore.textContent = "恢复";
+          restore.addEventListener("click", function () {
+            restoreForm(item.form);
+            state.current = item;
+            renderGenerated(item.generated);
+            $("#resultMeta").textContent = (item.data.topic || "文案") + " · 已恢复";
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            showToast("历史文案已恢复");
+          });
+
+          var copy = document.createElement("button");
+          copy.type = "button";
+          copy.textContent = "复制";
+          copy.addEventListener("click", function () {
+            copyText(item.generated.all || buildAll(item.generated));
+          });
+
+          actions.appendChild(restore);
+          actions.appendChild(copy);
+          card.appendChild(title);
+          card.appendChild(meta);
+          card.appendChild(actions);
+          root.appendChild(card);
+        });
+      }
+
+      function syncEditedResult(key) {
+        if (!state.current) return;
+        state.current.generated[key] = $("#" + key).textContent.trim();
+        state.current.generated.all = buildAll(state.current.generated);
+      }
+
+      async function copyText(input) {
+        var text = String(input || "").trim();
+        if (!text) {
+          showToast("暂无内容可复制");
+          return;
+        }
+
+        var copied = false;
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+            copied = true;
+          }
+        } catch (error) {
+          copied = false;
+        }
+
+        if (!copied) {
+          var area = document.createElement("textarea");
+          area.value = text;
+          area.setAttribute("readonly", "");
+          area.style.position = "fixed";
+          area.style.left = "-9999px";
+          document.body.appendChild(area);
+          area.focus();
+          area.select();
+          try {
+            copied = document.execCommand("copy");
+          } catch (error) {
+            copied = false;
+          }
+          area.remove();
+        }
+
+        window.__lastCopiedText = copied ? text : "";
+        showToast(copied ? "已复制到剪贴板" : "复制受限，请长按选择内容");
+      }
+
+      function copyAll() {
+        if (!state.current) {
+          showToast("请先生成文案");
+          return;
+        }
+        ["titles", "hooks", "extras", "body", "comment"].forEach(syncEditedResult);
+        copyText(state.current.generated.all);
+      }
+
+      function currentFile() {
+        ["titles", "hooks", "extras", "body", "comment"].forEach(syncEditedResult);
+        var filename = (state.current.data.topic || "文案") + "-" + (state.mode === "rednote" ? "小红书" : "闲鱼") + ".txt";
+        filename = filename.replace(/[\\/:*?"<>|]/g, "-");
+        return {
+          filename: filename,
+          file: new File([state.current.generated.all], filename, { type: "text/plain;charset=utf-8" })
+        };
+      }
+
+      function isAppleMobile() {
+        return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+          (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      }
+
+      async function shareApp() {
+        var shareData = {
+          title: "小红书文案工作台",
+          text: "打开网页即可生成小红书和闲鱼文案",
+          url: window.location.href
+        };
+        if (navigator.share) {
+          try {
+            await navigator.share(shareData);
+            showToast("已打开分享");
+            return;
+          } catch (error) {
+            if (error && error.name === "AbortError") return;
+          }
+        }
+        copyText(window.location.href);
+      }
+
+      async function shareResult() {
+        if (!state.current) {
+          showToast("请先生成文案");
+          return;
+        }
+        var output = currentFile();
+        if (navigator.share) {
+          try {
+            if (navigator.canShare && navigator.canShare({ files: [output.file] })) {
+              await navigator.share({
+                title: output.filename,
+                text: "由小红书文案工作台生成",
+                files: [output.file]
+              });
+            } else {
+              await navigator.share({
+                title: output.filename,
+                text: state.current.generated.all
+              });
+            }
+            showToast("已打开分享");
+            return;
+          } catch (error) {
+            if (error && error.name === "AbortError") return;
+          }
+        }
+        copyText(state.current.generated.all);
+      }
+
+      async function exportTxt() {
+        if (!state.current) {
+          showToast("请先生成文案");
+          return;
+        }
+        var output = currentFile();
+        if (isAppleMobile() && navigator.share && navigator.canShare && navigator.canShare({ files: [output.file] })) {
+          try {
+            await navigator.share({
+              title: output.filename,
+              files: [output.file]
+            });
+            showToast("已打开保存与分享");
+            return;
+          } catch (error) {
+            if (error && error.name === "AbortError") return;
+          }
+        }
+
+        var blob = output.file;
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement("a");
+        link.href = url;
+        link.download = output.filename;
+        link.style.display = "none";
+        document.body.appendChild(link);
+        window.__lastExportFile = output.filename;
+        link.click();
+        setTimeout(function () {
+          link.remove();
+          URL.revokeObjectURL(url);
+        }, 1000);
+        showToast("TXT已导出");
+      }
+
+      var toastTimer;
+      function showToast(message) {
+        var node = $("#toast");
+        node.textContent = message;
+        node.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          node.classList.remove("show");
+        }, 1900);
+      }
+
+      $$("[data-mode]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          setMode(button.dataset.mode);
+        });
+      });
+
+      $$("#categoryChips .chip").forEach(function (button) {
+        button.addEventListener("click", function () {
+          setCategory(button.dataset.category);
+          saveDraft();
+        });
+      });
+
+      $$("[data-generate]").forEach(function (button) {
+        button.addEventListener("click", generate);
+      });
+
+      $$("[data-fill-sample]").forEach(function (button) {
+        button.addEventListener("click", fillSample);
+      });
+
+      $$("[data-clear]").forEach(function (button) {
+        button.addEventListener("click", clearForm);
+      });
+
+      $$("[data-export]").forEach(function (button) {
+        button.addEventListener("click", exportTxt);
+      });
+
+      $$("[data-share-app]").forEach(function (button) {
+        button.addEventListener("click", shareApp);
+      });
+
+      $$("[data-share-result]").forEach(function (button) {
+        button.addEventListener("click", shareResult);
+      });
+
+      $$("[data-copy-all]").forEach(function (button) {
+        button.addEventListener("click", copyAll);
+      });
+
+      $$("[data-copy-target]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          var key = button.dataset.copyTarget;
+          if (!state.current) {
+            showToast("请先生成文案");
+            return;
+          }
+          syncEditedResult(key);
+          copyText(state.current.generated[key]);
+        });
+      });
+
+      $$(".output-content").forEach(function (node) {
+        node.addEventListener("input", function () {
+          node.classList.remove("placeholder");
+          syncEditedResult(node.id);
+        });
+      });
+
+      $$("[data-scroll]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          var target = $(button.dataset.scroll);
+          if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+
+      $("[data-clear-history]").addEventListener("click", function () {
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+        } catch (error) {
+          // Ignore storage restrictions.
+        }
+        renderHistory();
+        showToast("本地历史已清空");
+      });
+
+      $("#copyForm").addEventListener("input", function (event) {
+        if (event.target.id === "topic" && value("topic")) {
+          $("#topic").setAttribute("aria-invalid", "false");
+          $("#topicError").classList.remove("show");
+        }
+        saveDraft();
+      });
+
+      $("#copyForm").addEventListener("change", saveDraft);
+
+      if (window.visualViewport) {
+        var updateKeyboardState = function () {
+          document.body.classList.toggle(
+            "keyboard-open",
+            window.visualViewport.height < window.innerHeight * 0.72
+          );
+        };
+        window.visualViewport.addEventListener("resize", updateKeyboardState);
+        window.visualViewport.addEventListener("scroll", updateKeyboardState);
+      }
+
+      if ("serviceWorker" in navigator && /^(https?:)$/.test(window.location.protocol)) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("./sw.js").catch(function () {
+            // Online use still works if offline caching is unavailable.
+          });
+        });
+      }
+
+      setMode("rednote", { keepResults: true, skipSave: true });
+      loadDraft();
+      updateLabels();
+      resetOutputs();
+      renderHistory();
+    }());
+  </script>
+</body>
+</html>
