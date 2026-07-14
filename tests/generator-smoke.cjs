@@ -95,7 +95,7 @@ assert(scriptMatch[1].includes(exportMarker), "application export marker not fou
 const runnableScript = scriptMatch[1].replace(
   exportMarker,
   "      renderHistory();\n" +
-    "      globalThis.__generatorTest = { generateRednote: generateRednote, applyPolish: applyPolish, dedupeGenerated: dedupeGenerated, buildPublishable: buildPublishable, validateRednoteFacts: validateRednoteFacts, generatedQualityIssues: generatedQualityIssues, categoryData: categoryData };\n" +
+    "      globalThis.__generatorTest = { generateRednote: generateRednote, applyPolish: applyPolish, dedupeGenerated: dedupeGenerated, buildPublishable: buildPublishable, validateRednoteFacts: validateRednoteFacts, generatedQualityIssues: generatedQualityIssues, categoryData: categoryData, collectionProfiles: collectionProfiles, state: state };\n" +
     "    }());"
 );
 vm.runInNewContext(runnableScript, sandbox, { filename: "index-inline.js" });
@@ -179,6 +179,20 @@ const cases = {
 };
 
 const goals = ["干货教程", "经验分享", "避坑提醒", "产品种草", "使用测评", "商品介绍"];
+const naturalPhrases = {
+  "AI工具": "最后最直观的变化是",
+  "职场": "前后最明显的变化是",
+  "学习": "目前能看到的结果是",
+  "美妆护肤": "用下来最明显的感受是",
+  "穿搭": "真实上身后",
+  "美食": "出锅后的口感和问题是",
+  "旅行": "我最想提醒的一点是",
+  "探店": "吃完最直接的感受是",
+  "家居装修": "改完以后最明显的变化是",
+  "母婴育儿": "这段时间观察到的反应是",
+  "数码": "实际能观察到的表现是",
+  "生活经验": "最后的结果是"
+};
 const bannedPhrases = [
   "把这一点写成",
   "先写清楚",
@@ -224,13 +238,15 @@ for (const [category, facts] of Object.entries(cases)) {
     assert(result.body.includes(fact), category + " should include every supplied fact: " + fact);
     assert.equal((result.body.match(new RegExp(fact.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")) || []).length, 1, category + " should use each fact once");
   });
-  assert(result.body.includes(profile.sections[1]), category + " should use its category-specific section label");
-  assert(result.body.includes(profile.fields[3][0]) || result.body.includes(profile.sections[3]), category + " should use its category-specific boundary label");
+  assert(result.body.includes(naturalPhrases[category]), category + " should use its category-specific natural phrasing");
   assert(result.body.includes(data.details), category + " should include extra real details");
   assert(result.body.includes(data.cautions), category + " should include extra cautions");
   assert(result.extras.includes("#" + profile.tags[0]), category + " should include a category tag");
   assert(publishable.includes(result.body), category + " publishable copy should include the full body");
   assert(!result.body.includes("undefined"), category + " should never leak undefined values");
+  assert(!result.body.split(/\n{2,}/)[0].includes(","), category + " should place only one title in the first paragraph");
+  assert(result.body.split(/\n{2,}/).length >= 6, category + " should produce readable short paragraphs");
+  assert(result.titles.split("\n").length >= 3, category + " should keep title alternatives on separate lines");
   assert.deepEqual(Array.from(generator.generatedQualityIssues(result, data)), [], category + " should pass the quality gate");
   bannedPhrases.forEach((phrase) => {
     assert(![result.body, result.titles, result.hooks, result.comment].join("\n").includes(phrase), category + " should not contain meta-writing phrase " + phrase);
@@ -250,12 +266,98 @@ const invalid = generator.validateRednoteFacts({
 assert.equal(invalid.valid, false, "two facts should not pass validation");
 assert(invalid.message.includes("还差1项真实素材"), "validation should explain exactly what is missing");
 
-assert(html.includes("V6 分类型真实笔记"), "V6 branding should be visible");
+const collectionFacts = [
+  "牛乳雾面白、海盐冰蓝、桃粉微珠光、月光贝母、碎钻猫眼、莓果酒红、奶油小花、粉紫晕染、水果涂鸦、银色镜面、苔绿撞色、极细几何",
+  "清透氛围感、高级气质款、甜美元素、个性酷飒风",
+  "夏日通勤、约会出游、日常拍照、想显白又不张扬的时候",
+  "轻盈、有画面，不要厚重堆钻和影楼感"
+];
+const collectionData = {
+  mode: "rednote",
+  category: "美妆护肤",
+  topic: "夏日显白美甲灵感",
+  audience: "想做通勤、约会都耐看的夏日美甲的人",
+  goal: "灵感合集",
+  facts: collectionFacts,
+  factLabels: ["想包含的元素或选项", "想分成的风格方向", "适用场景或人群", "整体感觉或避开项"],
+  sectionLabels: ["元素", "风格方向", "适用场景", "整体偏好"],
+  points: [],
+  details: "",
+  cautions: "",
+  tone: "真实自然",
+  cta: "评论交流",
+  price: "",
+  naturalMode: true,
+  safeMode: true,
+  tags: generator.categoryData["美妆护肤"].tags
+};
+
+assert.equal(generator.validateRednoteFacts(collectionData).valid, true, "collection should require its first three material fields");
+assert.equal(generator.validateRednoteFacts({ ...collectionData, facts: [collectionFacts[0], "", collectionFacts[2], ""] }).valid, false, "collection should reject a missing style field");
+
+function generateCollection(length, generation) {
+  generator.state.generation = generation;
+  const data = { ...collectionData, length };
+  return generator.dedupeGenerated(generator.applyPolish(generator.generateRednote(data), data));
+}
+
+const collectionByLength = {
+  short: generateCollection("short", 1),
+  standard: generateCollection("standard", 1),
+  detailed: generateCollection("detailed", 1)
+};
+assert.equal((collectionByLength.short.body.match(/^• /gm) || []).length, 4, "short collection should contain four ideas");
+assert.equal((collectionByLength.standard.body.match(/^• /gm) || []).length, 9, "standard collection should contain nine ideas");
+assert.equal((collectionByLength.detailed.body.match(/^• /gm) || []).length, 12, "detailed collection should contain twelve ideas");
+assert(collectionByLength.short.body.length < collectionByLength.standard.body.length, "standard collection should be longer than short");
+assert(collectionByLength.standard.body.length < collectionByLength.detailed.body.length, "detailed collection should be longer than standard");
+assert(collectionByLength.detailed.body.includes("• 碎钻猫眼：细碎猫眼聚光"), "beauty collection should match cat-eye copy to the cat-eye idea");
+assert(collectionByLength.detailed.body.includes("• 粉紫晕染：粉和紫从边缘慢慢融在一起"), "beauty collection should match gradient copy to the gradient idea");
+assert(collectionByLength.detailed.body.includes("• 银色镜面：银色镜面只占一两处视觉重点"), "beauty collection should match mirror copy to the mirror idea");
+
+for (const result of Object.values(collectionByLength)) {
+  assert(result.body.startsWith(result.primaryTitle), "collection body should start with one selected title");
+  assert(!result.body.split(/\n{2,}/)[0].includes(","), "collection title should not be joined to other titles");
+  assert(result.body.includes("• "), "collection should use scannable bullet items");
+  assert(!result.body.includes("以下是"), "collection should not sound like a generated report");
+  assert(!result.body.includes("实际记录"), "collection should not fall back to the narrative template");
+  assert.deepEqual(Array.from(generator.generatedQualityIssues(result, { ...collectionData, length: "standard" })), [], "collection should pass the quality gate");
+  const descriptions = result.body.split("\n").filter((line) => line.startsWith("• ")).map((line) => line.slice(line.indexOf("：") + 1));
+  assert.equal(new Set(descriptions).size, descriptions.length, "collection descriptions should not repeat within one result");
+}
+
+const versions = [1, 2, 3, 4].map((generation) => generateCollection("standard", generation));
+assert.equal(new Set(versions.map((result) => result.body)).size, versions.length, "change-version should produce distinct collection bodies");
+assert.equal(new Set(versions.map((result) => result.primaryTitle)).size, versions.length, "change-version should rotate the selected title");
+assert(versions.some((result) => /薄雾|光泽|留白|层次/.test(result.body)), "beauty collection should use vivid category language");
+
+let collectionCategoryIndex = 10;
+for (const [category, profile] of Object.entries(generator.collectionProfiles)) {
+  generator.state.generation = collectionCategoryIndex;
+  const data = {
+    ...collectionData,
+    category,
+    topic: category + "灵感",
+    audience: generator.categoryData[category].audience,
+    facts: [profile.items.join("、"), profile.groups.join("、"), profile.scenes.join("、"), "自然、具体，不要堆空话"],
+    length: "detailed",
+    tags: generator.categoryData[category].tags
+  };
+  const result = generator.dedupeGenerated(generator.applyPolish(generator.generateRednote(data), data));
+  const descriptions = result.body.split("\n").filter((line) => line.startsWith("• ")).map((line) => line.slice(line.indexOf("：") + 1));
+  assert.equal(descriptions.length, 12, category + " detailed collection should contain twelve ideas");
+  assert.equal(new Set(descriptions).size, descriptions.length, category + " collection descriptions should not repeat");
+  assert(!result.body.includes("undefined"), category + " collection should never leak undefined values");
+  assert.deepEqual(Array.from(generator.generatedQualityIssues(result, data)), [], category + " collection should pass the quality gate");
+  collectionCategoryIndex += 1;
+}
+
+assert(html.includes("V7 灵感合集与真人文案"), "V7 branding should be visible");
 assert((html.match(/data-category=/g) || []).length >= 13, "all major categories should be selectable");
 assert(html.indexOf('id="body"') < html.indexOf('id="titles"'), "publish-ready body must appear before title alternatives");
 assert((html.match(/data-copy-body/g) || []).length >= 2, "desktop and mobile copy-body actions must exist");
 
 const serviceWorker = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-assert(serviceWorker.includes("rednote-copywriter-v6-20260714-category-facts"), "service worker cache version was not updated");
+assert(serviceWorker.includes("rednote-copywriter-v7-20260714-human-collection"), "service worker cache version was not updated");
 
-console.log("Generator smoke test passed for", Object.keys(cases).length, "content categories.");
+console.log("Generator smoke test passed for", Object.keys(cases).length, "narrative categories and", Object.keys(generator.collectionProfiles).length, "collection profiles, including length and variation checks.");

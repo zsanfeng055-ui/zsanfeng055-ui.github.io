@@ -881,7 +881,7 @@
         <div class="brand-mark" aria-hidden="true">文</div>
         <div class="brand-copy">
           小红书文案工作台
-          <small>V6 分类型真实笔记</small>
+          <small>V7 灵感合集与真人文案</small>
         </div>
       </div>
 
@@ -940,8 +940,9 @@
               <input id="audience" autocomplete="off" placeholder="例如：刚开始做小红书的新手">
             </div>
             <div class="field">
-              <label for="goal">内容目标</label>
+              <label for="goal">笔记形式</label>
               <select id="goal">
+                <option selected>灵感合集</option>
                 <option>干货教程</option>
                 <option>经验分享</option>
                 <option>避坑提醒</option>
@@ -955,7 +956,7 @@
           <section class="fact-section" id="factSection" aria-labelledby="factSectionTitle">
             <div class="fact-section-head">
               <strong id="factSectionTitle">真实素材</strong>
-              <span>至少填写3项，不确定就留空</span>
+              <span id="factSectionRule">至少填写3项，不确定就留空</span>
             </div>
             <div class="field-note" id="categoryHint"></div>
             <div class="field-row">
@@ -1011,9 +1012,9 @@
             <div class="field">
               <label for="length">笔记长度</label>
               <select id="length">
-                <option value="short">简短</option>
+                <option value="short">精简</option>
                 <option value="standard" selected>标准</option>
-                <option value="detailed">详细</option>
+                <option value="detailed">丰富</option>
               </select>
             </div>
           </div>
@@ -1338,6 +1339,267 @@
         }
       };
 
+      var collectionFieldConfig = {
+        hint: "按参考图生成分组灵感清单：先给元素，再给风格和适用场景；每一项都会写成有画面感的短描述。",
+        fields: [
+          ["想包含的元素或选项", "例如：清透乳白、冰雾蓝、碎珍珠、玻璃猫眼；可多写一些"],
+          ["想分成的风格方向", "例如：清透氛围、高级气质、甜美约会、个性酷飒"],
+          ["适用场景或人群", "例如：夏日通勤、约会出游、显白耐看、拍照有质感"],
+          ["整体感觉或避开项", "例如：轻盈、有画面，不要厚重堆砌和影楼感"]
+        ],
+        sections: ["元素", "风格方向", "适用场景", "整体偏好"]
+      };
+
+      var collectionProfiles = {
+        "AI工具": {
+          groups: ["快速上手（新手不费脑）", "写作提效（高频刚需）", "视觉创作（氛围加分）", "稳定工作流（长期使用）"],
+          items: ["主题拆解", "标题发散", "长文压缩", "口吻改写", "素材归类", "图像提示词", "封面构思", "视频分镜", "表格整理", "会议提炼", "批量检查", "发布复盘"],
+          scenes: ["日常写作", "内容创作", "临时赶稿", "重复任务"],
+          lines: [
+            "先从一个高频小任务切进去，步骤不绕，放在{scene}里也不会打断原来的节奏。",
+            "更像一块顺手的垫脚石，先把零散信息收拢，再把最后的判断留给自己。",
+            "不追求一步到位，重点是把最耗时间的前半段压短，后面依然有调整空间。",
+            "适合放进{group}这类固定流程，需求说得越具体，结果就越贴近手头任务。",
+            "一句需求说不清时，先让它追问缺口，比直接生成一大段更省心，尤其适合{scene}。",
+            "把可复用的规则留成小模板，下次只换材料，不用每次从空白页重新起步。",
+            "我更喜欢它先给三四个方向，而不是一次塞满答案，挑选和修改都会轻一点。",
+            "遇到需要核对的内容就停在草稿阶段，速度可以借，事实和判断不能一起外包。",
+            "这类用法在{group}里很稳，输入、检查、改写各走一步，不会把所有事搅在一起。",
+            "真正省下来的往往不是打字时间，而是面对一堆零散材料时的启动成本。",
+            "给它一个反例或不想要的样子，结果会比只说“写得好一点”具体很多。",
+            "偶尔生成得很漂亮却不贴题，我会退回任务本身，只保留能直接用的那一小段。"
+          ]
+        },
+        "职场": {
+          groups: ["轻量提效（日常马上用）", "沟通表达（少一点内耗）", "汇报复盘（信息更清楚）", "边界管理（长期更轻松）"],
+          items: ["晨间三件事", "任务优先级", "会议结论卡", "一句话确认", "进度同步", "风险前置", "周报减法", "数据先行", "复盘清单", "拒绝模糊需求", "下班前收口", "长期资料库"],
+          scenes: ["普通工作日", "跨部门协作", "临时汇报", "忙碌项目期"],
+          lines: [
+            "动作很小，却能把来回确认的次数降下来，尤其适合{scene}这种容易被打断的时刻。",
+            "重点不是把话说得更满，而是先把结论、责任人和时间点放到明面上。",
+            "放进{group}里会很顺手，信息不堆，别人扫一眼就知道下一步做什么。",
+            "看起来朴素，但胜在能长期执行，不需要额外做一套漂亮却用不起来的流程。",
+            "收到模糊任务时先补齐交付物、截止时间和判断标准，后面能少掉不少猜来猜去。",
+            "会后只发结论和待办，比完整复述过程更清楚，{scene}里也方便大家快速接上。",
+            "重要决定留一句文字确认，不是为了防谁，而是项目忙起来时还能找到共同依据。",
+            "进度没有变化也可以直说，把卡点和需要的支持摆出来，比安静等到最后更轻松。",
+            "周报归到{group}以后只留变化、数据和下一步，不再把每天做过的事重新抄一遍。",
+            "遇到边界模糊的请求，我会先确认优先级，让新增任务和原计划真正放在一起比较。",
+            "下班前给未完成的事留一句状态，第二天回来不用重新在脑子里翻找上下文。",
+            "长期资料按项目而不是按日期收，过一两个月再找，仍然能顺着问题找到答案。"
+          ]
+        },
+        "学习": {
+          groups: ["低门槛启动（先学起来）", "专注记忆（减少走神）", "复盘巩固（真正留下）", "长期节奏（不靠硬撑）"],
+          items: ["五分钟启动", "单页任务单", "番茄专注", "错题回看", "主动回忆", "关键词笔记", "睡前小复盘", "周末总整理", "难点拆小", "输入后输出", "进度留白", "阶段奖励"],
+          scenes: ["备考期", "碎片时间", "容易拖延时", "长期学习"],
+          lines: [
+            "先把门槛压低，不等状态满格再开始，放在{scene}反而更容易坚持。",
+            "不是多抄一遍，而是逼自己从记忆里找答案，卡住的地方才是真正要补的。",
+            "归进{group}很合适，步骤简单、反馈清楚，学完不会只剩下一页漂亮笔记。",
+            "给计划留一点呼吸感，偶尔落下一天也能接着走，不会因为一次中断全部推翻。",
+            "难题先切成能在二十分钟内完成的一小块，{scene}坐下时不会光看着任务发愁。",
+            "错题不急着抄标准答案，先写自己当时错在哪一步，下一次才更容易认出来。",
+            "每学完一段就用自己的话讲一遍，讲不顺的地方，比荧光笔画过的地方更值得回看。",
+            "进度只记真正完成的部分，不用计划里的数字安慰自己，节奏反而会更稳。",
+            "放进{group}后，我会隔几天再测一次，不追求当天全会，更看重过后还能想起来多少。",
+            "特别难的内容和简单任务穿插着做，既有推进感，也不会一开始就把精力耗光。",
+            "状态差的时候保留最低动作，哪怕只读十分钟，也比反复重新启动整套计划轻松。",
+            "阶段结束后只留下有效方法，做不下去的安排直接删，不让旧计划继续占着心思。"
+          ]
+        },
+        "美妆护肤": {
+          groups: ["清透氛围感（夏日/通勤百搭）", "高级气质款（显白/有质感）", "甜美元素（约会/出游）", "个性酷飒风（甜酷/小众）"],
+          items: ["牛乳雾面白", "海盐冰蓝", "桃粉微珠光", "月光贝母", "碎钻猫眼", "莓果酒红", "奶油小花", "粉紫晕染", "水果涂鸦", "银色镜面", "苔绿撞色", "极细几何"],
+          scenes: ["夏日通勤", "约会出游", "日常拍照", "想显白又不张扬的时候"],
+          lines: [
+            "底色压得很轻，像薄雾慢慢透出来，近看有细节，放在{scene}也不会太用力。",
+            "雾蓝从透明底色里慢慢透出来，像冰水里化开的一点颜色，清爽但不会显得冷硬。",
+            "桃粉里只藏很细的珠光，平时看是柔和裸色，转到光下才闪一下，显气色又不甜腻。",
+            "贝母的光泽不是平面的亮，角度一变会浮出细碎层次，放进{group}温柔又有质感。",
+            "细碎猫眼聚光时像一条会移动的星河，钻只点在局部，亮但没有堆满的厚重感。",
+            "莓果调把酒红压得更透，显白又有一点复古感，短甲也不会被深色压住。",
+            "小花像随手点在奶油底色上，线条不追求太规整，甜得轻轻的，很适合{scene}。",
+            "粉和紫从边缘慢慢融在一起，中间留一点透感，像傍晚云层，柔和但不寡淡。",
+            "水果图案画得小一点、颜色亮一点，像夏日手账里的随笔，活泼却没有儿童贴纸感。",
+            "银色镜面只占一两处视觉重点，光线扫过时很利落，配裸色底会把酷感收得刚好。",
+            "苔绿和奶白或黑色做小面积撞色，复古里带一点小众，放进{group}很有辨识度。",
+            "线条细到像一笔带过，圆弧和短线把留白分开，干净、利落，也不会太有距离感。"
+          ]
+        },
+        "穿搭": {
+          groups: ["清爽通勤（简单不无聊）", "温柔约会（轻盈有氛围）", "松弛休闲（舒服耐看）", "个性街头（利落有记忆点）"],
+          items: ["短衬衫叠穿", "窄肩小西装", "高腰直筒裤", "垂感半身裙", "薄针织开衫", "低饱和套装", "白T加长裙", "工装短外套", "同色系层次", "小面积亮色", "金属配饰", "复古运动鞋"],
+          scenes: ["上班通勤", "周末约会", "换季出门", "不想费力搭配的时候"],
+          lines: [
+            "版型先把线条理顺，再留一点松量，{scene}穿不会拘谨，也不容易显得没精神。",
+            "颜色没有抢着说话，靠材质和比例慢慢撑起氛围，拍照和日常都能接住。",
+            "归到{group}很合适，单品不复杂，但腰线、长度和露肤位置都留得很聪明。",
+            "看起来是随手穿，实际细节很完整，加一件小配饰就能从普通变得有记忆点。",
+            "肩线落得刚好，衣身又没有贴得太紧，{scene}活动起来会比照片里更松弛。",
+            "面料带一点垂感，走动时线条会跟着变化，不需要复杂剪裁也有轻盈感。",
+            "内外层只差一点长度和明度，叠穿不会显乱，反而把普通基础款穿出了层次。",
+            "鞋子和包没有硬凑同色，只保留相近的重量感，整套看起来会更自然。",
+            "比例的重点不一定是露腰，而是把上短下长、松紧对比放到合适的位置。",
+            "低饱和做大面积底色，再留一小块亮色，放进{group}会有精神但不吵。",
+            "配饰只选一个视觉重点，耳饰、项链和腰带不用同时出现，留白会更高级。",
+            "换季时把厚薄不同的单品叠在一起，早晚能增减，室内脱掉也还是完整一套。"
+          ]
+        },
+        "美食": {
+          groups: ["快手省心（工作日也能做）", "清爽开胃（吃完没负担）", "聚会分享（端上桌有面子）", "甜蜜收尾（简单又治愈）"],
+          items: ["十分钟拌面", "一锅焖饭", "脆皮鸡腿", "柠檬虾仁", "番茄炖牛腩", "时蔬烘蛋", "蒜香烤口蘑", "芝士焗南瓜", "酸奶水果杯", "抹茶小方", "焦糖布丁", "海盐巧克力"],
+          scenes: ["工作日晚餐", "周末朋友聚会", "夏天没胃口时", "想吃点甜的时候"],
+          lines: [
+            "步骤不绕，香气却很完整，放在{scene}刚刚好，忙的时候也愿意再做一次。",
+            "口感有轻重变化，不是一味堆调料，第一口清爽，后面慢慢吃出香味。",
+            "归进{group}很合适，食材常见、成品好看，端上桌不会像临时拼出来的。",
+            "最讨喜的是不容易腻，甜咸和软脆都有一点，吃到最后仍然很舒服。",
+            "香味先从锅里出来，真正入口却不会太重，{scene}吃完也没有满嘴调料感。",
+            "火候卡在外层刚变色、里面还保留水分的时候，口感会比一味追求焦脆更好。",
+            "酱汁只薄薄挂住食材，不泡成一整盘浓汁，味道够了，食材本身也还在。",
+            "软、脆、糯放在一口里有层次，归进{group}后端上桌会很有完成感。",
+            "食材不需要难买，重点是新鲜度和切法，普通材料也能做出干净的味道。",
+            "装盘不用堆得太满，留出一点空隙，再撒少量点缀，看着会更有食欲。",
+            "甜度收在刚好能尝出香气的位置，配茶或咖啡都不会互相压住。",
+            "做多一点第二天也能换种吃法，不只是当下好看，工作日继续吃也方便。"
+          ]
+        },
+        "旅行": {
+          groups: ["轻松慢游（不赶景点）", "拍照氛围（顺光好出片）", "吃喝路线（边走边尝）", "现实避坑（少绕一点路）"],
+          items: ["清晨老街", "湖边日落", "小众观景台", "本地早市", "巷子咖啡", "沿河骑行", "城市夜游", "一日公交线", "雨天备用点", "错峰入园", "行李寄存", "返程留白"],
+          scenes: ["三天短途", "第一次到访", "两个人慢慢逛", "不想特种兵旅行时"],
+          lines: [
+            "节奏放得比较松，不用一路掐时间，{scene}照着走也能留出临时停下来的空隙。",
+            "光线和路线衔接得自然，不必专门绕远，走到这里刚好能收下一段很完整的画面。",
+            "放进{group}里很顺，一边逛一边解决吃喝，不会为了一个点来回折返。",
+            "看起来是小事，却最影响当天心情，提前留意能少排队、少走路，也少一点狼狈。",
+            "把最想去的地方放在当天第一站，后面行程松一点，{scene}遇到变化也不用全盘重排。",
+            "同一片区域集中走完，比地图上东一个西一个省力，脚下轻松了才有心情慢慢看。",
+            "中间专门留一段喝水发呆的时间，不算浪费，反而能让后半天不至于只想赶紧回去。",
+            "天气不配合时换到室内点，路线仍能接上，放进{group}就不会因为一场雨彻底扫兴。",
+            "本地市场和早市不一定精致，但气味、声音和人情都在，很容易记住一座城真实的样子。",
+            "公共交通能到就不急着打车，沿途会看到攻略之外的街区，预算也能留给真正想吃的东西。",
+            "拍照点最好顺着自然光安排，早晚各留一处，不用正午一路顶着强光找角度。",
+            "返程前别再硬塞一个远景点，留出取行李和吃饭的空档，旅程收尾会从容很多。"
+          ]
+        },
+        "探店": {
+          groups: ["氛围约会（环境先加分）", "认真吃饭（味道更重要）", "朋友聚会（好聊也好点）", "理性避坑（人均排队都算）"],
+          items: ["窗边双人位", "开放式厨房", "季节限定菜", "招牌主食", "小份分享盘", "低糖甜品", "手冲咖啡", "晚间小酒", "工作日午市", "错峰到店", "停车路线", "隐藏菜单"],
+          scenes: ["周末约会", "朋友小聚", "一个人吃饭", "想找新店的时候"],
+          lines: [
+            "环境有记忆点但不会喧宾夺主，坐下来能慢慢聊天，{scene}来会比较舒服。",
+            "不是只靠摆盘，味道和口感有自己的重点，吃完能记住，不会拍完照就没印象。",
+            "归进{group}很合适，选择空间够，但不需要点满一桌才能吃到招牌。",
+            "把人均、排队和交通一起算进去才更真实，好吃是一部分，愿不愿意再来是另一部分。",
+            "座位间距留得够，旁桌声音不会一直压过来，{scene}想好好说话会更放松。",
+            "招牌菜没有只靠重口掩盖食材，第一口有记忆点，吃到后面也不容易疲惫。",
+            "小份菜对两个人很友好，可以多试两样，归进{group}也不用为了凑单点到浪费。",
+            "甜品的甜度和主餐衔接得住，不会刚吃完就腻，作为最后一口刚刚好。",
+            "工作日错峰来体验会完整很多，排队短、上菜稳，也更能判断这家店到底值不值得。",
+            "服务不会热情到打断聊天，需要时又能找到人，这种分寸比固定话术舒服。",
+            "灯光对食物和人脸都友好，不用把照片拉得很暗，现场看也不是只剩氛围。",
+            "真正让我想再来的通常不是某一道神菜，而是价格、味道和舒适度都没有明显短板。"
+          ]
+        },
+        "家居装修": {
+          groups: ["小空间减负（视觉更轻）", "收纳顺手（拿取不绕）", "氛围提升（住着更舒服）", "长期耐用（入住后再看）"],
+          items: ["玄关薄柜", "转角开放格", "悬浮床头柜", "餐边小电器区", "无主灯层次", "柔光窗帘", "同色收纳盒", "隐藏充电位", "清洁工具柜", "可移动边几", "留白墙面", "低饱和软装"],
+          scenes: ["小户型", "租房改造", "第一次装修", "想减少家务的时候"],
+          lines: [
+            "体量收得很轻，不会一进门就被柜子压住，放在{scene}尤其显得空间更透。",
+            "不是单纯追求能塞，而是把高频物品放到顺手的位置，用久了才知道这个细节省事。",
+            "归进{group}很合适，白天干净，晚上开灯后又有层次，家里会慢慢安静下来。",
+            "造型不追一时流行，尺寸、清洁和维修都先想一步，入住以后更不容易后悔。",
+            "走路、开门和拿东西的路线尽量别互相打架，{scene}住久了会比多一个造型更重要。",
+            "柜子内部按物品高度分，而不是平均切格，真正放进去时不会浪费一大截空间。",
+            "光源分成基础照明和局部照明，归进{group}以后，做事看得清，休息时也能慢下来。",
+            "手经常碰到的地方用耐擦材质，照片里未必最亮眼，但入住后会少很多小心翼翼。",
+            "底部能悬空就给清洁工具留路，不能悬空就直接落地封住，最怕不上不下积灰。",
+            "插座不是越多越好，要跟设备真正摆放的位置对上，线不横穿桌面才算顺手。",
+            "大面积颜色先安静下来，再用布艺和小物换季，想改变氛围时不用重新动硬装。",
+            "给未来的新设备或生活变化留一点余量，今天不塞满，过两年反而更好用。"
+          ]
+        },
+        "母婴育儿": {
+          groups: ["轻松吃饭（少一点拉扯）", "睡前安定（节奏慢下来）", "独立练习（给孩子时间）", "外出准备（临时不慌张）"],
+          items: ["固定餐椅", "小份分装", "两种口感", "睡前关灯仪式", "绘本二选一", "安抚小物", "自己拿勺", "低处收纳", "换洗小包", "外出零食盒", "备用湿巾", "回家收尾"],
+          scenes: ["忙乱的工作日", "宝宝状态不稳时", "第一次练习", "短途外出"],
+          lines: [
+            "先把步骤固定下来，大人少催一点，孩子也更容易知道接下来要发生什么。",
+            "放在{scene}很实用，东西不求多，但每一样都有明确位置，临时找起来不会手忙脚乱。",
+            "归进{group}更像一种温和提醒，不替孩子做完，也不给一次结果太大压力。",
+            "重点是连续观察反应，而不是照着别人的进度赶，每个孩子适应的速度都不一样。",
+            "同一件事每天按相近顺序出现，{scene}孩子更容易预判，大人也能少说很多遍。",
+            "一次只给两个选择，既保留一点主动权，也不会因为选项太多把注意力全打散。",
+            "情绪上来时先把动作放慢，不急着讲道理，等身体安定下来再回到原来的步骤。",
+            "份量先给少一点，吃完还能再加，归进{group}会比一开始摆满一桌轻松。",
+            "外出包按使用顺序装，不是把家里所有东西都带走，临时拿取时才不会越翻越乱。",
+            "入口、贴身和经常抓握的物品先看材质与尺寸，好看可以往后排，安全边界要在前面。",
+            "孩子愿意自己试时多等几秒，哪怕动作慢一点，这段练习也比大人代劳更有意义。",
+            "别人家的经验可以参考，但睡眠、饮食和成长反应要回到自己孩子身上连续看。"
+          ]
+        },
+        "数码": {
+          groups: ["日常顺手（高频体验）", "性能进阶（重度使用）", "影像记录（随手也好看）", "理性选购（短板先看）"],
+          items: ["单手操作", "通勤续航", "快充补电", "多任务切换", "长时发热", "游戏帧率", "白天抓拍", "夜景成像", "视频防抖", "系统更新", "存储选择", "售后成本"],
+          scenes: ["每天通勤", "连续重度使用", "旅行拍摄", "换机比较时"],
+          lines: [
+            "参数表里不显眼，真正放进{scene}才会频繁感受到，顺不顺手往往就差这一点。",
+            "短时间看不出区别，连续使用后稳定性更重要，性能高不代表每个场景都舒服。",
+            "归进{group}很合适，不只看样张亮不亮，还要看抓拍、暗光和成片率是否稳定。",
+            "优点当然要看，但尺寸、发热、续航和后续成本也要一起算，选择会更接近真实需求。",
+            "屏幕不只看峰值亮度，长时间阅读时是否刺眼、户外能不能看清，{scene}更容易感受到。",
+            "续航最好按自己的网络、亮度和应用来估，实验室数字很整齐，真实一天却未必一样。",
+            "发热不只是温度高低，还要看热量落在哪、多久能散，握持位置热会更影响体验。",
+            "影像放进{group}以后，我更看重随手拍的稳定，不想每次都先调一轮参数。",
+            "存储空间要把系统、照片和常用应用一起算，刚买时够用，不代表两年后还从容。",
+            "重量差几十克看着不多，通勤一直拿在手里、躺着使用时，体感会慢慢放大。",
+            "系统更新后的流畅度和功能保留同样重要，新功能好看，常用入口别被改得太绕。",
+            "价格之外再算配件、维修和换机周期，真正的使用成本往往不只在付款那一天。"
+          ]
+        },
+        "生活经验": {
+          groups: ["马上能做（先解决眼前）", "情绪减负（少一点自责）", "长期整理（生活慢慢顺）", "关系边界（舒服也清楚）"],
+          items: ["十分钟收尾", "只做一件事", "物品固定位置", "明天清单", "情绪暂停键", "拒绝即时回复", "每周小整理", "账单归档", "重要信息备份", "明确表达需求", "保留独处时间", "阶段性告别"],
+          scenes: ["状态很乱的时候", "独居日常", "工作特别忙的一周", "想重新找回节奏时"],
+          lines: [
+            "不要求一次解决全部，先做眼前最小的一步，{scene}也能慢慢把秩序找回来。",
+            "看起来只是一个小动作，真正有用的是它能截住反复内耗，不让情绪继续往下滚。",
+            "放进{group}里很自然，做久了不会觉得在执行任务，更像给生活留一个固定支点。",
+            "边界说清楚并不等于冷漠，反而能减少猜测，把时间和精力留给真正重要的部分。",
+            "特别乱的时候只收一个台面，{scene}先看到一小块清爽，心里也会跟着松一点。",
+            "常用物品固定位置以后，拿取和归还都不用重新决定，生活会少掉很多细碎消耗。",
+            "情绪很满时先暂停回复，不急着证明谁对，等自己能说清真正需求再继续沟通。",
+            "归进{group}以后，拒绝可以短一点，不编很多理由，也不给自己留下反复解释的任务。",
+            "低能量的一天把标准调到最低，只做能维持生活运转的部分，也算认真照顾自己。",
+            "每周固定收一次重复事务，账单、消息和采购集中处理，比每天惦记着更省心。",
+            "重要记录分门别类留下，真正需要时能找到，过去的经验才不会每次都重新交学费。",
+            "该结束的事情给它一个明确收尾，不一定要想通全部，但可以先把注意力拿回来。"
+          ]
+        },
+        "闲置": {
+          groups: ["实用好物（功能先看）", "成色细节（真实不遮）", "配件组合（拿到能用）", "理性入手（预算更友好）"],
+          items: ["通勤小设备", "桌面收纳", "轻便小家电", "日常数码", "完整包装", "轻微使用痕迹", "原装配件", "备用耗材", "功能实测", "购入时间", "同城自提", "平台交易"],
+          scenes: ["日常自用", "租房生活", "预算有限时", "想先低成本试试的时候"],
+          lines: [
+            "不是只看价格，真正放进{scene}里，功能顺手、状态稳定才是最重要的。",
+            "细节没有刻意藏起来，光线下能看到真实状态，介意的地方也可以提前判断。",
+            "归进{group}很合适，配件和使用情况都说清楚，拿到手不会还要临时补东西。",
+            "适合先把需求想明白再选，不追求全新感，更看重实际好不好用。",
+            "图片尽量把正面、背面和边角都拍到，{scene}远程判断时会比一句“成色很好”可信。",
+            "功能最好按常用场景实际跑一遍，能开机只是起点，连接、按键和续航都要看。",
+            "原装和后配配件分开说明，归进{group}以后，买家能直接知道到手还缺不缺东西。",
+            "划痕、磕碰和老化放在自然光下拍，不用故意放大，也不要用滤镜把它抹掉。",
+            "价格把成色、使用时间和同款行情一起算，留一点正常沟通空间，但不靠虚高再大砍。",
+            "出售原因说简单一点就够，换新、闲置或不合适都可以，没必要编一个完美故事。",
+            "邮寄前把易松动和易磕碰的位置固定好，拍下包装过程，双方都会更安心。",
+            "交易只留在平台里，沟通、付款和售后都有记录，省一点手续费不值得换额外风险。"
+          ]
+        }
+      };
+
       var labels = {
         rednote: {
           titles: "标题备选",
@@ -1476,13 +1738,15 @@
       function collectData() {
         var preset = categoryData[state.category] || categoryData["AI工具"];
         var selectedLength = value("length") || "standard";
-        var pointLimit = selectedLength === "short" ? 2 : selectedLength === "detailed" ? 6 : 4;
+        var selectedGoal = value("goal") || "灵感合集";
+        var fieldPreset = selectedGoal === "灵感合集" ? collectionFieldConfig : preset;
+        var pointLimit = selectedGoal === "灵感合集" ? 20 : selectedLength === "short" ? 2 : selectedLength === "detailed" ? 6 : 4;
         return {
           mode: state.mode,
           category: state.category,
           topic: value("topic"),
           audience: value("audience") || preset.audience,
-          goal: value("goal") || "干货教程",
+          goal: selectedGoal,
           points: pointsFrom(value("points"), pointLimit),
           details: value("details"),
           cautions: value("cautions"),
@@ -1495,8 +1759,8 @@
           city: value("city"),
           trade: value("trade") || "只走平台，支持邮寄",
           facts: [value("fact1"), value("fact2"), value("fact3"), value("fact4")],
-          factLabels: preset.fields.map(function (field) { return field[0]; }),
-          sectionLabels: preset.sections.slice(),
+          factLabels: fieldPreset.fields.map(function (field) { return field[0]; }),
+          sectionLabels: fieldPreset.sections.slice(),
           naturalMode: $("#naturalMode").checked,
           safeMode: $("#safeMode").checked,
           tags: preset.tags.slice()
@@ -1520,11 +1784,12 @@
 
       function uniqueTextLines(input, reserved) {
         var seen = {};
+        var source = Array.isArray(input) ? input.join("\n") : String(input || "");
         (reserved || []).forEach(function (item) {
           var reservedKey = outputKey(item);
           if (reservedKey) seen[reservedKey] = true;
         });
-        return String(input || "")
+        return source
           .split(/\n+/)
           .map(function (item) { return cleanSpaces(item); })
           .filter(function (item) {
@@ -1537,11 +1802,12 @@
 
       function uniqueTextBlocks(input, reserved) {
         var seen = {};
+        var source = Array.isArray(input) ? input.join("\n\n") : String(input || "");
         (reserved || []).forEach(function (item) {
           var reservedKey = outputKey(item);
           if (reservedKey) seen[reservedKey] = true;
         });
-        return String(input || "")
+        return source
           .split(/\n{2,}/)
           .map(function (item) { return item.trim(); })
           .filter(function (item) {
@@ -1572,64 +1838,87 @@
         }).slice(0, 2).join("、");
       }
 
-      function openingIndexes(category) {
-        return {
-          "穿搭": [0, 3],
-          "美食": [0, 3]
-        }[category] || [0, 2];
-      }
-
       function titleFocusIndex(category, goal) {
         if (goal === "避坑提醒") return 3;
         if (category === "穿搭" || category === "美食") return 3;
         return 2;
       }
 
+      function firstClause(input, max) {
+        var text = cleanSpaces(input).split(/[，,。；;]/)[0];
+        return text.length > (max || 8) ? "" : text;
+      }
+
       function rednoteTitles(data, seed) {
         var focusIndex = titleFocusIndex(data.category, data.goal);
         var focus = factValue(data, focusIndex) || factValue(data, 2) || factValue(data, 1) || factValue(data, 0);
-        var evidence = titleEvidence(focus);
+        var metricIndex = {
+          "美妆护肤": 1,
+          "穿搭": 0,
+          "美食": 1,
+          "旅行": 2,
+          "探店": 1,
+          "家居装修": 0,
+          "母婴育儿": 0,
+          "数码": 2
+        }[data.category];
+        var evidence = titleEvidence(factValue(data, metricIndex == null ? focusIndex : metricIndex)) || titleEvidence(focus);
+        var identity = firstClause(factValue(data, 0), 7);
         var categoryLeads = {
-          "AI工具": ["实测记录", "我的实际工作流", "效率和限制都说"],
-          "职场": ["这次工作复盘", "上班族实用记录", "前后变化都在这里"],
-          "学习": ["这段时间的学习记录", "从起点到结果", "执行过程复盘"],
-          "美妆护肤": ["按肤质说感受", "用了以后再评价", "优点和不适都说"],
-          "穿搭": ["身材数据在这里", "真实上身记录", "尺码和问题都说"],
-          "美食": ["克数和时间都给了", "新手实做记录", "成品和失败点都说"],
-          "旅行": ["路线花费实记", "这趟真实行程", "时间预算都列了"],
-          "探店": ["真实消费记录", "人均和排队都说", "点单后再评价"],
-          "家居装修": ["尺寸预算实记", "改完入住再说", "效果和遗憾都有"],
-          "母婴育儿": ["按月龄说情况", "一段真实观察", "个体反应如实记"],
-          "数码": ["连续使用后再说", "实测表现记录", "短板也不省略"],
-          "生活经验": ["这件事的真实经过", "我最后这样处理", "结果和教训都在"]
-        }[data.category] || ["真实记录", "实际体验", "优点和问题都说"];
+          "AI工具": ["真实工作流", "效率变化", "限制也说"],
+          "职场": ["一次工作复盘", "前后变化", "返工点也说"],
+          "学习": ["执行记录", "从起点到结果", "弯路也保留"],
+          "美妆护肤": ["按肤质实测", "用后感受", "缺点不省略"],
+          "穿搭": ["身材数据实穿", "尺码参考", "上身问题也说"],
+          "美食": ["克数时间都在", "实做步骤", "失败点也说"],
+          "旅行": ["路线花费实记", "真实行程", "避坑也说"],
+          "探店": ["真实消费记录", "点单和人均", "排队缺点也说"],
+          "家居装修": ["尺寸预算实记", "入住后复盘", "遗憾也保留"],
+          "母婴育儿": ["按月龄记录", "连续观察", "个体差异也说"],
+          "数码": ["连续使用实测", "真实表现", "短板不省略"],
+          "生活经验": ["事情完整经过", "实际处理结果", "教训也留下"]
+        }[data.category] || ["真实记录", "实际体验", "问题也说"];
+        var titleQuestion = {
+          "AI工具": "到底省了多少时间？",
+          "职场": "我是怎么减少返工的？",
+          "学习": "坚持下来结果怎样？",
+          "美妆护肤": "到底适不适合？",
+          "穿搭": "上身到底怎么样？",
+          "美食": "怎么做不容易翻车？",
+          "旅行": "路线怎么排更顺？",
+          "探店": "值不值得排队？",
+          "家居装修": "住进去后好用吗？",
+          "母婴育儿": "我家实际反应怎样？",
+          "数码": "真实表现怎么样？",
+          "生活经验": "最后我是怎么解决的？"
+        }[data.category] || "实际结果怎么样？";
         var goalLead = {
-          "干货教程": "实际步骤",
-          "经验分享": "我的真实经历",
-          "避坑提醒": "这处问题要注意",
-          "产品种草": "用过后的感受",
-          "使用测评": "使用表现实测",
-          "商品介绍": "内容与限制"
+          "干货教程": "实际步骤和关键点",
+          "经验分享": "一次真实经历",
+          "避坑提醒": "我遇到的问题",
+          "产品种草": "优点缺点都说",
+          "使用测评": "用后再评价",
+          "商品介绍": "信息和限制"
         }[data.goal] || "真实记录";
         var pool = [
-          data.topic + "｜" + (evidence ? evidence + "后的真实记录" : categoryLeads[0]),
-          data.topic + "，" + categoryLeads[0],
-          "给" + titleFragment(data.audience, 10) + "的" + data.topic + goalLead,
-          data.topic + "：" + categoryLeads[1],
-          "关于" + data.topic + "，" + categoryLeads[2]
+          data.topic + "｜" + (evidence ? evidence + "，" : "") + categoryLeads[2],
+          (identity ? identity + "｜" : "") + data.topic + categoryLeads[0],
+          data.topic + "：" + categoryLeads[1] + "，" + categoryLeads[2],
+          data.topic + titleQuestion,
+          data.topic + "｜" + goalLead
         ];
         var ordered = [];
         for (var i = 0; i < pool.length; i += 1) {
           ordered.push(pool[(seed + state.generation + i) % pool.length]);
         }
         return uniqueTextLines(ordered.map(function (item) {
-          return compact(item, 32);
+          return compact(item, 26);
         })).slice(0, 5);
       }
 
       function goalOpening(data) {
         if (data.tone === "清单干货") {
-          return data.topic + "的实际条件、过程和结果，按顺序列在下面。";
+          return data.topic + "的实际条件、过程和结果都在这里。";
         }
         if (data.tone === "简洁专业") {
           return "以下是" + data.topic + "在本次条件下的实际记录。";
@@ -1638,23 +1927,57 @@
           return "最近刚好在做" + data.topic + "，把这次真实体验记一下。";
         }
         return {
-          "干货教程": "这次做" + data.topic + "，我把自己实际用过的过程放在一起。",
-          "经验分享": "这是我关于" + data.topic + "的一次实际记录。",
-          "避坑提醒": "关于" + data.topic + "，我确实遇到过下面这些问题。",
-          "产品种草": "这篇只说我实际接触" + data.topic + "后的感受。",
-          "使用测评": "下面是我在固定使用条件下对" + data.topic + "的观察。",
-          "商品介绍": "关于" + data.topic + "，这里是实际内容、结果和限制。"
+          "干货教程": "这次做" + data.topic + "，我只保留了自己真正用过的步骤。",
+          "经验分享": "关于" + data.topic + "，结果和中间的细节都值得记一下。",
+          "避坑提醒": "关于" + data.topic + "，我确实踩到过一个不太起眼的问题。",
+          "产品种草": data.topic + "没有让我立刻下结论，用过以后感受更具体。",
+          "使用测评": "不只看介绍，直接说" + data.topic + "在我这里的实际表现。",
+          "商品介绍": "先把" + data.topic + "的实际内容、适用条件和限制放在一起。"
         }[data.goal] || "这是我关于" + data.topic + "的一次实际记录。";
       }
 
+      function storyOrder(data) {
+        if (data.goal === "避坑提醒" && factValue(data, 3)) return [3, 0, 1, 2];
+        return {
+          "美妆护肤": [2, 0, 1, 3],
+          "穿搭": [3, 0, 1, 2],
+          "美食": [3, 0, 2, 1],
+          "旅行": [3, 0, 1, 2],
+          "探店": [2, 0, 1, 3],
+          "家居装修": [2, 0, 1, 3],
+          "母婴育儿": [2, 0, 1, 3],
+          "数码": [2, 0, 1, 3],
+          "生活经验": [2, 0, 1, 3]
+        }[data.category] || [2, 0, 1, 3];
+      }
+
+      function factPrefixes(category) {
+        return {
+          "AI工具": ["我真正用到它的场景是：", "实际操作时，我是这样跑的：", "最后最直观的变化是：", "但它没有省掉所有工作："],
+          "职场": ["先交代工作背景：", "我具体做了这件事：", "前后最明显的变化是：", "仍然会返工的地方是："],
+          "学习": ["我的起点和目标是：", "这段时间我实际执行的是：", "目前能看到的结果是：", "中间走过的弯路是："],
+          "美妆护肤": ["先交代我的肤质：", "我的使用频率是：", "用下来最明显的感受是：", "不太满意的地方也有："],
+          "穿搭": ["给大家一个身材参考：", "这套我主要穿去：", "单品和尺码是：", "真实上身后，我最在意的是："],
+          "美食": ["这次用到的食材是：", "温度和时间我设成：", "做的时候最关键的一步是：", "出锅后的口感和问题是："],
+          "旅行": ["这趟的时间和同行人是：", "路线我这样排：", "花费和耗时大概是：", "我最想提醒的一点是："],
+          "探店": ["先说到店信息：", "我们这次点了：", "吃完最直接的感受是：", "排队、停车和缺点也说一下："],
+          "家居装修": ["先交代房屋和预算：", "这次用到的尺寸和材料是：", "改完以后最明显的变化是：", "住进去才发现的遗憾是："],
+          "母婴育儿": ["先说孩子当时的阶段：", "我们连续做了这件事：", "这段时间观察到的反应是：", "需要单独说明的边界是："],
+          "数码": ["我用的具体版本是：", "这段时间主要这样用：", "实际能观察到的表现是：", "短板和适合的人也很明确："],
+          "生活经验": ["事情发生时的情况是：", "我当时这样处理：", "最后的结果是：", "下次我会改掉这一点："],
+          "闲置": ["购买和使用情况：", "配件与功能状态：", "成色和出售原因：", "瑕疵与交易限制："]
+        }[category] || ["先说我的情况：", "实际过程是：", "最后的结果是：", "还有一个限制："];
+      }
+
+      function naturalFactSentence(data, index) {
+        var fact = factValue(data, index);
+        if (!fact) return "";
+        return factPrefixes(data.category)[index] + ensureSentence(fact);
+      }
+
       function rednoteOpening(data) {
-        var indexes = openingIndexes(data.category);
-        var parts = [goalOpening(data)];
-        indexes.forEach(function (index) {
-          var fact = factValue(data, index);
-          if (fact) parts.push(data.factLabels[index] + "：" + ensureSentence(fact));
-        });
-        return parts.join("\n");
+        var firstIndex = storyOrder(data).filter(function (index) { return factValue(data, index); })[0];
+        return [goalOpening(data), naturalFactSentence(data, firstIndex)].filter(Boolean).join("\n");
       }
 
       function categoryBoundary(data) {
@@ -1718,25 +2041,47 @@
         }).join("\n");
       }
 
-      function rednoteBody(data, primaryTitle, opening) {
-        var indexesUsedInOpening = openingIndexes(data.category);
-        var sections = [primaryTitle, opening];
+      function categoryQuestion(data) {
+        return {
+          "AI工具": "你用AI时最想省掉的是哪一步？",
+          "职场": "你工作里最容易反复返工的是哪一环？",
+          "学习": "你现在更卡在计划，还是坚持执行？",
+          "美妆护肤": "你更在意肤感、效果，还是搓泥这类问题？",
+          "穿搭": "你选这类单品时最纠结尺码还是版型？",
+          "美食": "你做这道时最容易卡在温度还是调味？",
+          "旅行": "如果你也去，最想先看路线、预算还是避坑？",
+          "探店": "你选店时更在意味道、人均还是排队？",
+          "家居装修": "你家最想先解决收纳、尺寸还是动线？",
+          "母婴育儿": "你家在同一阶段也遇到过类似情况吗？",
+          "数码": "你买数码产品时最在意续航、性能还是影像？",
+          "生活经验": "换成你遇到这件事，会先处理哪一步？"
+        }[data.category] || "你遇到过类似情况吗？";
+      }
 
-        (data.facts || []).forEach(function (fact, index) {
-          if (!cleanSpaces(fact) || indexesUsedInOpening.indexOf(index) !== -1) return;
-          sections.push(data.sectionLabels[index] + "\n" + ensureSentence(fact));
+      function rednoteBody(data, primaryTitle, opening) {
+        var sections = [primaryTitle, opening];
+        var orderedIndexes = storyOrder(data).filter(function (index) { return factValue(data, index); });
+        var firstIndex = orderedIndexes[0];
+
+        orderedIndexes.forEach(function (index) {
+          if (index === firstIndex) return;
+          if (data.tone === "清单干货") {
+            sections.push(data.sectionLabels[index] + "\n" + ensureSentence(factValue(data, index)));
+          } else {
+            sections.push(naturalFactSentence(data, index));
+          }
         });
 
         var pointSection = rednotePointSection(data);
         if (pointSection) sections.push(pointSection);
-        if (data.details) sections.push("补充记录\n" + ensureSentence(data.details));
-        if (data.cautions) sections.push("还要注意\n" + ensureSentence(data.cautions));
+        if (data.details) sections.push("还有一个细节：" + ensureSentence(data.details));
+        if (data.cautions) sections.push("另外要说的是：" + ensureSentence(data.cautions));
         sections.push(categoryBoundary(data));
 
         var price = data.price ? "，当前标价" + data.price + "元" : "";
         var ctaText = {
           "收藏备用": "这份记录可以先收藏，遇到相同情况时再回来对照。",
-          "评论交流": "你在" + data.topic + "里遇到的情况一样吗？可以在评论里交流。",
+          "评论交流": categoryQuestion(data),
           "查看店铺商品": "完整目录和预览可以在店铺商品页查看" + price + "，确认适合自己再选择。",
           "不加引导": ""
         }[data.cta] || "";
@@ -1745,9 +2090,232 @@
         return uniqueTextBlocks(sections).join("\n\n");
       }
 
+      function collectionValues(input, limit) {
+        var seen = {};
+        var text = String(input || "").trim();
+        var parts = /\n/.test(text) ? text.split(/\n+/) : text.split(/[，,、；;]+/);
+        return parts.map(function (item) {
+          return cleanSpaces(item).replace(/^\s*(?:[•·-]\s*|\d{1,2}[.、]\s*)/, "");
+        }).filter(function (item) {
+          var key = cleanSpaces(item).toLowerCase().replace(/[，。！？!?；;：:、,.\s#“”"'「」【】()[\]（）《》]/g, "");
+          if (!key || seen[key]) return false;
+          seen[key] = true;
+          return true;
+        }).slice(0, limit || 24);
+      }
+
+      function mergeCollectionValues(primary, fallback, limit) {
+        var seen = {};
+        return (primary || []).concat(fallback || []).map(function (item) {
+          return cleanSpaces(item);
+        }).filter(function (item) {
+          var key = cleanSpaces(item).toLowerCase().replace(/[，。！？!?；;：:、,.\s#“”"'「」【】()[\]（）《》]/g, "");
+          if (!key || seen[key]) return false;
+          seen[key] = true;
+          return true;
+        }).slice(0, limit);
+      }
+
+      function collectionSettings(length) {
+        if (length === "short") return { groupCount: 2, itemsPerGroup: 2, label: "精简" };
+        if (length === "detailed") return { groupCount: 4, itemsPerGroup: 3, label: "丰富" };
+        return { groupCount: 3, itemsPerGroup: 3, label: "标准" };
+      }
+
+      function getCollectionProfile(data) {
+        return collectionProfiles[data.category] || collectionProfiles["生活经验"];
+      }
+
+      function parseCollectionIdea(input) {
+        var text = cleanSpaces(input);
+        var match = text.match(/^([^：:]{1,24})[：:]\s*(.+)$/);
+        return match ? { name: cleanSpaces(match[1]), detail: cleanSpaces(match[2]) } : { name: text, detail: "" };
+      }
+
+      function shortGroupName(input) {
+        return cleanSpaces(input).replace(/[（(].*?[）)]/g, "").trim();
+      }
+
+      function collectionHeading(group, scene) {
+        var text = cleanSpaces(group);
+        return /[（(]/.test(text) ? text : text + "（" + scene + "）";
+      }
+
+      function collectionInputs(data, profile, settings) {
+        var suppliedItems = collectionValues(factValue(data, 0), 24).concat(data.points || []);
+        var suppliedGroups = collectionValues(factValue(data, 1), 8);
+        var suppliedScenes = collectionValues(factValue(data, 2), 8);
+        return {
+          items: mergeCollectionValues(suppliedItems, profile.items, settings.groupCount * settings.itemsPerGroup),
+          groups: mergeCollectionValues(suppliedGroups, profile.groups, settings.groupCount),
+          scenes: mergeCollectionValues(suppliedScenes, profile.scenes, Math.max(settings.groupCount, 4)),
+          preference: factValue(data, 3)
+        };
+      }
+
+      function collectionNuances(category) {
+        var visualCategories = ["美妆护肤", "穿搭", "美食", "旅行", "探店", "家居装修"];
+        if (visualCategories.indexOf(category) !== -1) {
+          return [
+            "整体不会显得用力过头。", "放进日常也不会突然跳出来。", "单独保留这一点就已经很完整。",
+            "换个场景，方向也不容易跑偏。", "不必再靠很多装饰撑存在感。", "看着有变化，真正搭起来又不难接住。",
+            "轻重留得有分寸，多看几次也不会觉得挤。", "和同组其他选择放在一起也很顺。", "第一次尝试也不会觉得门槛太高。",
+            "想换一点感觉时，从这里开始刚刚好。", "留一点余地，反而更有自己的味道。", "不只是拍一下好看，回到日常也能留下来。"
+          ];
+        }
+        return [
+          "真正做起来不会一下增加很多负担。", "放进原来的节奏里也不容易打架。", "只先保留这一项就已经能看见变化。",
+          "换个场景，核心思路也不会跟着跑偏。", "不必额外搭一套复杂流程。", "看着有变化，实际执行又不难接住。",
+          "轻重有分寸，连续使用也不容易累。", "和同组其他选择放在一起也很顺。", "第一次尝试也不会觉得门槛太高。",
+          "想先小范围试试，从这里开始刚刚好。", "留一点调整余地，后面反而更好坚持。", "不是只能看一次的点子，放回日常也能留下来。"
+        ];
+      }
+
+      function collectionLineIndex(data, profile, idea, group, seed) {
+        var knownIndex = profile.items.indexOf(idea.name);
+        if (knownIndex !== -1 && knownIndex < profile.lines.length) return knownIndex;
+        if (data.category === "美妆护肤") {
+          var beautyMatchers = [
+            /乳白|牛乳|雾面|裸透/, /海盐|冰蓝|雾蓝|蓝色/, /桃粉|珠光|微闪/, /贝母|月光/,
+            /猫眼|碎钻/, /莓果|酒红/, /奶油.*花|小花|花朵/, /晕染|渐变|粉紫/,
+            /水果|涂鸦/, /镜面|银色|金属/, /苔绿|撞色|绿色/, /几何|线条|极细/
+          ];
+          for (var i = 0; i < beautyMatchers.length; i += 1) {
+            if (beautyMatchers[i].test(idea.name)) return i;
+          }
+        }
+        return hash(idea.name + shortGroupName(group) + data.category + seed) % profile.lines.length;
+      }
+
+      function collectionDescription(data, profile, idea, group, scene, index, seed) {
+        if (idea.detail) return ensureSentence(idea.detail);
+        var lineIndex = collectionLineIndex(data, profile, idea, group, seed);
+        var line = profile.lines[lineIndex]
+          .replace(/\{scene\}/g, scene)
+          .replace(/\{group\}/g, shortGroupName(group));
+        var nuances = collectionNuances(data.category);
+        var nuance = nuances[(seed + state.generation * 5 + index) % nuances.length];
+        line = line.replace(/。$/, "") + "，" + nuance;
+        if (data.tone === "简洁专业") {
+          return line.replace(/，属于[^。]+的那种。$/, "。").replace(/，很耐看。$/, "。");
+        }
+        if (data.tone === "轻松口语" && index % 3 === 1) {
+          return line.replace(/。$/, "，我自己会很愿意把它留在备选里。");
+        }
+        return line;
+      }
+
+      function collectionSubject(topic) {
+        return cleanSpaces(topic).replace(/(?:灵感|合集|清单)+$/g, "") || cleanSpaces(topic);
+      }
+
+      function collectionTitles(data, inputs, settings, seed) {
+        var subject = collectionSubject(data.topic);
+        var total = settings.groupCount * settings.itemsPerGroup;
+        var first = shortGroupName(inputs.groups[0]);
+        var second = shortGroupName(inputs.groups[1] || inputs.groups[0]);
+        var pool = [
+          subject + "｜" + total + "个灵感按风格挑",
+          subject + "灵感清单｜从" + first + "到" + second,
+          "别再乱翻了｜" + subject + "分成" + settings.groupCount + "种感觉",
+          "想做" + subject + "的先看｜每一种都分好组了",
+          subject + "怎么选？这份分组清单更直观",
+          total + "个" + subject + "灵感｜日常和出片都照顾到",
+          "最近很喜欢的" + subject + "方向，都替你分好了"
+        ];
+        var ordered = [];
+        var offset = (seed + state.generation) % pool.length;
+        for (var i = 0; i < pool.length; i += 1) {
+          ordered.push(compact(pool[(offset + i) % pool.length], 26));
+        }
+        return uniqueTextLines(ordered).slice(0, 5);
+      }
+
+      function collectionOpeningPool(data, inputs, seed) {
+        var subject = collectionSubject(data.topic);
+        var first = shortGroupName(inputs.groups[0]);
+        var second = shortGroupName(inputs.groups[1] || inputs.groups[0]);
+        var scene = inputs.scenes[0];
+        var pool = [
+          "最近把" + subject + "重新理了一遍，越看越觉得只按“好看”来分太笼统。干脆顺着不同感觉慢慢挑，反而更容易找到真正适合自己的。",
+          "这次不想堆一长串冷冰冰的名字，直接把" + subject + "按" + first + "、" + second + "这些方向分开，想找哪种气质一眼就能看到。",
+          "收藏夹里零零散散存了不少" + subject + "，这两天终于把它们分好组了。" + scene + "想换点感觉，可以从下面慢慢挑。",
+          "如果你也常常觉得每一款都好看、真要选又拿不准，这份" + subject + "清单会直观很多。我把日常、氛围和一点小个性都放进来了。",
+          "我挑" + subject + "时不太喜欢一味堆元素，更在意整体有没有呼吸感。下面这些方向各有脾气，但都不是只能拍照看一次的款。"
+        ];
+        var ordered = [];
+        var offset = (seed + state.generation * 2) % pool.length;
+        for (var i = 0; i < pool.length; i += 1) ordered.push(pool[(offset + i) % pool.length]);
+        if (inputs.preference) {
+          ordered[0] += "\n这次筛选时我也留了一个小标准：" + ensureSentence(inputs.preference);
+        }
+        return ordered;
+      }
+
+      function collectionClosing(data, inputs) {
+        var first = shortGroupName(inputs.groups[0]);
+        var second = shortGroupName(inputs.groups[1] || inputs.groups[0]);
+        var price = data.price ? "，当前是" + data.price + "元" : "";
+        return {
+          "收藏备用": "先存着也不急着一次选定，等真正要用的时候，再回来看看自己更偏向哪一组。",
+          "评论交流": "你第一眼更喜欢" + first + "，还是" + second + "？我还挺想知道大家会怎么选。",
+          "查看店铺商品": "完整清单和可直接修改的版本放在商品页" + price + "，可以先看目录和预览，觉得用得上再选。",
+          "不加引导": "这份先整理到这里。我自己会在" + first + "和" + second + "之间反复横跳，你呢？"
+        }[data.cta] || "你第一眼更喜欢哪一组？";
+      }
+
+      function collectionComment(data, inputs) {
+        var first = shortGroupName(inputs.groups[0]);
+        var last = shortGroupName(inputs.groups[inputs.groups.length - 1]);
+        if (data.cta === "查看店铺商品") {
+          return "完整版里保留了更多分组和可改文字，商品页可以先看目录，不合适不用勉强选。";
+        }
+        if (data.cta === "收藏备用") {
+          return "可以先收藏，等要做同类内容时直接按分组找，不用再从头翻灵感。";
+        }
+        return "下一份你想先看“" + first + "”还是“" + last + "”？我按大家更想看的方向继续整理。";
+      }
+
+      function generateCollectionRednote(data) {
+        var profile = getCollectionProfile(data);
+        var settings = collectionSettings(data.length);
+        var seed = hash(data.topic + data.category + data.audience);
+        var inputs = collectionInputs(data, profile, settings);
+        var titles = collectionTitles(data, inputs, settings, seed);
+        var primaryTitle = titles[0] || data.topic;
+        var openings = collectionOpeningPool(data, inputs, seed);
+        var sections = [primaryTitle, openings[0]];
+        var itemIndex = 0;
+
+        inputs.groups.forEach(function (group, groupIndex) {
+          var scene = inputs.scenes[groupIndex % inputs.scenes.length];
+          var lines = [collectionHeading(group, scene)];
+          for (var i = 0; i < settings.itemsPerGroup; i += 1) {
+            var idea = parseCollectionIdea(inputs.items[itemIndex]);
+            lines.push("• " + idea.name + "：" + collectionDescription(data, profile, idea, group, scene, itemIndex, seed));
+            itemIndex += 1;
+          }
+          sections.push(lines.join("\n"));
+        });
+
+        if (data.details) sections.push("我还会顺手留意这一点：" + ensureSentence(data.details));
+        if (data.cautions) sections.push("有一类我会先排除：" + ensureSentence(data.cautions));
+        sections.push(collectionClosing(data, inputs));
+
+        return {
+          primaryTitle: primaryTitle,
+          titles: titles.slice(1).map(function (item, index) { return (index + 1) + ". " + item; }).join("\n"),
+          hooks: uniqueTextBlocks(openings.slice(1)).slice(0, 3).join("\n\n"),
+          extras: rednoteExtras(data),
+          body: uniqueTextBlocks(sections).join("\n\n"),
+          comment: collectionComment(data, inputs)
+        };
+      }
+
       function rednoteExtras(data) {
         var topicTag = cleanSpaces(data.topic).replace(/[^\u4e00-\u9fa5A-Za-z0-9]/g, "").slice(0, 12);
         var goalTags = {
+          "灵感合集": ["灵感合集", "分类清单"],
           "干货教程": ["教程分享", "方法整理"],
           "经验分享": ["经验记录", "真实分享"],
           "避坑提醒": ["避坑指南", "新手避坑"],
@@ -1782,6 +2350,7 @@
       }
 
       function generateRednote(data) {
+        if (data.goal === "灵感合集") return generateCollectionRednote(data);
         var seed = hash(data.topic + data.audience + data.goal + data.category);
         var titles = rednoteTitles(data, seed);
         var primaryTitle = titles[0] || data.topic;
@@ -1799,6 +2368,18 @@
       }
 
       function validateRednoteFacts(data) {
+        if (data.goal === "灵感合集") {
+          var required = [0, 1, 2];
+          var missingCollection = required.filter(function (index) {
+            return cleanSpaces((data.facts || [])[index]).length < 4;
+          }).map(function (index) {
+            return data.factLabels[index];
+          });
+          return missingCollection.length ? {
+            valid: false,
+            message: "还差灵感素材：" + missingCollection.join("、")
+          } : { valid: true, message: "" };
+        }
         var filled = (data.facts || []).filter(function (fact) {
           return cleanSpaces(fact).length >= 4;
         });
@@ -1820,10 +2401,12 @@
         banned.forEach(function (phrase) {
           if (combined.indexOf(phrase) !== -1) issues.push("包含写作提示：" + phrase);
         });
-        (data.facts || []).filter(Boolean).forEach(function (fact) {
-          var factText = cleanSpaces(fact).replace(/[。！？!?；;]+$/g, "");
-          if (comparableBody.indexOf(factText) === -1) issues.push("遗漏真实素材");
-        });
+        if (data.goal !== "灵感合集") {
+          (data.facts || []).filter(Boolean).forEach(function (fact) {
+            var factText = cleanSpaces(fact).replace(/[。！？!?；;]+$/g, "");
+            if (comparableBody.indexOf(factText) === -1) issues.push("遗漏真实素材");
+          });
+        }
         return Array.from(new Set(issues));
       }
 
@@ -2060,33 +2643,48 @@
 
       function updateCategoryFields() {
         var preset = categoryData[state.category] || categoryData["AI工具"];
-        $("#categoryHint").textContent = preset.hint;
-        preset.fields.forEach(function (field, index) {
+        var isCollection = state.mode === "rednote" && value("goal") === "灵感合集";
+        var fieldPreset = isCollection ? collectionFieldConfig : preset;
+        $("#categoryHint").textContent = fieldPreset.hint;
+        fieldPreset.fields.forEach(function (field, index) {
           var number = index + 1;
           $("#fact" + number + "Label").textContent = field[0];
           $("#fact" + number).placeholder = field[1];
         });
+        $("#factSectionTitle").textContent = isCollection ? "灵感素材" : "真实素材";
+        $("#factSectionRule").textContent = isCollection ? "填写元素、风格和场景，整体偏好可选" : "至少填写3项，不确定就留空";
+        if (state.mode === "xianyu") {
+          $("#pointsLabelText").textContent = "商品卖点";
+          $("#points").placeholder = "例如：自用为主；功能正常；盒子和充电线都在";
+        } else if (isCollection) {
+          $("#pointsLabelText").textContent = "更多灵感选项";
+          $("#points").placeholder = "还想加入哪些元素？可继续用逗号或换行补充";
+        } else {
+          $("#pointsLabelText").textContent = "补充要点";
+          $("#points").placeholder = "例如：打开工具导入原始内容；删掉没有依据的数据；人工调整开头";
+        }
         $("#factSection").classList.remove("has-error");
         $("#factsError").classList.remove("show");
       }
 
       function fillSample() {
         if (state.mode === "rednote") {
-          setCategory("AI工具");
-          $("#topic").value = "用AI整理小红书文案";
-          $("#audience").value = "刚开始做小红书、每次写文案都卡住的新手";
-          $("#goal").value = "干货教程";
-          $("#fact1").value = "每天要整理3篇小红书初稿，原来一篇大约需要40分钟";
-          $("#fact2").value = "先输入主题、目标读者和自己的真实经历，再从生成结果里人工调整标题和开头";
-          $("#fact3").value = "熟悉操作后，一篇初稿大约15分钟能整理完，标题和正文还能继续修改";
-          $("#fact4").value = "网站不会自动核实经历和数据，空泛输入得到的内容也会很空，最后仍要人工检查";
-          $("#points").value = "选定作品类型\n填入3到4项真实素材\n生成后删掉与自己不符的句子";
-          $("#details").value = "目前包含标题、完整正文、标签和置顶评论，手机和电脑浏览器都能打开";
-          $("#cautions").value = "它能缩短整理初稿的时间，但不能保证流量或成交";
+          setCategory("美妆护肤");
+          $("#topic").value = "夏日显白美甲灵感";
+          $("#audience").value = "想做通勤、约会都耐看的夏日美甲的人";
+          $("#goal").value = "灵感合集";
+          updateCategoryFields();
+          $("#fact1").value = "牛乳雾面白、海盐冰蓝、桃粉微珠光、月光贝母、碎钻猫眼、莓果酒红、奶油小花、粉紫晕染、水果涂鸦、银色镜面、苔绿撞色、极细几何";
+          $("#fact2").value = "清透氛围感、高级气质款、甜美元素、个性酷飒风";
+          $("#fact3").value = "夏日通勤、约会出游、日常拍照、想显白又不张扬的时候";
+          $("#fact4").value = "轻盈、有画面，不要厚重堆钻和影楼感";
+          $("#points").value = "";
+          $("#details").value = "";
+          $("#cautions").value = "";
           $("#tone").value = "真实自然";
           $("#length").value = "standard";
-          $("#cta").value = "查看店铺商品";
-          $("#price").value = "19.9";
+          $("#cta").value = "评论交流";
+          $("#price").value = "";
         } else {
           setCategory("闲置");
           $("#topic").value = "Sony WH-1000XM5降噪耳机";
@@ -2129,6 +2727,7 @@
           if (!node || key === "naturalMode" || key === "safeMode") return;
           node.value = form[key] == null ? "" : form[key];
         });
+        updateCategoryFields();
         $("#naturalMode").checked = form.naturalMode !== false;
         $("#safeMode").checked = form.safeMode !== false;
         saveDraft();
@@ -2508,10 +3107,11 @@
           $("#topicError").classList.remove("show");
         }
         if (/^fact[1-4]$/.test(event.target.id)) {
-          var filledFacts = [value("fact1"), value("fact2"), value("fact3"), value("fact4")].filter(function (fact) {
+          var collectionReady = value("goal") === "灵感合集" && [value("fact1"), value("fact2"), value("fact3")].every(function (fact) {
             return fact.length >= 4;
           });
-          if (filledFacts.length >= 3) {
+          var filledFacts = [value("fact1"), value("fact2"), value("fact3"), value("fact4")].filter(function (fact) { return fact.length >= 4; });
+          if (collectionReady || (value("goal") !== "灵感合集" && filledFacts.length >= 3)) {
             $("#factSection").classList.remove("has-error");
             $("#factsError").classList.remove("show");
           }
@@ -2519,7 +3119,13 @@
         saveDraft();
       });
 
-      $("#copyForm").addEventListener("change", saveDraft);
+      $("#copyForm").addEventListener("change", function (event) {
+        if (event.target.id === "goal") {
+          updateCategoryFields();
+          resetOutputs();
+        }
+        saveDraft();
+      });
 
       if (window.visualViewport) {
         var updateKeyboardState = function () {
