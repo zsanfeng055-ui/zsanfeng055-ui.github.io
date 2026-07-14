@@ -498,6 +498,19 @@
       grid-column: 1 / -1;
     }
 
+    .output-card.primary-output {
+      border-top: 3px solid var(--primary);
+    }
+
+    .output-card.primary-output .card-head {
+      background: var(--primary-soft);
+    }
+
+    .output-card.primary-output .output-content {
+      min-height: 360px;
+      max-height: 620px;
+    }
+
     .card-head {
       min-height: 48px;
       display: flex;
@@ -822,7 +835,7 @@
         <div class="brand-mark" aria-hidden="true">文</div>
         <div class="brand-copy">
           小红书文案工作台
-          <small>V3 苹果网页版</small>
+          <small>V5 小红书完整笔记</small>
         </div>
       </div>
 
@@ -1001,7 +1014,7 @@
         </div>
         <div class="toolbar">
           <button class="mini-button primary" type="button" data-generate>换一版</button>
-          <button class="mini-button" type="button" data-copy-all>复制全部</button>
+          <button class="mini-button" type="button" data-copy-body>复制完整文案</button>
           <button class="mini-button" type="button" data-share-result>分享文案</button>
           <button class="mini-button" type="button" data-export>导出TXT</button>
         </div>
@@ -1013,20 +1026,28 @@
       </div>
 
       <div class="output-grid">
+        <article class="output-card wide primary-output">
+          <div class="card-head">
+            <h2><span id="bodyLabel">完整发布稿</span><span class="edit-hint">结果可直接修改</span></h2>
+            <button class="copy-button" type="button" data-copy-target="body">复制</button>
+          </div>
+          <div class="output-content placeholder" id="body" contenteditable="true" role="textbox" aria-label="完整发布稿">生成后显示一篇包含标题、正文和结尾的完整小红书笔记。</div>
+        </article>
+
         <article class="output-card wide">
           <div class="card-head">
-            <h2><span id="titlesLabel">标题方案</span><span class="edit-hint">结果可直接修改</span></h2>
+            <h2><span id="titlesLabel">标题备选</span></h2>
             <button class="copy-button" type="button" data-copy-target="titles">复制</button>
           </div>
-          <div class="output-content placeholder" id="titles" contenteditable="true" role="textbox" aria-label="标题方案">生成后显示5个标题方案。</div>
+          <div class="output-content placeholder" id="titles" contenteditable="true" role="textbox" aria-label="标题备选">生成后显示未被完整发布稿使用的标题备选。</div>
         </article>
 
         <article class="output-card">
           <div class="card-head">
-            <h2 id="hooksLabel">开头方案</h2>
+            <h2 id="hooksLabel">开头备选</h2>
             <button class="copy-button" type="button" data-copy-target="hooks">复制</button>
           </div>
-          <div class="output-content placeholder" id="hooks" contenteditable="true" role="textbox" aria-label="开头方案">生成后显示3个开头方案。</div>
+          <div class="output-content placeholder" id="hooks" contenteditable="true" role="textbox" aria-label="开头备选">生成后显示没有写进完整发布稿的开头备选。</div>
         </article>
 
         <article class="output-card">
@@ -1034,15 +1055,7 @@
             <h2 id="extrasLabel">标签与搜索词</h2>
             <button class="copy-button" type="button" data-copy-target="extras">复制</button>
           </div>
-          <div class="output-content placeholder" id="extras" contenteditable="true" role="textbox" aria-label="标签与搜索词">生成后显示相关标签。</div>
-        </article>
-
-        <article class="output-card wide">
-          <div class="card-head">
-            <h2 id="bodyLabel">完整笔记</h2>
-            <button class="copy-button" type="button" data-copy-target="body">复制</button>
-          </div>
-          <div class="output-content placeholder" id="body" contenteditable="true" role="textbox" aria-label="完整笔记">生成后显示可直接编辑的完整文案。</div>
+          <div class="output-content placeholder" id="extras" contenteditable="true" role="textbox" aria-label="话题标签">生成后显示与正文对应且不重复的话题标签。</div>
         </article>
 
         <article class="output-card wide">
@@ -1066,7 +1079,7 @@
 
   <div class="mobile-action">
     <button class="primary-button" type="button" data-generate>生成文案</button>
-    <button class="secondary-button" type="button" data-copy-all>复制全部</button>
+    <button class="secondary-button" type="button" data-copy-body>复制完整文案</button>
     <button class="secondary-button" type="button" data-share-result>分享</button>
   </div>
 
@@ -1118,10 +1131,10 @@
 
       var labels = {
         rednote: {
-          titles: "标题方案",
-          hooks: "开头方案",
-          extras: "标签与搜索词",
-          body: "完整笔记",
+          titles: "标题备选",
+          hooks: "开头备选",
+          extras: "话题标签",
+          body: "完整发布稿",
           comment: "置顶评论"
         },
         xianyu: {
@@ -1135,10 +1148,10 @@
 
       var placeholders = {
         rednote: {
-          titles: "生成后显示5个标题方案。",
-          hooks: "生成后显示3个开头方案。",
-          extras: "生成后显示相关标签。",
-          body: "生成后显示可直接编辑的完整文案。",
+          titles: "生成后显示没有写进完整发布稿的标题备选。",
+          hooks: "生成后显示没有写进完整发布稿的开头备选。",
+          extras: "生成后显示与正文对应且不重复的话题标签。",
+          body: "生成后显示一篇包含标题、正文和结尾的完整小红书笔记。",
           comment: "生成后显示自然的评论区承接话术。"
         },
         xianyu: {
@@ -1168,10 +1181,16 @@
       }
 
       function pointsFrom(input, limit) {
+        var seen = {};
         return String(input || "")
           .split(/[，,、；;\n]+/)
           .map(function (item) { return cleanSpaces(item); })
-          .filter(Boolean)
+          .filter(function (item) {
+            var key = outputKey(item);
+            if (!key || seen[key]) return false;
+            seen[key] = true;
+            return true;
+          })
           .slice(0, limit || 6);
       }
 
@@ -1278,163 +1297,325 @@
         return ["先明确写给谁看", "用具体细节替代空话", "发布前检查承诺和边界"];
       }
 
+      function outputKey(input) {
+        return cleanSpaces(input)
+          .toLowerCase()
+          .replace(/[0-9０-９]+/g, "")
+          .replace(/[，。！？!?；;：:、,.\s#“”"'「」【】()[\]（）《》]/g, "");
+      }
+
+      function uniqueTextLines(input, reserved) {
+        var seen = {};
+        (reserved || []).forEach(function (item) {
+          var reservedKey = outputKey(item);
+          if (reservedKey) seen[reservedKey] = true;
+        });
+        return String(input || "")
+          .split(/\n+/)
+          .map(function (item) { return cleanSpaces(item); })
+          .filter(function (item) {
+            var key = outputKey(item);
+            if (!key || seen[key]) return false;
+            seen[key] = true;
+            return true;
+          });
+      }
+
+      function uniqueTextBlocks(input, reserved) {
+        var seen = {};
+        (reserved || []).forEach(function (item) {
+          var reservedKey = outputKey(item);
+          if (reservedKey) seen[reservedKey] = true;
+        });
+        return String(input || "")
+          .split(/\n{2,}/)
+          .map(function (item) { return item.trim(); })
+          .filter(function (item) {
+            var key = outputKey(item);
+            if (!key || seen[key]) return false;
+            seen[key] = true;
+            return true;
+          });
+      }
+
+      function ensureSentence(input) {
+        var text = cleanSpaces(input).replace(/[。！？!?；;]+$/g, "");
+        return text ? text + "。" : "";
+      }
+
       function rednoteTitles(data, seed) {
-        var count = Math.max(3, defaultPoints(data).length);
+        var count = Math.max(3, Math.min(6, defaultPoints(data).length));
+        var topic = data.topic;
+        var audience = data.audience;
         var groups = {
           "干货教程": [
-            data.topic + "怎么做？先拆成这" + count + "步",
-            data.audience + "看" + data.topic + "，先看这份清单",
-            "把" + data.topic + "讲清楚：方法、细节和注意事项",
-            data.topic + "新手最容易忽略的" + count + "个细节",
-            "别急着照抄，" + data.topic + "应该这样整理",
-            data.topic + "写不出来？从这" + count + "个位置开始"
+            topic + "怎么做？我把关键步骤和检查点整理好了",
+            "给" + audience + "的" + topic + "入门清单",
+            "别急着开始" + topic + "，先看这份新手检查表",
+            topic + "最容易卡住的地方，逐个说清",
+            "从0开始做" + topic + "：先完成这" + count + "件事",
+            "不堆空话，把" + topic + "拆成能执行的步骤"
           ],
           "经验分享": [
-            "关于" + data.topic + "，我更建议先想清这" + count + "点",
-            data.topic + "实际做起来，最重要的是这些细节",
-            "把" + data.topic + "拆开以后，事情简单多了",
-            data.audience + "可以参考的" + data.topic + "整理法",
-            data.topic + "别只看结果，过程里还有这些问题"
+            "关于" + topic + "，这次真正值得记录的是这些细节",
+            topic + "做了一段时间后，我留下的几条经验",
+            "别只看" + topic + "的结果，过程里这几处更重要",
+            audience + "可以参考的" + topic + "真实记录",
+            "把" + topic + "讲得具体一点：哪些地方有效，哪些不一定",
+            topic + "复盘：我会保留和删掉的内容"
           ],
           "避坑提醒": [
-            data.topic + "先别急着做，这" + count + "个坑要避开",
-            data.audience + "注意：" + data.topic + "最容易错在这里",
-            data.topic + "看起来简单，真正容易忽略的是这些",
-            data.topic + "之前，先检查这份避坑清单",
-            data.topic + "常见问题整理，不要再重复踩坑"
+            topic + "先别急着做，这" + count + "个地方容易踩坑",
+            audience + "注意：" + topic + "最容易错在这些细节",
+            "看起来简单的" + topic + "，为什么总有人做到一半卡住",
+            topic + "发布前，建议先过一遍这份检查表",
+            "关于" + topic + "，几个常见误区一次说清",
+            "别再重复踩坑了：" + topic + "的边界和限制"
           ],
           "产品种草": [
-            data.topic + "适合谁？优点和限制一次说清",
-            "不夸张种草，聊聊" + data.topic + "的真实使用场景",
-            data.audience + "要不要选" + data.topic + "？先看这几点",
-            data.topic + "值不值得选，重点不是参数多少",
-            "关于" + data.topic + "，优点和注意事项都在这里"
+            topic + "适合谁？优点、场景和限制一次说清",
+            "不夸张种草，聊聊" + topic + "真正适合的使用场景",
+            audience + "要不要选" + topic + "？先看这几件事",
+            topic + "值不值得选，重点不是参数有多少",
+            "用了" + topic + "之后，我更在意这几个细节",
+            topic + "真实分享：有优点，也有不适合的人"
           ],
           "使用测评": [
-            data.topic + "真实测评：优点、限制和适用人群",
-            data.topic + "到底好不好用？先看这" + count + "点",
-            "不只说优点，" + data.topic + "的使用边界也讲清",
-            data.audience + "看" + data.topic + "，重点关注这些",
-            data.topic + "使用感受整理，买前可以先参考"
+            topic + "真实测评：优点、限制和适用人群",
+            topic + "到底好不好用？按实际场景拆开看",
+            "不只说优点，" + topic + "的使用边界也讲清",
+            audience + "看" + topic + "，先关注这些判断维度",
+            topic + "使用记录：哪些体验值得，哪些别期待",
+            "买前看完再决定：" + topic + "的真实表现"
           ],
           "商品介绍": [
-            data.topic + "内容一页讲清，先看适用场景",
-            data.topic + "适合谁？信息和限制都整理好了",
-            data.audience + "了解" + data.topic + "，先看这份说明",
-            data.topic + "主要信息整理，按需求选择",
-            "关于" + data.topic + "，买前先确认这些细节"
+            topic + "一篇讲清：适用场景、内容和注意事项",
+            topic + "适合谁？下单前需要确认的信息都在这里",
+            audience + "了解" + topic + "，先看这份实际说明",
+            topic + "主要信息整理，按自己的需求选择",
+            "关于" + topic + "，先把这些细节确认清楚",
+            topic + "不是人人都需要，适用条件先说在前面"
           ]
         };
         var pool = groups[data.goal] || groups["干货教程"];
-        var result = [];
-        for (var i = 0; i < 5; i += 1) {
-          result.push(compact(pick(pool, i, seed), 32));
+        var ordered = [];
+        for (var i = 0; i < pool.length; i += 1) {
+          ordered.push(pool[(seed + state.generation + i) % pool.length]);
         }
-        return Array.from(new Set(result)).slice(0, 5);
+        return uniqueTextLines(ordered.map(function (item) {
+          return compact(item, 32);
+        })).slice(0, 5);
       }
 
-      function rednoteHooks(data, seed) {
-        var points = defaultPoints(data);
-        var first = points[0];
-        var detailLead = data.details
-          ? "先把真实信息放在前面：" + compact(data.details, 70) + "。"
-          : "这篇不堆空话，只整理可以直接执行的部分。";
-        var pool = [
-          "如果你正在为" + data.topic + "发愁，先别急着把所有信息塞进一篇内容。真正需要先说清的是：" + first + "。",
-          data.topic + "看起来复杂，拆开以后主要是" + points.length + "件事。第一步先处理：" + first + "。",
-          detailLead,
-          "围绕" + data.topic + "写内容时，最容易出现的问题不是内容太少，而是读者看不出这篇和自己有什么关系。",
-          "先说结论：" + first + "。剩下的内容都应该围绕这件事展开。"
-        ];
-        var result = [];
-        for (var i = 0; i < 3; i += 1) {
-          result.push(pick(pool, i * 2, seed));
-        }
-        return Array.from(new Set(result)).slice(0, 3);
+      function rednoteOpening(data, points, seed) {
+        var count = points.length;
+        var groups = {
+          "干货教程": [
+            "如果你是" + data.audience + "，刚开始处理" + data.topic + "，最容易卡住的不是不会做，而是不知道先做哪一步。这篇按" + count + "个重点，把动作和判断依据写清。",
+            "关于" + data.topic + "，先给一个简单判断：不要一上来追求完整，先让读者看懂自己能得到什么，再补充细节。"
+          ],
+          "经验分享": [
+            "关于" + data.topic + "，我更想留下的不是一句“好用”或“没用”，而是过程中真实发生了什么、为什么会这样判断。",
+            "如果你也在经历" + data.topic + "，这篇可以当成一份过程记录：有值得保留的地方，也有不适合照搬的部分。"
+          ],
+          "避坑提醒": [
+            "很多人做" + data.topic + "时，问题不是完全不懂，而是开始前漏掉了几个小条件。下面把容易出错的地方和处理方式放在一起。",
+            "先说一个容易被忽略的边界：" + data.topic + "不能只看表面结论，适用场景和限制没有说清，后面很容易返工。"
+          ],
+          "产品种草": [
+            "先说结论：" + data.topic + "不是所有人都需要。判断它值不值得，先看它能不能对应你的使用场景，再看优点和限制。",
+            "这篇不把" + data.topic + "写成万能答案，只把真实需求、使用感受和不适合的情况说清楚，方便你自己判断。"
+          ],
+          "使用测评": [
+            "这次不只说" + data.topic + "好不好用，而是按实际场景、具体体验和使用边界拆开看，避免一句结论替代全部信息。",
+            "看" + data.topic + "的测评，最重要的不是别人给了几分，而是评价依据能不能和你的使用条件对上。"
+          ],
+          "商品介绍": [
+            "如果你正在了解" + data.topic + "，先不用被零散的卖点带着走。适用人群、主要内容和需要提前确认的条件，下面一次说明。",
+            "这篇只做一件事：把" + data.topic + "的实际信息讲明白，让你在决定之前知道它适不适合自己。"
+          ]
+        };
+        return pick(groups[data.goal] || groups["干货教程"], 1, seed);
       }
 
-      function rednoteBody(data, titles, hooks) {
-        var points = defaultPoints(data);
-        var sections = [];
-        var toneLead = {
-          "真实自然": hooks[0],
-          "清单干货": "这篇把" + data.topic + "拆成一份可以直接检查的清单。",
-          "简洁专业": "以下内容围绕" + data.topic + "的目标、要点和边界展开。",
-          "轻松口语": data.topic + "不用想得太复杂，先把下面几件事做好。"
-        }[data.tone] || hooks[0];
-
-        sections.push("标题：" + titles[0]);
-        sections.push(toneLead);
-        sections.push("先看重点：\n" + points.map(function (item, index) {
-          return (index + 1) + ". " + item;
-        }).join("\n"));
-
-        if (data.length !== "short") {
-          sections.push("具体怎么处理：\n" + points.map(function (item, index) {
-            var endings = [
-              "先把它写成一句读者能理解的话，再补充必要细节。",
-              "不要只给结论，最好补一个真实场景或可核对的信息。",
-              "保留和主题有关的内容，无关信息可以删掉。",
-              "发布前重新读一遍，确认没有虚构经历或夸张承诺。"
-            ];
-            return "第" + (index + 1) + "点，" + item + "。\n" + endings[index % endings.length];
-          }).join("\n\n"));
+      function rednoteHooks(data, seed, primaryOpening) {
+        var groups = {
+          "干货教程": [
+            "有没有这种感觉：知道要做" + data.topic + "，真正打开输入框却不知道从哪里写？先把读者、动作和结果拆开，内容会顺很多。",
+            "如果只能先改一处，我会先改" + data.topic + "的开头：让读者马上知道这篇解决什么问题。",
+            "写" + data.topic + "时，信息越多不一定越清楚。先保留能让读者行动的内容，再删掉解释性空话。",
+            "这篇适合收藏的原因，不是句子多，而是每一段都对应一个可以检查的动作。"
+          ],
+          "经验分享": [
+            "一开始看" + data.topic + "，我也容易只记住结果，后来才发现真正影响判断的是过程里的细节。",
+            "很多经验分享看起来很顺，是因为把踩过的弯路也写出来了，而不是只留下最后一句结论。",
+            "如果你正在做" + data.topic + "，可以先对照自己的场景，不用急着把别人的方法原样搬过来。",
+            "我会把这篇当作记录，而不是标准答案：有些内容适合参考，有些内容必须自己验证。"
+          ],
+          "避坑提醒": [
+            "最麻烦的坑往往不是明显错误，而是看起来合理、实际却缺少适用条件的说法。",
+            "做" + data.topic + "之前，先问自己一句：这个结论有没有具体场景和依据？",
+            "如果一篇内容只告诉你“不要做什么”，却不说为什么和怎么改，读完还是很难执行。",
+            "下面这些提醒不一定适合所有人，但可以用来检查自己有没有漏掉关键条件。"
+          ],
+          "产品种草": [
+            "买之前最想知道的通常不是“好不好”，而是它在自己的场景里到底能不能派上用场。",
+            "关于" + data.topic + "，我会把优点和限制放在同一篇里，省得只看单方面推荐。",
+            "如果你只是被某个卖点吸引，建议先停一下，看看它是否真的对应你的日常需求。",
+            "种草可以有，但先把不适合的情况说清楚，反而更容易做决定。"
+          ],
+          "使用测评": [
+            "一条“值得买”并不能替代测评，真正有用的是它在什么条件下表现好、什么情况下会失望。",
+            "这次把" + data.topic + "拆成几个观察维度，优点和限制都按同一套标准说。",
+            "如果你在看" + data.topic + "，先别只盯着最终评分，评价依据比分数更重要。",
+            "同一个产品，不同人的使用结果可能完全不同，所以场景一定要写在结论前面。"
+          ],
+          "商品介绍": [
+            "看商品介绍时，先确认自己需要解决的问题，再看这件商品具体能提供什么。",
+            "一篇清楚的商品介绍，不应该只列卖点，还要把适用条件、交付内容和限制写明白。",
+            "如果你正在找" + data.topic + "，下面这些信息比一句“很不错”更值得先看。",
+            "买不买可以慢一点，先确认信息是否完整，后面的选择会更轻松。"
+          ]
+        };
+        var pool = groups[data.goal] || groups["干货教程"];
+        var ordered = [];
+        for (var i = 0; i < pool.length; i += 1) {
+          ordered.push(pool[(seed + i + 1) % pool.length]);
         }
+        return uniqueTextBlocks(ordered, [primaryOpening]).slice(0, 3);
+      }
+
+      function pointAdvice(data, point, index) {
+        var kind = /读者|人群|用户|对象/.test(point) ? "audience"
+          : /标题|开头|封面|首图/.test(point) ? "headline"
+            : /真实|细节|经历|数据|时间|数量|价格/.test(point) ? "evidence"
+              : /步骤|流程|顺序|方法|操作|执行/.test(point) ? "action"
+                : /产品|功能|卖点|使用|体验|效果/.test(point) ? "feature"
+                  : /限制|注意|风险|避坑|问题|缺点/.test(point) ? "boundary"
+                    : "general";
+        var advice = {
+          audience: "先写清楚对象、场景和他现在卡在哪里，后面的例子才不会只对自己有用。",
+          headline: "保留主题词，再放进一个具体场景、数量或结果范围；不要用“最好”“必看”这类空泛词代替内容。",
+          evidence: "补充时间、数量、价格、使用频率或前后差异中的至少一项；没有验证过的信息就直接说明，不要补造。",
+          action: "把这件事写成一个能执行的动作，并补上做完后应该看到什么，读者才知道下一步怎么走。",
+          feature: "不要只写功能或卖点，要把它翻译成使用场景：什么时候有用、解决什么、什么情况下用不上。",
+          boundary: "把适用条件和限制一起写出来，避免读者只记住一个结论，发布后才发现预期不一致。",
+          general: "把这一点写成“场景、动作、结果”三部分，读者看完应该知道自己能不能照着做。"
+        }[kind];
+        var endings = {
+          "干货教程": ["先完成这一项，再进入下一步，信息不会混在一起。", "发布前可以用这一点反向检查正文是否具体。", "如果读者看不懂，优先补对象、动作和结果。"],
+          "经验分享": ["这样留下的才是过程，不只是一个看起来漂亮的结论。", "有了这个细节，别人才能判断它和自己的情况像不像。", "不相关的内容可以删掉，真实记录不需要写得很满。"],
+          "避坑提醒": ["发现条件不满足时，宁可暂停，也不要为了赶进度硬做。", "提前核对这一项，通常比发布后反复修改省事。", "不确定的地方说清边界，比给出一个过度肯定的答案更稳妥。"],
+          "产品种草": ["如果这个场景和你无关，就不必因为别人的推荐勉强选择。", "具体使用条件写出来，推荐会比单纯夸优点更可信。", "把不适合的人也说清楚，读者反而更容易判断。"],
+          "使用测评": ["不同使用条件可能得到不同结果，这里只把观察依据留下来。", "把优点和限制放在同一处，判断会比单看评分更接近实际。", "这部分适合作为参考，不应该替代你自己的实际体验。"],
+          "商品介绍": ["信息越明确，后续沟通和选择都会更省时间。", "买前先确认这一点，再决定要不要继续了解。", "如果条件不符合，直接跳过也比买错后再后悔更好。"]
+        }[data.goal] || [];
+        return advice + " " + (endings[index % endings.length] || "写清楚之后再进入下一步。" );
+      }
+
+      function rednotePointCopy(data, point, index) {
+        var labelsByGoal = {
+          "干货教程": "第" + (index + 1) + "步",
+          "经验分享": "记录点" + (index + 1),
+          "避坑提醒": "提醒" + (index + 1),
+          "产品种草": "使用场景" + (index + 1),
+          "使用测评": "观察维度" + (index + 1),
+          "商品介绍": "信息" + (index + 1)
+        };
+        var pointText = cleanSpaces(point).replace(/[。！？!?；;]+$/g, "");
+        return labelsByGoal[data.goal] + "｜" + pointText + "\n" + pointAdvice(data, pointText, index);
+      }
+
+      function rednoteConclusion(data) {
+        return {
+          "干货教程": "把上面的动作替换成自己的主题和素材后再发布，尤其检查对象、数字和边界是否真实。",
+          "经验分享": "这类内容最有价值的地方，不是把结果说得多漂亮，而是把过程里的判断和限制留下来。",
+          "避坑提醒": "发布前再检查一遍：每个提醒后面有没有原因、场景和处理方式；没有依据的内容直接删掉。",
+          "产品种草": "所以，是否适合不看别人说得多好，而看它是否对应你的使用场景、预算和接受的限制。",
+          "使用测评": "综合这些观察，这份记录适合帮助你做初步判断，不能替代你自己的实际使用。",
+          "商品介绍": "如果这些信息和你的需求对得上，再继续了解；如果关键条件不符合，直接跳过也没关系。"
+        }[data.goal] || "发布前把示例替换成自己的真实信息，再检查内容是否具体。";
+      }
+
+      function rednoteBody(data, primaryTitle, opening) {
+        var points = defaultPoints(data);
+        var sections = [primaryTitle, opening];
+
+        points.forEach(function (point, index) {
+          sections.push(rednotePointCopy(data, point, index));
+        });
 
         if (data.details) {
-          sections.push("真实信息：\n" + data.details);
+          sections.push("真实记录\n" + ensureSentence(data.details));
         }
 
         if (data.cautions) {
-          sections.push("需要提前说明：\n" + data.cautions);
+          sections.push("需要提前说清\n" + ensureSentence(data.cautions));
         }
 
-        if (data.length === "detailed") {
-          sections.push("发布前检查：\n- 标题是否写清目标读者\n- 开头是否直接进入问题\n- 正文是否包含具体信息\n- 结尾是否给出明确下一步\n- 是否删除无法兑现的承诺");
-        }
+        sections.push(rednoteConclusion(data));
 
+        var price = data.price ? "，当前标价" + data.price + "元" : "";
         var ctaText = {
-          "收藏备用": "可以先收藏，下一次写同类内容时按顺序替换。",
-          "评论交流": "你现在最卡哪一步？可以在评论里说具体情况。",
-          "查看店铺商品": "完整分类模板已经放在店铺商品页，可以先看目录和预览，适合再选。",
+          "收藏备用": "先收藏，真正发布前把示例换成自己的经历、数据和图片。",
+          "评论交流": "如果你正在做同一件事，评论里可以说说自己卡在哪个环节。",
+          "查看店铺商品": "完整目录和预览可以在店铺商品页查看" + price + "，按需选择就好。",
           "不加引导": ""
         }[data.cta] || "";
         if (ctaText) sections.push(ctaText);
 
-        return sections.join("\n\n");
+        return uniqueTextBlocks(sections).join("\n\n");
       }
 
       function rednoteExtras(data) {
         var topicTag = cleanSpaces(data.topic).replace(/[^\u4e00-\u9fa5A-Za-z0-9]/g, "").slice(0, 12);
-        var tags = [topicTag].concat(data.tags).filter(Boolean);
-        return Array.from(new Set(tags)).slice(0, 6).map(function (tag) {
-          return "#" + tag;
-        }).join(" ");
+        var goalTags = {
+          "干货教程": ["教程分享", "方法整理"],
+          "经验分享": ["经验记录", "真实分享"],
+          "避坑提醒": ["避坑指南", "新手避坑"],
+          "产品种草": ["好物分享", "种草记录"],
+          "使用测评": ["真实测评", "使用体验"],
+          "商品介绍": ["商品信息", "购买参考"]
+        }[data.goal] || [];
+        var seen = {};
+        var tags = [topicTag].concat(goalTags, data.tags).map(function (tag) {
+          return cleanSpaces(tag).replace(/[^\u4e00-\u9fa5A-Za-z0-9]/g, "");
+        }).filter(function (tag) {
+          var key = outputKey(tag);
+          if (!key || tag.length < 2 || seen[key]) return false;
+          seen[key] = true;
+          return true;
+        }).slice(0, 5);
+        return tags.map(function (tag) { return "#" + tag; }).join(" ");
       }
 
       function rednoteComment(data) {
         var price = data.price ? "，当前价格" + data.price + "元" : "";
         if (data.cta === "查看店铺商品") {
-          return "完整目录和部分预览已经放在店铺商品页" + price + "。先看内容是否适合自己再决定。模板不能保证爆款，主要用于减少每次从零开始写文案的时间。";
+          return "想看完整目录和预览，可以去商品页查看" + price + "。先确认内容适不适合自己，再决定要不要选。";
         }
         if (data.cta === "评论交流") {
-          return "大家最容易卡在标题、开头、正文还是结尾？把具体问题留在评论里，我会优先整理高频问题。";
+          return "你现在最想看" + data.topic + "的哪一部分？可以把具体场景留在评论里。";
         }
         if (data.cta === "收藏备用") {
-          return "这份结构可以先收藏。真正发布时，请把示例替换成自己的信息和细节，不要直接照抄。";
+          return "如果之后还会遇到同类问题，可以先收藏；真正发布时记得替换成自己的信息。";
         }
-        return "补充说明：" + (data.cautions || "示例结构需要结合自己的真实信息修改。");
+        return "补充说明：" + (data.cautions || "示例内容需要结合自己的真实情况修改。");
       }
 
       function generateRednote(data) {
-        var seed = hash(data.topic + data.goal + data.category);
+        var seed = hash(data.topic + data.audience + data.goal + data.category);
         var titles = rednoteTitles(data, seed);
-        var hooks = rednoteHooks(data, seed);
+        var primaryTitle = titles[0] || data.topic;
+        var opening = rednoteOpening(data, defaultPoints(data), seed);
+        var hooks = rednoteHooks(data, seed, opening);
+        var extras = rednoteExtras(data);
         return {
-          titles: titles.map(function (item, index) { return (index + 1) + ". " + item; }).join("\n"),
-          hooks: hooks.map(function (item, index) { return "方案" + (index + 1) + "\n" + item; }).join("\n\n"),
-          extras: rednoteExtras(data),
-          body: rednoteBody(data, titles, hooks),
+          primaryTitle: primaryTitle,
+          titles: titles.slice(1).map(function (item, index) { return (index + 1) + ". " + item; }).join("\n"),
+          hooks: hooks.join("\n\n"),
+          extras: extras,
+          body: rednoteBody(data, primaryTitle, opening),
           comment: rednoteComment(data)
         };
       }
@@ -1488,11 +1669,31 @@
 
         return {
           titles: titles.map(function (item, index) { return (index + 1) + ". " + item; }).join("\n"),
-          hooks: hooks.map(function (item, index) { return "方案" + (index + 1) + "\n" + item; }).join("\n\n"),
+          hooks: hooks.join("\n\n"),
           extras: extras,
           body: detail,
           comment: comment
         };
+      }
+
+      function dedupeGenerated(generated) {
+        var bodyBlocks = uniqueTextBlocks(generated.body);
+        generated.body = bodyBlocks.join("\n\n");
+
+        var used = bodyBlocks.slice();
+        generated.titles = uniqueTextLines(generated.titles, used).join("\n");
+        used = used.concat(uniqueTextLines(generated.titles));
+        generated.hooks = uniqueTextBlocks(generated.hooks, used).join("\n\n");
+        used = used.concat(uniqueTextBlocks(generated.hooks));
+        generated.extras = uniqueTextLines(generated.extras.replace(/\s+(?=#)/g, "\n"), used).join(" ");
+        used = used.concat(uniqueTextLines(generated.extras.replace(/\s+(?=#)/g, "\n")));
+
+        var comment = cleanSpaces(generated.comment);
+        var commentKey = outputKey(comment);
+        if (used.some(function (item) { return outputKey(item) === commentKey; })) {
+          generated.comment = "补充说明：请结合自己的真实情况核对后再发布。";
+        }
+        return generated;
       }
 
       function applyPolish(generated, data) {
@@ -1511,6 +1712,10 @@
           "【" + currentLabels.extras + "】\n" + generated.extras,
           "【" + currentLabels.comment + "】\n" + generated.comment
         ].join("\n\n");
+      }
+
+      function buildPublishable(generated) {
+        return uniqueTextBlocks([generated.body, generated.extras].filter(Boolean).join("\n\n")).join("\n\n");
       }
 
       function renderGenerated(generated) {
@@ -1536,6 +1741,7 @@
         var data = collectData();
         var generated = state.mode === "rednote" ? generateRednote(data) : generateXianyu(data);
         generated = applyPolish(generated, data);
+        generated = dedupeGenerated(generated);
         generated.all = buildAll(generated);
 
         state.current = {
@@ -1553,7 +1759,7 @@
         saveHistory(state.current);
         renderHistory();
         saveDraft();
-        showToast(state.mode === "rednote" ? "小红书文案已生成" : "闲鱼文案已生成");
+        showToast(state.mode === "rednote" ? "完整小红书文案已生成" : "闲鱼文案已生成");
 
         if (window.innerWidth <= 820) {
           $(".results-area").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1826,6 +2032,15 @@
         copyText(state.current.generated.all);
       }
 
+      function copyBody() {
+        if (!state.current) {
+          showToast("请先生成文案");
+          return;
+        }
+        syncEditedResult("body");
+        copyText(buildPublishable(state.current.generated));
+      }
+
       function currentFile() {
         ["titles", "hooks", "extras", "body", "comment"].forEach(syncEditedResult);
         var filename = (state.current.data.topic || "文案") + "-" + (state.mode === "rednote" ? "小红书" : "闲鱼") + ".txt";
@@ -1975,6 +2190,10 @@
         button.addEventListener("click", copyAll);
       });
 
+      $$("[data-copy-body]").forEach(function (button) {
+        button.addEventListener("click", copyBody);
+      });
+
       $$("[data-copy-target]").forEach(function (button) {
         button.addEventListener("click", function () {
           var key = button.dataset.copyTarget;
@@ -2037,6 +2256,12 @@
           navigator.serviceWorker.register("./sw.js").catch(function () {
             // Online use still works if offline caching is unavailable.
           });
+        });
+        var refreshingForUpdate = false;
+        navigator.serviceWorker.addEventListener("controllerchange", function () {
+          if (refreshingForUpdate) return;
+          refreshingForUpdate = true;
+          window.location.reload();
         });
       }
 
