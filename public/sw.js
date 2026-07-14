@@ -1,4 +1,4 @@
-const CACHE_NAME = "rednote-copywriter-v5-20260713-full-note";
+const CACHE_NAME = "rednote-copywriter-v6-20260714-category-facts";
 const APP_SHELL = [
   "/",
   "/index.html",

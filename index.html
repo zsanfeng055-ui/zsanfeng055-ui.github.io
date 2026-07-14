@@ -349,6 +349,52 @@
       display: block;
     }
 
+    .fact-section {
+      margin-bottom: 16px;
+      padding: 12px;
+      border: 1px solid #f1c9d0;
+      border-radius: 8px;
+      background: #fffafb;
+    }
+
+    .fact-section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .fact-section-head strong {
+      color: #344054;
+      font-size: 13px;
+    }
+
+    .fact-section-head span,
+    .field-note {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .fact-section .field-note {
+      margin-bottom: 10px;
+    }
+
+    .fact-section .field-row:last-of-type .field {
+      margin-bottom: 0;
+    }
+
+    .fact-section textarea {
+      min-height: 72px;
+      background: var(--surface);
+    }
+
+    .fact-section.has-error {
+      border-color: var(--danger);
+      background: #fff7f6;
+    }
+
     .chips {
       display: flex;
       flex-wrap: wrap;
@@ -835,7 +881,7 @@
         <div class="brand-mark" aria-hidden="true">文</div>
         <div class="brand-copy">
           小红书文案工作台
-          <small>V5 小红书完整笔记</small>
+          <small>V6 分类型真实笔记</small>
         </div>
       </div>
 
@@ -867,9 +913,15 @@
             <button class="chip active" type="button" data-category="AI工具">AI工具</button>
             <button class="chip" type="button" data-category="职场">职场</button>
             <button class="chip" type="button" data-category="学习">学习</button>
-            <button class="chip" type="button" data-category="美妆">美妆</button>
+            <button class="chip" type="button" data-category="美妆护肤">美妆护肤</button>
+            <button class="chip" type="button" data-category="穿搭">穿搭</button>
+            <button class="chip" type="button" data-category="美食">美食</button>
+            <button class="chip" type="button" data-category="旅行">旅行</button>
             <button class="chip" type="button" data-category="探店">探店</button>
-            <button class="chip" type="button" data-category="家居">家居</button>
+            <button class="chip" type="button" data-category="家居装修">家居装修</button>
+            <button class="chip" type="button" data-category="母婴育儿">母婴育儿</button>
+            <button class="chip" type="button" data-category="数码">数码</button>
+            <button class="chip" type="button" data-category="生活经验">生活经验</button>
             <button class="chip" type="button" data-category="闲置">闲置</button>
           </div>
           <input type="hidden" id="category" value="AI工具">
@@ -899,21 +951,50 @@
               </select>
             </div>
           </div>
+
+          <section class="fact-section" id="factSection" aria-labelledby="factSectionTitle">
+            <div class="fact-section-head">
+              <strong id="factSectionTitle">真实素材</strong>
+              <span>至少填写3项，不确定就留空</span>
+            </div>
+            <div class="field-note" id="categoryHint"></div>
+            <div class="field-row">
+              <div class="field">
+                <label for="fact1" id="fact1Label">使用场景</label>
+                <textarea id="fact1" autocomplete="off"></textarea>
+              </div>
+              <div class="field">
+                <label for="fact2" id="fact2Label">实际过程</label>
+                <textarea id="fact2" autocomplete="off"></textarea>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="fact3" id="fact3Label">真实结果</label>
+                <textarea id="fact3" autocomplete="off"></textarea>
+              </div>
+              <div class="field">
+                <label for="fact4" id="fact4Label">缺点或限制</label>
+                <textarea id="fact4" autocomplete="off"></textarea>
+              </div>
+            </div>
+            <div class="error" id="factsError">请至少填写3项真实素材。</div>
+          </section>
         </div>
 
         <div class="field">
-          <label for="points">核心要点 <span class="optional">逗号或换行分隔</span></label>
-          <textarea id="points" placeholder="例如：先定目标人群；AI只写结构；加入真实细节；发布前删除空话"></textarea>
+          <label for="points"><span id="pointsLabelText">补充要点</span> <span class="optional">选填，逗号或换行分隔</span></label>
+          <textarea id="points" placeholder="例如：打开工具导入原始内容；删掉没有依据的数据；人工调整开头"></textarea>
         </div>
 
         <div class="field">
-          <label for="details">真实信息 <span class="optional">不虚构经历</span></label>
-          <textarea id="details" placeholder="例如：整理包包含标题、开头、正文和结尾模板，可以编辑"></textarea>
+          <label for="details">其他真实信息 <span class="optional">选填</span></label>
+          <textarea id="details" placeholder="还有需要写进正文的事实，可以补充在这里"></textarea>
         </div>
 
         <div class="field">
-          <label for="cautions">限制或注意事项 <span class="optional">选填</span></label>
-          <textarea id="cautions" placeholder="例如：模板不能保证爆款，需要替换成自己的细节"></textarea>
+          <label for="cautions">其他限制或注意事项 <span class="optional">选填</span></label>
+          <textarea id="cautions" placeholder="例如：不适用的人、不能保证的结果或购买前提"></textarea>
         </div>
 
         <div data-mode-only="rednote">
@@ -1101,31 +1182,159 @@
       var categoryData = {
         "AI工具": {
           audience: "刚开始用AI做内容的新手",
-          tags: ["AI工具", "AI写作", "内容创作", "自媒体新手"]
+          tags: ["AI工具", "AI实测", "内容创作", "效率工具"],
+          hint: "写你实际在哪个任务里使用、怎么操作、得到什么结果，以及仍需人工处理的部分。",
+          fields: [
+            ["使用场景", "例如：每天要整理3篇口播稿，原来一篇约40分钟"],
+            ["实际操作", "例如：导入逐字稿后先提炼观点，再人工改标题"],
+            ["真实结果", "例如：初稿时间缩短到15分钟，但仍要核对数据"],
+            ["限制或成本", "例如：长文本会漏信息，免费额度每天有限"]
+          ],
+          sections: ["我为什么用它", "实际怎么用", "结果怎么样", "不能忽略的问题"]
         },
         "职场": {
           audience: "想提高工作效率的上班族",
-          tags: ["职场干货", "工作效率", "职场成长", "实用技巧"]
+          tags: ["职场经验", "工作效率", "上班族", "实用方法"],
+          hint: "写清职位或任务、具体做法、前后变化，以及适用条件。",
+          fields: [
+            ["工作背景", "例如：运营岗，每周一要汇总5个项目的数据"],
+            ["具体做法", "例如：先统一表格字段，再按负责人逐项确认"],
+            ["实际结果", "例如：整理时间从半天缩短到2小时"],
+            ["限制或踩坑", "例如：临时口径变化时仍要重新核对"]
+          ],
+          sections: ["当时的工作情况", "我具体做了什么", "前后变化", "适用范围"]
         },
         "学习": {
           audience: "需要更高效学习方法的学生",
-          tags: ["学习方法", "自我提升", "学习效率", "经验分享"]
+          tags: ["学习方法", "学习记录", "自我提升", "备考经验"],
+          hint: "写起点和目标、执行周期、实际结果，不要只写抽象方法。",
+          fields: [
+            ["基础与目标", "例如：四级425分基础，目标两个月后过500"],
+            ["计划与周期", "例如：连续6周，每天背词30分钟并精听1篇"],
+            ["实际结果", "例如：第三次模考从438提高到492"],
+            ["困难或不适用", "例如：前两周进度太满，后来删掉了两项任务"]
+          ],
+          sections: ["我的起点", "执行过程", "目前结果", "走过的弯路"]
         },
-        "美妆": {
+        "美妆护肤": {
           audience: "正在挑选适合自己产品的人",
-          tags: ["美妆分享", "真实测评", "护肤心得", "新手化妆"]
+          tags: ["美妆分享", "护肤记录", "真实测评", "使用感受"],
+          hint: "肤质、使用周期和不适反应比空泛的“好用”更有参考价值。",
+          fields: [
+            ["肤质或基础情况", "例如：混油皮，鼻翼容易出油，脸颊偶尔泛红"],
+            ["用法与周期", "例如：晚间隔天使用，连续用了3周"],
+            ["质地与实际变化", "例如：成膜快，第2周起鼻翼出油少一些"],
+            ["缺点或不适合谁", "例如：叠加防晒会搓泥，干皮可能觉得紧绷"]
+          ],
+          sections: ["先说我的肤质", "我是怎么用的", "实际使用感受", "缺点也说清楚"]
+        },
+        "穿搭": {
+          audience: "想找适合自己身材和场景穿搭的人",
+          tags: ["穿搭分享", "显瘦穿搭", "通勤穿搭", "身材参考"],
+          hint: "写身高体重、天气场合、单品信息和真实上身效果。",
+          fields: [
+            ["身高体重或身材", "例如：158cm、52kg，肩宽、腰腹有肉"],
+            ["天气与场合", "例如：18到24度，通勤加周末逛街"],
+            ["单品与尺码价格", "例如：衬衫M码129元，半裙S码89元"],
+            ["上身效果与问题", "例如：正面显腰线，但坐下时腰部略紧"]
+          ],
+          sections: ["我的身材参考", "这套适合什么场景", "单品和尺码", "上身效果"]
+        },
+        "美食": {
+          audience: "想照着做出同款成品的人",
+          tags: ["美食教程", "家常菜", "配方分享", "新手做饭"],
+          hint: "克数、温度、时间和失败点要写具体，读者才真的能复现。",
+          fields: [
+            ["食材与用量", "例如：鸡腿500g、生抽15ml、蜂蜜10g"],
+            ["温度与时间", "例如：空气炸锅180度12分钟，翻面再8分钟"],
+            ["关键步骤", "例如：鸡腿划两刀，腌30分钟后擦掉表面水分"],
+            ["口感与失败提醒", "例如：外皮微脆；蜂蜜放早了容易焦"]
+          ],
+          sections: ["食材准备", "温度和时间", "具体做法", "成品口感与提醒"]
+        },
+        "旅行": {
+          audience: "正在规划同类目的地行程的人",
+          tags: ["旅行攻略", "旅行记录", "路线分享", "旅行避坑"],
+          hint: "写出行季节、天数、路线、预算、排队和交通等可核对信息。",
+          fields: [
+            ["时间与同行人", "例如：6月中旬去3天，两位成年人同行"],
+            ["路线与交通", "例如：D1古城，D2环湖；高铁到站后租车"],
+            ["预算与耗时", "例如：人均1600元，热门景点排队约40分钟"],
+            ["推荐与避坑", "例如：上午光线好；周末停车位很难找"]
+          ],
+          sections: ["这次行程背景", "路线和交通", "花费与时间", "推荐和避坑"]
         },
         "探店": {
           audience: "正在找真实消费参考的人",
-          tags: ["探店分享", "真实体验", "本地生活", "消费参考"]
+          tags: ["探店分享", "本地生活", "真实消费", "吃喝玩乐"],
+          hint: "位置、到店时间、人均、点单、味道和排队信息都要来自真实消费。",
+          fields: [
+            ["城市位置与到店时间", "例如：杭州湖滨商圈，周六12点10分到店"],
+            ["点单与人均", "例如：两人点3道菜，人均86元"],
+            ["味道或服务感受", "例如：招牌鱼偏辣，米饭免费续，出餐约20分钟"],
+            ["排队停车与缺点", "例如：等位35分钟，附近停车12元一小时"]
+          ],
+          sections: ["到店信息", "我们点了什么", "实际感受", "排队和其他问题"]
         },
-        "家居": {
+        "家居装修": {
           audience: "想改善居住体验的人",
-          tags: ["家居好物", "生活经验", "实用分享", "居家生活"]
+          tags: ["家居装修", "装修记录", "居住体验", "装修避坑"],
+          hint: "面积、预算、尺寸、材料、前后变化和遗憾是家居内容的核心。",
+          fields: [
+            ["面积与预算", "例如：89平两居，玄关改造预算3000元"],
+            ["尺寸与材料", "例如：柜深35cm、宽120cm，用多层板"],
+            ["改造前后变化", "例如：原来鞋子堆门口，现在能收纳约20双"],
+            ["遗憾或踩坑", "例如：底部留空太低，扫地机器人进不去"]
+          ],
+          sections: ["房屋和预算", "尺寸与材料", "改完后的变化", "这处遗憾要提醒"]
+        },
+        "母婴育儿": {
+          audience: "需要同龄阶段真实育儿参考的家长",
+          tags: ["育儿经验", "母婴分享", "宝宝成长", "真实记录"],
+          hint: "必须写孩子年龄、观察周期和个体反应；健康问题不要替代专业判断。",
+          fields: [
+            ["孩子年龄与情况", "例如：宝宝10个月，最近吃辅食容易分心"],
+            ["做法与观察周期", "例如：连续7天固定餐椅，每餐控制在20分钟内"],
+            ["孩子实际反应", "例如：第4天开始能坐满15分钟，进食量略有增加"],
+            ["安全边界或不适用", "例如：这是个人记录；持续异常应咨询专业人员"]
+          ],
+          sections: ["孩子的阶段", "我们怎么做", "观察到的反应", "需要说明的边界"]
+        },
+        "数码": {
+          audience: "正在比较同类数码产品的人",
+          tags: ["数码测评", "真实体验", "数码好物", "购买参考"],
+          hint: "写准确型号、使用场景、续航发热等可观察表现，以及明显短板。",
+          fields: [
+            ["具体型号与版本", "例如：256GB国行版本，系统为当前正式版"],
+            ["使用场景与周期", "例如：通勤听歌加拍照，连续使用14天"],
+            ["可观察表现", "例如：亮屏6小时剩余22%，视频20分钟机身微热"],
+            ["短板与适合人群", "例如：夜景涂抹明显，更适合在意续航的人"]
+          ],
+          sections: ["型号和使用条件", "我的使用方式", "实际表现", "短板与适合人群"]
+        },
+        "生活经验": {
+          audience: "正在经历相似问题的人",
+          tags: ["生活记录", "经验分享", "日常生活", "真实感受"],
+          hint: "从一件具体发生的事写起，保留冲突、情绪、变化和个人结论。",
+          fields: [
+            ["事情背景", "例如：独居后第一次自己处理搬家，只有一个周末"],
+            ["具体经过", "例如：先列清单，再按房间装箱并给纸箱编号"],
+            ["结果与感受", "例如：当天搬完，但找充电线还是花了半小时"],
+            ["改变或边界", "例如：下次会把当天用品单独装；不适合物品特别多的人"]
+          ],
+          sections: ["事情是怎么开始的", "中间发生了什么", "最后的结果", "我会怎么调整"]
         },
         "闲置": {
           audience: "正在寻找高性价比闲置的人",
-          tags: ["闲置转让", "断舍离", "二手好物", "省钱生活"]
+          tags: ["闲置转让", "断舍离", "二手好物", "省钱生活"],
+          hint: "闲置内容按实物、购买时间、成色、瑕疵和交易方式填写。",
+          fields: [
+            ["购买和使用情况", "例如：去年双11购买，通勤使用约半年"],
+            ["配件与功能状态", "例如：盒子充电线都在，连接和降噪正常"],
+            ["成色与出售原因", "例如：95新，换了新设备所以出售"],
+            ["瑕疵与交易限制", "例如：外壳有细小划痕，只走平台"]
+          ],
+          sections: ["购买与使用", "功能和配件", "成色与原因", "瑕疵和交易"]
         }
       };
 
@@ -1266,23 +1475,28 @@
 
       function collectData() {
         var preset = categoryData[state.category] || categoryData["AI工具"];
+        var selectedLength = value("length") || "standard";
+        var pointLimit = selectedLength === "short" ? 2 : selectedLength === "detailed" ? 6 : 4;
         return {
           mode: state.mode,
           category: state.category,
           topic: value("topic"),
           audience: value("audience") || preset.audience,
           goal: value("goal") || "干货教程",
-          points: pointsFrom(value("points"), value("length") === "short" ? 3 : 6),
+          points: pointsFrom(value("points"), pointLimit),
           details: value("details"),
           cautions: value("cautions"),
           tone: value("tone") || "真实自然",
-          length: value("length") || "standard",
+          length: selectedLength,
           cta: value("cta") || "不加引导",
           price: numberValue(value("price")),
           condition: value("condition") || "正常使用痕迹",
           sellPrice: numberValue(value("sellPrice")),
           city: value("city"),
           trade: value("trade") || "只走平台，支持邮寄",
+          facts: [value("fact1"), value("fact2"), value("fact3"), value("fact4")],
+          factLabels: preset.fields.map(function (field) { return field[0]; }),
+          sectionLabels: preset.sections.slice(),
           naturalMode: $("#naturalMode").checked,
           safeMode: $("#safeMode").checked,
           tags: preset.tags.slice()
@@ -1294,7 +1508,7 @@
         if (data.mode === "xianyu") {
           return ["商品信息按实物填写", "使用状态已经说明", "支持平台内沟通交易"];
         }
-        return ["先明确写给谁看", "用具体细节替代空话", "发布前检查承诺和边界"];
+        return [];
       }
 
       function outputKey(input) {
@@ -1343,61 +1557,67 @@
         return text ? text + "。" : "";
       }
 
+      function factValue(data, index) {
+        return cleanSpaces((data.facts && data.facts[index]) || "");
+      }
+
+      function titleFragment(input, max) {
+        return compact(cleanSpaces(input).replace(/[。！？!?；;]+$/g, ""), max || 16);
+      }
+
+      function titleEvidence(input) {
+        var matches = cleanSpaces(input).match(/\d+(?:\.\d+)?(?:到\d+(?:\.\d+)?)?\s*(?:分钟|小时|天|周|个月|月|次|篇|个|元|块|公里|千米|厘米|cm|ml|kg|g|度|%|％|GB)?/gi) || [];
+        return matches.filter(function (item, index) {
+          return item && matches.indexOf(item) === index;
+        }).slice(0, 2).join("、");
+      }
+
+      function openingIndexes(category) {
+        return {
+          "穿搭": [0, 3],
+          "美食": [0, 3]
+        }[category] || [0, 2];
+      }
+
+      function titleFocusIndex(category, goal) {
+        if (goal === "避坑提醒") return 3;
+        if (category === "穿搭" || category === "美食") return 3;
+        return 2;
+      }
+
       function rednoteTitles(data, seed) {
-        var count = Math.max(3, Math.min(6, defaultPoints(data).length));
-        var topic = data.topic;
-        var audience = data.audience;
-        var groups = {
-          "干货教程": [
-            topic + "怎么做？我把关键步骤和检查点整理好了",
-            "给" + audience + "的" + topic + "入门清单",
-            "别急着开始" + topic + "，先看这份新手检查表",
-            topic + "最容易卡住的地方，逐个说清",
-            "从0开始做" + topic + "：先完成这" + count + "件事",
-            "不堆空话，把" + topic + "拆成能执行的步骤"
-          ],
-          "经验分享": [
-            "关于" + topic + "，这次真正值得记录的是这些细节",
-            topic + "做了一段时间后，我留下的几条经验",
-            "别只看" + topic + "的结果，过程里这几处更重要",
-            audience + "可以参考的" + topic + "真实记录",
-            "把" + topic + "讲得具体一点：哪些地方有效，哪些不一定",
-            topic + "复盘：我会保留和删掉的内容"
-          ],
-          "避坑提醒": [
-            topic + "先别急着做，这" + count + "个地方容易踩坑",
-            audience + "注意：" + topic + "最容易错在这些细节",
-            "看起来简单的" + topic + "，为什么总有人做到一半卡住",
-            topic + "发布前，建议先过一遍这份检查表",
-            "关于" + topic + "，几个常见误区一次说清",
-            "别再重复踩坑了：" + topic + "的边界和限制"
-          ],
-          "产品种草": [
-            topic + "适合谁？优点、场景和限制一次说清",
-            "不夸张种草，聊聊" + topic + "真正适合的使用场景",
-            audience + "要不要选" + topic + "？先看这几件事",
-            topic + "值不值得选，重点不是参数有多少",
-            "用了" + topic + "之后，我更在意这几个细节",
-            topic + "真实分享：有优点，也有不适合的人"
-          ],
-          "使用测评": [
-            topic + "真实测评：优点、限制和适用人群",
-            topic + "到底好不好用？按实际场景拆开看",
-            "不只说优点，" + topic + "的使用边界也讲清",
-            audience + "看" + topic + "，先关注这些判断维度",
-            topic + "使用记录：哪些体验值得，哪些别期待",
-            "买前看完再决定：" + topic + "的真实表现"
-          ],
-          "商品介绍": [
-            topic + "一篇讲清：适用场景、内容和注意事项",
-            topic + "适合谁？下单前需要确认的信息都在这里",
-            audience + "了解" + topic + "，先看这份实际说明",
-            topic + "主要信息整理，按自己的需求选择",
-            "关于" + topic + "，先把这些细节确认清楚",
-            topic + "不是人人都需要，适用条件先说在前面"
-          ]
-        };
-        var pool = groups[data.goal] || groups["干货教程"];
+        var focusIndex = titleFocusIndex(data.category, data.goal);
+        var focus = factValue(data, focusIndex) || factValue(data, 2) || factValue(data, 1) || factValue(data, 0);
+        var evidence = titleEvidence(focus);
+        var categoryLeads = {
+          "AI工具": ["实测记录", "我的实际工作流", "效率和限制都说"],
+          "职场": ["这次工作复盘", "上班族实用记录", "前后变化都在这里"],
+          "学习": ["这段时间的学习记录", "从起点到结果", "执行过程复盘"],
+          "美妆护肤": ["按肤质说感受", "用了以后再评价", "优点和不适都说"],
+          "穿搭": ["身材数据在这里", "真实上身记录", "尺码和问题都说"],
+          "美食": ["克数和时间都给了", "新手实做记录", "成品和失败点都说"],
+          "旅行": ["路线花费实记", "这趟真实行程", "时间预算都列了"],
+          "探店": ["真实消费记录", "人均和排队都说", "点单后再评价"],
+          "家居装修": ["尺寸预算实记", "改完入住再说", "效果和遗憾都有"],
+          "母婴育儿": ["按月龄说情况", "一段真实观察", "个体反应如实记"],
+          "数码": ["连续使用后再说", "实测表现记录", "短板也不省略"],
+          "生活经验": ["这件事的真实经过", "我最后这样处理", "结果和教训都在"]
+        }[data.category] || ["真实记录", "实际体验", "优点和问题都说"];
+        var goalLead = {
+          "干货教程": "实际步骤",
+          "经验分享": "我的真实经历",
+          "避坑提醒": "这处问题要注意",
+          "产品种草": "用过后的感受",
+          "使用测评": "使用表现实测",
+          "商品介绍": "内容与限制"
+        }[data.goal] || "真实记录";
+        var pool = [
+          data.topic + "｜" + (evidence ? evidence + "后的真实记录" : categoryLeads[0]),
+          data.topic + "，" + categoryLeads[0],
+          "给" + titleFragment(data.audience, 10) + "的" + data.topic + goalLead,
+          data.topic + "：" + categoryLeads[1],
+          "关于" + data.topic + "，" + categoryLeads[2]
+        ];
         var ordered = [];
         for (var i = 0; i < pool.length; i += 1) {
           ordered.push(pool[(seed + state.generation + i) % pool.length]);
@@ -1407,77 +1627,75 @@
         })).slice(0, 5);
       }
 
-      function rednoteOpening(data, points, seed) {
-        var count = points.length;
-        var groups = {
-          "干货教程": [
-            "如果你是" + data.audience + "，刚开始处理" + data.topic + "，最容易卡住的不是不会做，而是不知道先做哪一步。这篇按" + count + "个重点，把动作和判断依据写清。",
-            "关于" + data.topic + "，先给一个简单判断：不要一上来追求完整，先让读者看懂自己能得到什么，再补充细节。"
-          ],
-          "经验分享": [
-            "关于" + data.topic + "，我更想留下的不是一句“好用”或“没用”，而是过程中真实发生了什么、为什么会这样判断。",
-            "如果你也在经历" + data.topic + "，这篇可以当成一份过程记录：有值得保留的地方，也有不适合照搬的部分。"
-          ],
-          "避坑提醒": [
-            "很多人做" + data.topic + "时，问题不是完全不懂，而是开始前漏掉了几个小条件。下面把容易出错的地方和处理方式放在一起。",
-            "先说一个容易被忽略的边界：" + data.topic + "不能只看表面结论，适用场景和限制没有说清，后面很容易返工。"
-          ],
-          "产品种草": [
-            "先说结论：" + data.topic + "不是所有人都需要。判断它值不值得，先看它能不能对应你的使用场景，再看优点和限制。",
-            "这篇不把" + data.topic + "写成万能答案，只把真实需求、使用感受和不适合的情况说清楚，方便你自己判断。"
-          ],
-          "使用测评": [
-            "这次不只说" + data.topic + "好不好用，而是按实际场景、具体体验和使用边界拆开看，避免一句结论替代全部信息。",
-            "看" + data.topic + "的测评，最重要的不是别人给了几分，而是评价依据能不能和你的使用条件对上。"
-          ],
-          "商品介绍": [
-            "如果你正在了解" + data.topic + "，先不用被零散的卖点带着走。适用人群、主要内容和需要提前确认的条件，下面一次说明。",
-            "这篇只做一件事：把" + data.topic + "的实际信息讲明白，让你在决定之前知道它适不适合自己。"
-          ]
-        };
-        return pick(groups[data.goal] || groups["干货教程"], 1, seed);
+      function goalOpening(data) {
+        if (data.tone === "清单干货") {
+          return data.topic + "的实际条件、过程和结果，按顺序列在下面。";
+        }
+        if (data.tone === "简洁专业") {
+          return "以下是" + data.topic + "在本次条件下的实际记录。";
+        }
+        if (data.tone === "轻松口语") {
+          return "最近刚好在做" + data.topic + "，把这次真实体验记一下。";
+        }
+        return {
+          "干货教程": "这次做" + data.topic + "，我把自己实际用过的过程放在一起。",
+          "经验分享": "这是我关于" + data.topic + "的一次实际记录。",
+          "避坑提醒": "关于" + data.topic + "，我确实遇到过下面这些问题。",
+          "产品种草": "这篇只说我实际接触" + data.topic + "后的感受。",
+          "使用测评": "下面是我在固定使用条件下对" + data.topic + "的观察。",
+          "商品介绍": "关于" + data.topic + "，这里是实际内容、结果和限制。"
+        }[data.goal] || "这是我关于" + data.topic + "的一次实际记录。";
+      }
+
+      function rednoteOpening(data) {
+        var indexes = openingIndexes(data.category);
+        var parts = [goalOpening(data)];
+        indexes.forEach(function (index) {
+          var fact = factValue(data, index);
+          if (fact) parts.push(data.factLabels[index] + "：" + ensureSentence(fact));
+        });
+        return parts.join("\n");
+      }
+
+      function categoryBoundary(data) {
+        return {
+          "AI工具": "不同输入材料和任务复杂度会影响结果，我仍会保留人工核对这一步。",
+          "职场": "岗位、团队和业务口径不同，这次做法更适合当作一个可对照的工作记录。",
+          "学习": "基础、时间和目标不同，进度不必照搬，能持续执行比排得很满更重要。",
+          "美妆护肤": "肤质、季节和叠加产品不同，使用感受可能不一样；有明显不适就及时停止。",
+          "穿搭": "身材比例和面料批次都会影响上身效果，尺码只能结合自己的数据判断。",
+          "美食": "食材大小和设备火力会影响时间，第一次做可以根据成品状态微调。",
+          "旅行": "季节、周末客流和营业信息会变化，出发当天还要再确认交通和开放情况。",
+          "探店": "口味和服务体验有主观差异，这里只对应我这次到店的时间和点单。",
+          "家居装修": "户型、施工条件和生活习惯不同，同样的尺寸不一定适合每个家。",
+          "母婴育儿": "孩子的反应存在个体差异，涉及健康、安全或持续异常时应咨询专业人员。",
+          "数码": "系统版本、网络和使用强度都会影响表现，这些数据只对应我的使用条件。",
+          "生活经验": "这是我在当时条件下的处理结果，不一定适合每个人，但过程可以用来对照。",
+          "闲置": "商品状态以实物图片和双方确认的信息为准，交易只在平台内完成。"
+        }[data.category] || "这只是一次真实记录，条件不同，结果也可能不同。";
       }
 
       function rednoteHooks(data, seed, primaryOpening) {
-        var groups = {
-          "干货教程": [
-            "有没有这种感觉：知道要做" + data.topic + "，真正打开输入框却不知道从哪里写？先把读者、动作和结果拆开，内容会顺很多。",
-            "如果只能先改一处，我会先改" + data.topic + "的开头：让读者马上知道这篇解决什么问题。",
-            "写" + data.topic + "时，信息越多不一定越清楚。先保留能让读者行动的内容，再删掉解释性空话。",
-            "这篇适合收藏的原因，不是句子多，而是每一段都对应一个可以检查的动作。"
-          ],
-          "经验分享": [
-            "一开始看" + data.topic + "，我也容易只记住结果，后来才发现真正影响判断的是过程里的细节。",
-            "很多经验分享看起来很顺，是因为把踩过的弯路也写出来了，而不是只留下最后一句结论。",
-            "如果你正在做" + data.topic + "，可以先对照自己的场景，不用急着把别人的方法原样搬过来。",
-            "我会把这篇当作记录，而不是标准答案：有些内容适合参考，有些内容必须自己验证。"
-          ],
-          "避坑提醒": [
-            "最麻烦的坑往往不是明显错误，而是看起来合理、实际却缺少适用条件的说法。",
-            "做" + data.topic + "之前，先问自己一句：这个结论有没有具体场景和依据？",
-            "如果一篇内容只告诉你“不要做什么”，却不说为什么和怎么改，读完还是很难执行。",
-            "下面这些提醒不一定适合所有人，但可以用来检查自己有没有漏掉关键条件。"
-          ],
-          "产品种草": [
-            "买之前最想知道的通常不是“好不好”，而是它在自己的场景里到底能不能派上用场。",
-            "关于" + data.topic + "，我会把优点和限制放在同一篇里，省得只看单方面推荐。",
-            "如果你只是被某个卖点吸引，建议先停一下，看看它是否真的对应你的日常需求。",
-            "种草可以有，但先把不适合的情况说清楚，反而更容易做决定。"
-          ],
-          "使用测评": [
-            "一条“值得买”并不能替代测评，真正有用的是它在什么条件下表现好、什么情况下会失望。",
-            "这次把" + data.topic + "拆成几个观察维度，优点和限制都按同一套标准说。",
-            "如果你在看" + data.topic + "，先别只盯着最终评分，评价依据比分数更重要。",
-            "同一个产品，不同人的使用结果可能完全不同，所以场景一定要写在结论前面。"
-          ],
-          "商品介绍": [
-            "看商品介绍时，先确认自己需要解决的问题，再看这件商品具体能提供什么。",
-            "一篇清楚的商品介绍，不应该只列卖点，还要把适用条件、交付内容和限制写明白。",
-            "如果你正在找" + data.topic + "，下面这些信息比一句“很不错”更值得先看。",
-            "买不买可以慢一点，先确认信息是否完整，后面的选择会更轻松。"
-          ]
-        };
-        var pool = groups[data.goal] || groups["干货教程"];
+        var categoryHook = {
+          "AI工具": "同一个工具换了输入和任务，效果可能完全不同，所以我只说这次实际用到的场景。",
+          "职场": "真正让我省时间的不是多做一套表，而是把容易返工的环节先固定下来。",
+          "学习": "我没有照搬一张很满的计划表，而是保留了自己能连续完成的部分。",
+          "美妆护肤": "判断护肤品是否适合，肤质、频率和使用周期缺一项都很难比较。",
+          "穿搭": "同一件衣服在不同身高和身材上差别很大，我把尺码和上身问题一起放出来。",
+          "美食": "这次把克数、温度和失败点都留下，照做时会比只看成品图更有把握。",
+          "旅行": "路线好不好走，要和季节、交通、预算一起看，单独看景点清单不够。",
+          "探店": "这不是只拍环境的打卡，我把到店时间、点单和实际花费都记下来了。",
+          "家居装修": "住进去以后才知道哪些尺寸真的顺手，哪些当时看着好、后来却麻烦。",
+          "母婴育儿": "同一个做法在不同月龄反应可能不同，下面只记录我家这段时间的变化。",
+          "数码": "参数表能看配置，但续航、发热和手感还是要放进真实使用里判断。",
+          "生活经验": "这件事最后解决了，但中间并不顺利，真正有用的是我后来改掉的那一步。"
+        }[data.category] || "这次不只留下结果，也把实际条件和遇到的问题放在一起。";
+        var pool = [
+          "如果你也是" + data.audience + "，可以先对照我的条件，再判断" + data.topic + "是否适合你。",
+          categoryHook,
+          "我没有把" + data.topic + "只归结为好或不好，过程、结果和限制都放在下面。",
+          "这次记录只对应我的实际条件，换一个人、时间或使用方式，结论可能会变。"
+        ];
         var ordered = [];
         for (var i = 0; i < pool.length; i += 1) {
           ordered.push(pool[(seed + i + 1) % pool.length]);
@@ -1485,81 +1703,41 @@
         return uniqueTextBlocks(ordered, [primaryOpening]).slice(0, 3);
       }
 
-      function pointAdvice(data, point, index) {
-        var kind = /读者|人群|用户|对象/.test(point) ? "audience"
-          : /标题|开头|封面|首图/.test(point) ? "headline"
-            : /真实|细节|经历|数据|时间|数量|价格/.test(point) ? "evidence"
-              : /步骤|流程|顺序|方法|操作|执行/.test(point) ? "action"
-                : /产品|功能|卖点|使用|体验|效果/.test(point) ? "feature"
-                  : /限制|注意|风险|避坑|问题|缺点/.test(point) ? "boundary"
-                    : "general";
-        var advice = {
-          audience: "先写清楚对象、场景和他现在卡在哪里，后面的例子才不会只对自己有用。",
-          headline: "保留主题词，再放进一个具体场景、数量或结果范围；不要用“最好”“必看”这类空泛词代替内容。",
-          evidence: "补充时间、数量、价格、使用频率或前后差异中的至少一项；没有验证过的信息就直接说明，不要补造。",
-          action: "把这件事写成一个能执行的动作，并补上做完后应该看到什么，读者才知道下一步怎么走。",
-          feature: "不要只写功能或卖点，要把它翻译成使用场景：什么时候有用、解决什么、什么情况下用不上。",
-          boundary: "把适用条件和限制一起写出来，避免读者只记住一个结论，发布后才发现预期不一致。",
-          general: "把这一点写成“场景、动作、结果”三部分，读者看完应该知道自己能不能照着做。"
-        }[kind];
-        var endings = {
-          "干货教程": ["先完成这一项，再进入下一步，信息不会混在一起。", "发布前可以用这一点反向检查正文是否具体。", "如果读者看不懂，优先补对象、动作和结果。"],
-          "经验分享": ["这样留下的才是过程，不只是一个看起来漂亮的结论。", "有了这个细节，别人才能判断它和自己的情况像不像。", "不相关的内容可以删掉，真实记录不需要写得很满。"],
-          "避坑提醒": ["发现条件不满足时，宁可暂停，也不要为了赶进度硬做。", "提前核对这一项，通常比发布后反复修改省事。", "不确定的地方说清边界，比给出一个过度肯定的答案更稳妥。"],
-          "产品种草": ["如果这个场景和你无关，就不必因为别人的推荐勉强选择。", "具体使用条件写出来，推荐会比单纯夸优点更可信。", "把不适合的人也说清楚，读者反而更容易判断。"],
-          "使用测评": ["不同使用条件可能得到不同结果，这里只把观察依据留下来。", "把优点和限制放在同一处，判断会比单看评分更接近实际。", "这部分适合作为参考，不应该替代你自己的实际体验。"],
-          "商品介绍": ["信息越明确，后续沟通和选择都会更省时间。", "买前先确认这一点，再决定要不要继续了解。", "如果条件不符合，直接跳过也比买错后再后悔更好。"]
-        }[data.goal] || [];
-        return advice + " " + (endings[index % endings.length] || "写清楚之后再进入下一步。" );
-      }
-
-      function rednotePointCopy(data, point, index) {
-        var labelsByGoal = {
-          "干货教程": "第" + (index + 1) + "步",
-          "经验分享": "记录点" + (index + 1),
-          "避坑提醒": "提醒" + (index + 1),
-          "产品种草": "使用场景" + (index + 1),
-          "使用测评": "观察维度" + (index + 1),
-          "商品介绍": "信息" + (index + 1)
-        };
-        var pointText = cleanSpaces(point).replace(/[。！？!?；;]+$/g, "");
-        return labelsByGoal[data.goal] + "｜" + pointText + "\n" + pointAdvice(data, pointText, index);
-      }
-
-      function rednoteConclusion(data) {
-        return {
-          "干货教程": "把上面的动作替换成自己的主题和素材后再发布，尤其检查对象、数字和边界是否真实。",
-          "经验分享": "这类内容最有价值的地方，不是把结果说得多漂亮，而是把过程里的判断和限制留下来。",
-          "避坑提醒": "发布前再检查一遍：每个提醒后面有没有原因、场景和处理方式；没有依据的内容直接删掉。",
-          "产品种草": "所以，是否适合不看别人说得多好，而看它是否对应你的使用场景、预算和接受的限制。",
-          "使用测评": "综合这些观察，这份记录适合帮助你做初步判断，不能替代你自己的实际使用。",
-          "商品介绍": "如果这些信息和你的需求对得上，再继续了解；如果关键条件不符合，直接跳过也没关系。"
-        }[data.goal] || "发布前把示例替换成自己的真实信息，再检查内容是否具体。";
+      function rednotePointSection(data) {
+        if (!data.points.length) return "";
+        var heading = {
+          "干货教程": "实际步骤",
+          "经验分享": "过程中的几个细节",
+          "避坑提醒": "另外遇到的问题",
+          "产品种草": "其他使用感受",
+          "使用测评": "补充观察",
+          "商品介绍": "其他信息"
+        }[data.goal] || "补充记录";
+        return heading + "\n" + data.points.map(function (point, index) {
+          return (index + 1) + ". " + cleanSpaces(point).replace(/[。！？!?；;]+$/g, "");
+        }).join("\n");
       }
 
       function rednoteBody(data, primaryTitle, opening) {
-        var points = defaultPoints(data);
+        var indexesUsedInOpening = openingIndexes(data.category);
         var sections = [primaryTitle, opening];
 
-        points.forEach(function (point, index) {
-          sections.push(rednotePointCopy(data, point, index));
+        (data.facts || []).forEach(function (fact, index) {
+          if (!cleanSpaces(fact) || indexesUsedInOpening.indexOf(index) !== -1) return;
+          sections.push(data.sectionLabels[index] + "\n" + ensureSentence(fact));
         });
 
-        if (data.details) {
-          sections.push("真实记录\n" + ensureSentence(data.details));
-        }
-
-        if (data.cautions) {
-          sections.push("需要提前说清\n" + ensureSentence(data.cautions));
-        }
-
-        sections.push(rednoteConclusion(data));
+        var pointSection = rednotePointSection(data);
+        if (pointSection) sections.push(pointSection);
+        if (data.details) sections.push("补充记录\n" + ensureSentence(data.details));
+        if (data.cautions) sections.push("还要注意\n" + ensureSentence(data.cautions));
+        sections.push(categoryBoundary(data));
 
         var price = data.price ? "，当前标价" + data.price + "元" : "";
         var ctaText = {
-          "收藏备用": "先收藏，真正发布前把示例换成自己的经历、数据和图片。",
-          "评论交流": "如果你正在做同一件事，评论里可以说说自己卡在哪个环节。",
-          "查看店铺商品": "完整目录和预览可以在店铺商品页查看" + price + "，按需选择就好。",
+          "收藏备用": "这份记录可以先收藏，遇到相同情况时再回来对照。",
+          "评论交流": "你在" + data.topic + "里遇到的情况一样吗？可以在评论里交流。",
+          "查看店铺商品": "完整目录和预览可以在店铺商品页查看" + price + "，确认适合自己再选择。",
           "不加引导": ""
         }[data.cta] || "";
         if (ctaText) sections.push(ctaText);
@@ -1595,19 +1773,19 @@
           return "想看完整目录和预览，可以去商品页查看" + price + "。先确认内容适不适合自己，再决定要不要选。";
         }
         if (data.cta === "评论交流") {
-          return "你现在最想看" + data.topic + "的哪一部分？可以把具体场景留在评论里。";
+          return "你更关心" + data.topic + "的“" + data.factLabels[1] + "”还是“" + data.factLabels[3] + "”？";
         }
         if (data.cta === "收藏备用") {
-          return "如果之后还会遇到同类问题，可以先收藏；真正发布时记得替换成自己的信息。";
+          return "如果之后还会遇到同类问题，可以先收藏，真正需要时再回来对照。";
         }
-        return "补充说明：" + (data.cautions || "示例内容需要结合自己的真实情况修改。");
+        return "补充说明：以上内容对应这次记录中的具体条件，其他情况可能会有不同结果。";
       }
 
       function generateRednote(data) {
         var seed = hash(data.topic + data.audience + data.goal + data.category);
         var titles = rednoteTitles(data, seed);
         var primaryTitle = titles[0] || data.topic;
-        var opening = rednoteOpening(data, defaultPoints(data), seed);
+        var opening = rednoteOpening(data);
         var hooks = rednoteHooks(data, seed, opening);
         var extras = rednoteExtras(data);
         return {
@@ -1618,6 +1796,35 @@
           body: rednoteBody(data, primaryTitle, opening),
           comment: rednoteComment(data)
         };
+      }
+
+      function validateRednoteFacts(data) {
+        var filled = (data.facts || []).filter(function (fact) {
+          return cleanSpaces(fact).length >= 4;
+        });
+        if (filled.length >= 3) return { valid: true, message: "" };
+        var missing = (data.facts || []).map(function (fact, index) {
+          return cleanSpaces(fact).length >= 4 ? "" : data.factLabels[index];
+        }).filter(Boolean).slice(0, 3 - filled.length);
+        return {
+          valid: false,
+          message: "还差" + (3 - filled.length) + "项真实素材：" + missing.join("、")
+        };
+      }
+
+      function generatedQualityIssues(generated, data) {
+        var issues = [];
+        var combined = [generated.body, generated.titles, generated.hooks, generated.comment].join("\n");
+        var comparableBody = cleanSpaces(generated.body);
+        var banned = ["把这一点写成", "先写清楚", "替换成自己的", "场景、动作、结果", "读者才知道", "写作方案"];
+        banned.forEach(function (phrase) {
+          if (combined.indexOf(phrase) !== -1) issues.push("包含写作提示：" + phrase);
+        });
+        (data.facts || []).filter(Boolean).forEach(function (fact) {
+          var factText = cleanSpaces(fact).replace(/[。！？!?；;]+$/g, "");
+          if (comparableBody.indexOf(factText) === -1) issues.push("遗漏真实素材");
+        });
+        return Array.from(new Set(issues));
       }
 
       function generateXianyu(data) {
@@ -1676,7 +1883,25 @@
         };
       }
 
+      function dedupeBodySentences(input) {
+        var seen = {};
+        return String(input || "").split(/\n{2,}/).map(function (block) {
+          return block.split("\n").map(function (line) {
+            if (!/[。！？!?]/.test(line)) return line.trim();
+            var parts = line.match(/[^。！？!?]+[。！？!?]?/g) || [];
+            return parts.filter(function (part) {
+              var key = outputKey(part);
+              if (!key || key.length < 8) return true;
+              if (seen[key]) return false;
+              seen[key] = true;
+              return true;
+            }).join("").trim();
+          }).filter(Boolean).join("\n");
+        }).filter(Boolean).join("\n\n");
+      }
+
       function dedupeGenerated(generated) {
+        generated.body = dedupeBodySentences(generated.body);
         var bodyBlocks = uniqueTextBlocks(generated.body);
         generated.body = bodyBlocks.join("\n\n");
 
@@ -1737,11 +1962,30 @@
           return;
         }
 
-        state.generation += 1;
         var data = collectData();
+        if (state.mode === "rednote") {
+          var factCheck = validateRednoteFacts(data);
+          $("#factSection").classList.toggle("has-error", !factCheck.valid);
+          $("#factsError").textContent = factCheck.message || "请至少填写3项真实素材。";
+          $("#factsError").classList.toggle("show", !factCheck.valid);
+          if (!factCheck.valid) {
+            $("#factSection").scrollIntoView({ behavior: "smooth", block: "center" });
+            showToast(factCheck.message);
+            return;
+          }
+        }
+
+        state.generation += 1;
         var generated = state.mode === "rednote" ? generateRednote(data) : generateXianyu(data);
         generated = applyPolish(generated, data);
         generated = dedupeGenerated(generated);
+        if (state.mode === "rednote") {
+          var qualityIssues = generatedQualityIssues(generated, data);
+          if (qualityIssues.length) {
+            showToast("文案未通过真实性检查，请调整素材后重试");
+            return;
+          }
+        }
         generated.all = buildAll(generated);
 
         state.current = {
@@ -1755,7 +1999,7 @@
         };
 
         renderGenerated(generated);
-        $("#resultMeta").textContent = data.topic + " · " + (state.mode === "rednote" ? data.goal : data.condition) + " · 刚刚生成";
+        $("#resultMeta").textContent = data.topic + " · " + (state.mode === "rednote" ? data.category + " · 已使用" + data.facts.filter(Boolean).length + "项真实素材" : data.condition) + " · 刚刚生成";
         saveHistory(state.current);
         renderHistory();
         saveDraft();
@@ -1796,17 +2040,34 @@
         $$("[data-mode-only]").forEach(function (node) {
           node.hidden = node.dataset.modeOnly !== state.mode;
         });
+        $("#pointsLabelText").textContent = state.mode === "xianyu" ? "商品卖点" : "补充要点";
+        updateCategoryFields();
         updateLabels();
         if (!options || !options.keepResults) resetOutputs();
         if (!options || !options.skipSave) saveDraft();
       }
 
       function setCategory(category) {
+        var aliases = { "美妆": "美妆护肤", "家居": "家居装修" };
+        category = aliases[category] || category;
         state.category = categoryData[category] ? category : "AI工具";
         $("#category").value = state.category;
         $$("#categoryChips .chip").forEach(function (chip) {
           chip.classList.toggle("active", chip.dataset.category === state.category);
         });
+        updateCategoryFields();
+      }
+
+      function updateCategoryFields() {
+        var preset = categoryData[state.category] || categoryData["AI工具"];
+        $("#categoryHint").textContent = preset.hint;
+        preset.fields.forEach(function (field, index) {
+          var number = index + 1;
+          $("#fact" + number + "Label").textContent = field[0];
+          $("#fact" + number).placeholder = field[1];
+        });
+        $("#factSection").classList.remove("has-error");
+        $("#factsError").classList.remove("show");
       }
 
       function fillSample() {
@@ -1815,9 +2076,13 @@
           $("#topic").value = "用AI整理小红书文案";
           $("#audience").value = "刚开始做小红书、每次写文案都卡住的新手";
           $("#goal").value = "干货教程";
-          $("#points").value = "先确定目标读者\n让AI只生成标题和结构\n加入自己的真实信息\n删除空话和夸张承诺";
-          $("#details").value = "资料包按照标题、开头、正文结构和结尾互动分类，可直接编辑；完整版本放在店铺商品页";
-          $("#cautions").value = "模板不能保证爆款，需要替换成自己的信息和细节";
+          $("#fact1").value = "每天要整理3篇小红书初稿，原来一篇大约需要40分钟";
+          $("#fact2").value = "先输入主题、目标读者和自己的真实经历，再从生成结果里人工调整标题和开头";
+          $("#fact3").value = "熟悉操作后，一篇初稿大约15分钟能整理完，标题和正文还能继续修改";
+          $("#fact4").value = "网站不会自动核实经历和数据，空泛输入得到的内容也会很空，最后仍要人工检查";
+          $("#points").value = "选定作品类型\n填入3到4项真实素材\n生成后删掉与自己不符的句子";
+          $("#details").value = "目前包含标题、完整正文、标签和置顶评论，手机和电脑浏览器都能打开";
+          $("#cautions").value = "它能缩短整理初稿的时间，但不能保证流量或成交";
           $("#tone").value = "真实自然";
           $("#length").value = "standard";
           $("#cta").value = "查看店铺商品";
@@ -1840,7 +2105,7 @@
 
       function serializeForm() {
         var ids = [
-          "topic", "audience", "goal", "points", "details", "cautions", "tone",
+          "topic", "audience", "goal", "fact1", "fact2", "fact3", "fact4", "points", "details", "cautions", "tone",
           "length", "cta", "price", "condition", "sellPrice", "city", "trade"
         ];
         var form = {
@@ -1876,6 +2141,8 @@
         $("#safeMode").checked = true;
         $("#topic").setAttribute("aria-invalid", "false");
         $("#topicError").classList.remove("show");
+        $("#factSection").classList.remove("has-error");
+        $("#factsError").classList.remove("show");
         resetOutputs();
         try {
           localStorage.removeItem(DRAFT_KEY);
@@ -2157,6 +2424,11 @@
 
       $$("#categoryChips .chip").forEach(function (button) {
         button.addEventListener("click", function () {
+          if (state.mode === "rednote" && state.category !== button.dataset.category) {
+            ["fact1", "fact2", "fact3", "fact4"].forEach(function (id) {
+              $("#" + id).value = "";
+            });
+          }
           setCategory(button.dataset.category);
           saveDraft();
         });
@@ -2234,6 +2506,15 @@
         if (event.target.id === "topic" && value("topic")) {
           $("#topic").setAttribute("aria-invalid", "false");
           $("#topicError").classList.remove("show");
+        }
+        if (/^fact[1-4]$/.test(event.target.id)) {
+          var filledFacts = [value("fact1"), value("fact2"), value("fact3"), value("fact4")].filter(function (fact) {
+            return fact.length >= 4;
+          });
+          if (filledFacts.length >= 3) {
+            $("#factSection").classList.remove("has-error");
+            $("#factsError").classList.remove("show");
+          }
         }
         saveDraft();
       });
