@@ -888,7 +888,7 @@
         <div class="brand-mark" aria-hidden="true">文</div>
         <div class="brand-copy">
           小红书文案工作台
-          <small>V8 首图文案与真人节奏</small>
+          <small>V9 全赛道与防重复表达</small>
         </div>
       </div>
 
@@ -915,20 +915,38 @@
 
       <div class="form-body">
         <div class="field">
-          <div class="field-label">内容赛道</div>
+          <div class="field-label">内容赛道 <span class="optional">31类可选</span></div>
           <div class="chips" id="categoryChips">
             <button class="chip active" type="button" data-category="AI工具">AI工具</button>
-            <button class="chip" type="button" data-category="职场">职场</button>
-            <button class="chip" type="button" data-category="学习">学习</button>
-            <button class="chip" type="button" data-category="美妆护肤">美妆护肤</button>
             <button class="chip" type="button" data-category="穿搭">穿搭</button>
+            <button class="chip" type="button" data-category="美妆护肤">美妆护肤</button>
+            <button class="chip" type="button" data-category="家居装修">家居装修</button>
+            <button class="chip" type="button" data-category="好物测评">好物测评</button>
+            <button class="chip" type="button" data-category="情感成长">情感成长</button>
+            <button class="chip" type="button" data-category="母婴育儿">母婴育儿</button>
             <button class="chip" type="button" data-category="美食">美食</button>
             <button class="chip" type="button" data-category="旅行">旅行</button>
-            <button class="chip" type="button" data-category="探店">探店</button>
-            <button class="chip" type="button" data-category="家居装修">家居装修</button>
-            <button class="chip" type="button" data-category="母婴育儿">母婴育儿</button>
+            <button class="chip" type="button" data-category="宠物">宠物</button>
+            <button class="chip" type="button" data-category="健身运动">健身运动</button>
+            <button class="chip" type="button" data-category="职场">职场</button>
+            <button class="chip" type="button" data-category="影视">影视</button>
+            <button class="chip" type="button" data-category="学习">学习</button>
+            <button class="chip" type="button" data-category="教育">教育</button>
+            <button class="chip" type="button" data-category="婚礼">婚礼</button>
+            <button class="chip" type="button" data-category="摄影">摄影</button>
             <button class="chip" type="button" data-category="数码">数码</button>
+            <button class="chip" type="button" data-category="汽车">汽车</button>
+            <button class="chip" type="button" data-category="房产">房产</button>
+            <button class="chip" type="button" data-category="兴趣手作">兴趣手作</button>
+            <button class="chip" type="button" data-category="游戏">游戏</button>
             <button class="chip" type="button" data-category="生活经验">生活经验</button>
+            <button class="chip" type="button" data-category="娱乐追星">娱乐追星</button>
+            <button class="chip" type="button" data-category="资讯解读">资讯解读</button>
+            <button class="chip" type="button" data-category="健康养生">健康养生</button>
+            <button class="chip" type="button" data-category="音乐">音乐</button>
+            <button class="chip" type="button" data-category="萌娃">萌娃</button>
+            <button class="chip" type="button" data-category="知识科普">知识科普</button>
+            <button class="chip" type="button" data-category="探店">探店</button>
             <button class="chip" type="button" data-category="闲置">闲置</button>
           </div>
           <input type="hidden" id="category" value="AI工具">
@@ -991,18 +1009,18 @@
         </div>
 
         <div class="field">
-          <label for="points"><span id="pointsLabelText">补充要点</span> <span class="optional">选填，逗号或换行分隔</span></label>
-          <textarea id="points" placeholder="例如：打开工具导入原始内容；删掉没有依据的数据；人工调整开头"></textarea>
+          <label for="points"><span id="pointsLabelText">补充细节</span> <span class="optional">选填，逗号或换行分隔</span></label>
+          <textarea id="points" placeholder="还想写进正文的具体动作、数据或细节，可以逐条补充"></textarea>
         </div>
 
         <div class="field">
-          <label for="details">其他真实信息 <span class="optional">选填</span></label>
-          <textarea id="details" placeholder="还有需要写进正文的事实，可以补充在这里"></textarea>
+          <label for="details"><span id="detailsLabelText">个人感受或其他事实</span> <span class="optional">选填</span></label>
+          <textarea id="details" placeholder="例如：当时的情绪、一个小故事，或上面四项没有覆盖的事实"></textarea>
         </div>
 
         <div class="field">
-          <label for="cautions">其他限制或注意事项 <span class="optional">选填</span></label>
-          <textarea id="cautions" placeholder="例如：不适用的人、不能保证的结果或购买前提"></textarea>
+          <label for="cautions"><span id="cautionsLabelText">不适用情况或边界</span> <span class="optional">选填</span></label>
+          <textarea id="cautions" placeholder="例如：不适合谁、哪些结果不能保证、还需要核对什么"></textarea>
         </div>
 
         <div data-mode-only="rednote">
@@ -1340,6 +1358,222 @@
           ],
           sections: ["事情是怎么开始的", "中间发生了什么", "最后的结果", "我会怎么调整"]
         },
+        "好物测评": {
+          audience: "购买前想看真实使用参考的人",
+          tags: ["好物测评", "真实使用", "购买参考", "优缺点分享"],
+          hint: "写清为什么买、用了多久、在哪些场景使用，以及真正喜欢和劝退的地方。",
+          fields: [
+            ["购买背景与需求", "例如：为了通勤补妆入手，活动价129元，最在意便携和持妆"],
+            ["使用场景与周期", "例如：连续用了20天，工作日早上和出差时使用"],
+            ["最有感的表现", "例如：上脸轻薄，下午鼻翼略出油，但没有明显斑驳"],
+            ["缺点与适合人群", "例如：色号偏少，更适合追求自然妆效、皮肤状态较稳定的人"]
+          ],
+          sections: ["为什么会买", "实际怎么用", "留下它的理由", "劝退点和适合谁"]
+        },
+        "情感成长": {
+          audience: "正在处理相似关系或情绪的人",
+          tags: ["情感成长", "关系思考", "自我成长", "真实故事"],
+          hint: "从一件具体发生的事写起，保留当时的情绪、转折和现在的边界，不替别人下结论。",
+          fields: [
+            ["关系背景与当时状态", "例如：异地半年，最近因为回复消息的频率反复争执"],
+            ["触发事件或冲突", "例如：一次临时取消见面后，我们第一次把真实期待说开"],
+            ["我的感受与变化", "例如：从反复猜测变成直接确认，情绪消耗明显少了一些"],
+            ["现在的想法与边界", "例如：不再用冷处理试探；同样的方法不一定适合每段关系"]
+          ],
+          sections: ["当时的关系状态", "事情的转折点", "我真正意识到的事", "现在保留的边界"]
+        },
+        "宠物": {
+          audience: "正在照顾同阶段宠物的主人",
+          tags: ["宠物日常", "养宠经验", "真实测评", "科学养宠"],
+          hint: "写宠物年龄和状态、具体做法、观察周期及真实反应；健康问题不要代替专业诊断。",
+          fields: [
+            ["宠物年龄与状态", "例如：2岁短毛猫，换季掉毛明显，肠胃偶尔敏感"],
+            ["使用方法与周期", "例如：每周梳毛4次，连续观察3周，主粮没有同时更换"],
+            ["实际反应与变化", "例如：浮毛少了一些，猫咪从躲开变成能配合约5分钟"],
+            ["问题与安全边界", "例如：梳齿偏硬要控制力度；持续异常会及时咨询兽医"]
+          ],
+          sections: ["宠物的基础情况", "我们怎么尝试", "观察到的反应", "问题和安全边界"]
+        },
+        "健身运动": {
+          audience: "想建立稳定运动习惯的人",
+          tags: ["健身记录", "运动计划", "体态改善", "真实变化"],
+          hint: "写身体基础、训练频率、执行周期和可记录变化，不承诺快速减重或医疗效果。",
+          fields: [
+            ["身体基础与目标", "例如：久坐上班族，肩背容易紧，目标是先恢复每周运动3次"],
+            ["训练安排与周期", "例如：连续6周，每次40分钟，两次力量加一次快走"],
+            ["可记录的变化", "例如：深蹲从徒手做到20kg，爬楼后的喘感比之前轻"],
+            ["不适与调整方式", "例如：第二周膝盖不舒服后降低强度，并请教专业教练调整动作"]
+          ],
+          sections: ["我的运动起点", "这段时间怎么练", "实际记录到的变化", "不适和调整"]
+        },
+        "影视": {
+          audience: "正在找同类型影视作品的人",
+          tags: ["影视分享", "观后感", "剧集推荐", "电影推荐"],
+          hint: "写作品和观看进度、最打动你的具体情节或人物、个人理解，以及适合和不适合谁。",
+          fields: [
+            ["作品与观看进度", "例如：看完12集正片和番外，下面尽量不涉及关键结局"],
+            ["最有感的情节或人物", "例如：第6集两个人沉默吃饭的段落，比台词更能说明关系变化"],
+            ["个人理解与情绪", "例如：前半段觉得慢，后面才发现留白一直在为人物选择做铺垫"],
+            ["不足与适合人群", "例如：节奏偏慢，更适合喜欢人物成长、能接受弱情节推进的人"]
+          ],
+          sections: ["我看到哪里", "最打动我的细节", "看完后的理解", "不足和适合谁"]
+        },
+        "教育": {
+          audience: "正在面对相似学习或陪伴问题的家长和老师",
+          tags: ["教育经验", "学习习惯", "亲子沟通", "成长记录"],
+          hint: "写年龄或学段、具体问题、尝试周期和观察到的变化，不用单次成绩替孩子定型。",
+          fields: [
+            ["年龄学段与具体问题", "例如：小学三年级，写作业容易漏题，检查时比较抗拒"],
+            ["尝试的方法与周期", "例如：连续3周只检查题号和单位，每晚控制在10分钟内"],
+            ["观察到的变化", "例如：漏题从一周4次降到1次，也愿意自己说出检查顺序"],
+            ["不适用情况与边界", "例如：这是家庭观察；持续的学习困难需要寻求专业评估"]
+          ],
+          sections: ["孩子所处的阶段", "我们做了什么", "这段时间的变化", "边界和提醒"]
+        },
+        "婚礼": {
+          audience: "正在筹备同规模婚礼的新人",
+          tags: ["婚礼筹备", "备婚攻略", "婚礼预算", "备婚避坑"],
+          hint: "写城市日期、人数预算、关键选择、现场效果和遗憾，比只发成片更有参考价值。",
+          fields: [
+            ["城市日期与规模", "例如：杭州10月午宴，18桌约180人，户外仪式加室内用餐"],
+            ["预算与关键选择", "例如：总预算12万元，把更多预算留给摄影和灯光"],
+            ["现场效果与反馈", "例如：阴天柔光很适合拍照，但迎宾区在高峰时略拥挤"],
+            ["遗憾与避坑提醒", "例如：没有预留换装后的单独合影时间，流程表要给每位负责人"]
+          ],
+          sections: ["婚礼基本信息", "预算花在了哪里", "现场真实效果", "遗憾和避坑"]
+        },
+        "摄影": {
+          audience: "想复现同类照片效果的人",
+          tags: ["摄影技巧", "拍照教程", "修图思路", "拍摄参数"],
+          hint: "写器材参数、光线场景、拍摄动作和后期步骤，同时保留失败条件。",
+          fields: [
+            ["器材参数与光线", "例如：35mm镜头、F2.0、傍晚5点侧逆光，白平衡5200K"],
+            ["场景与构图方式", "例如：人物离窗约1米，背景留出三分之一空白"],
+            ["拍摄或后期步骤", "例如：先压高光再提阴影，肤色只做少量橙色明度调整"],
+            ["成片效果与问题", "例如：肤色通透，但太阳落下后噪点明显，需要降低快门风险"]
+          ],
+          sections: ["设备和现场光线", "构图与站位", "拍摄和后期过程", "成片问题"]
+        },
+        "汽车": {
+          audience: "正在比较同级车型或真实用车成本的人",
+          tags: ["汽车测评", "真实用车", "选车参考", "用车成本"],
+          hint: "写具体车型配置、里程路况、能耗空间和真实缺点，不只复述参数表。",
+          fields: [
+            ["车型配置与购车信息", "例如：2025款标准版，落地约18万元，没有选装辅助包"],
+            ["使用场景与里程", "例如：开了6500公里，七成城市通勤、三成高速"],
+            ["能耗空间与驾驶感受", "例如：综合电耗14.8kWh，后排坐两位成年人空间充足"],
+            ["缺点与适合人群", "例如：低速刹车脚感要适应，更适合有固定充电条件的家庭"]
+          ],
+          sections: ["车型和购车前提", "真实用车场景", "日常表现", "缺点和适合谁"]
+        },
+        "房产": {
+          audience: "正在比较同类居住选择的人",
+          tags: ["买房经验", "租房攻略", "看房记录", "居住选择"],
+          hint: "写城市区域、预算户型、通勤配套和明显风险；市场信息和政策需要标明时间。",
+          fields: [
+            ["城市区域与居住需求", "例如：上海外环附近，两人自住，优先考虑通勤和采光"],
+            ["预算户型与费用", "例如：总价预算350万元，主要看70到85平两居"],
+            ["通勤配套与实际体验", "例如：步行到地铁约12分钟，晚高峰进城单程55分钟"],
+            ["缺点风险与核对项", "例如：临街卧室晚上有车声，税费和学区信息需按最新政策核对"]
+          ],
+          sections: ["我的居住需求", "预算和户型", "实地体验", "风险和待核对项"]
+        },
+        "兴趣手作": {
+          audience: "想低成本尝试同类兴趣或手作的人",
+          tags: ["兴趣爱好", "手作教程", "新手入门", "制作记录"],
+          hint: "写材料工具、花费时间、关键步骤和失败调整，让新手能判断是否适合尝试。",
+          fields: [
+            ["基础与材料花费", "例如：第一次做滴胶，材料和模具一共花了86元"],
+            ["关键步骤与耗时", "例如：分两层灌注，每层静置12小时，气泡用牙签慢慢挑"],
+            ["完成效果与感受", "例如：颜色比预期更通透，第一次成品边缘有轻微溢胶"],
+            ["失败点与调整", "例如：亮片放太多会下沉，下次会减少用量并延长第一层固化"]
+          ],
+          sections: ["入门成本", "制作过程", "第一次的成品", "翻车和调整"]
+        },
+        "游戏": {
+          audience: "正在玩同一游戏或考虑入坑的人",
+          tags: ["游戏攻略", "游戏体验", "新手入门", "阵容分享"],
+          hint: "写游戏版本、游玩进度、具体配置或操作、结果和明显短板，避免空泛地说强不强。",
+          fields: [
+            ["游戏版本与进度", "例如：当前2.3版本，零氪玩到第35天，主线已通关第8章"],
+            ["角色阵容或具体操作", "例如：主C配双辅助，资源优先升关键技能到8级"],
+            ["实战结果与体验", "例如：同练度下副本时间从3分钟降到1分40秒"],
+            ["短板与适合玩家", "例如：前期资源紧张，更适合愿意慢养成、不追求快速毕业的人"]
+          ],
+          sections: ["版本和账号进度", "我的配置与操作", "实战表现", "短板和适合谁"]
+        },
+        "娱乐追星": {
+          audience: "关注同一作品、艺人或现场活动的人",
+          tags: ["娱乐分享", "现场记录", "追星日常", "舞台分享"],
+          hint: "只写公开可核对的信息和自己的现场感受，不传播未经证实的传闻或私人信息。",
+          fields: [
+            ["人物活动与时间来源", "例如：7月12日公开舞台，内容来自官方直播和本人现场记录"],
+            ["最有感的公开细节", "例如：第二首歌换成现场乐队后，情绪和镜头表现更完整"],
+            ["个人感受与原因", "例如：不是因为高音，而是收尾时的停顿让我反复回看"],
+            ["信息边界与不足", "例如：只讨论公开舞台，不猜测私人行程；现场收音会影响判断"]
+          ],
+          sections: ["公开信息来源", "让我记住的细节", "我的真实感受", "信息边界"]
+        },
+        "资讯解读": {
+          audience: "想快速看懂一条信息与自己关系的人",
+          tags: ["资讯解读", "信息整理", "热点分析", "事实核对"],
+          hint: "写明来源和日期，区分已确认事实、个人分析和仍需核对的信息。",
+          fields: [
+            ["来源日期与事件", "例如：7月15日发布的官方公告，涉及平台服务规则调整"],
+            ["已确认的核心事实", "例如：公告明确列出3项变化，8月1日起分阶段执行"],
+            ["可能影响的人和场景", "例如：频繁发布商品内容的创作者需要重新检查授权材料"],
+            ["不确定项与核对入口", "例如：细则尚未全部公布，后续以官方帮助中心更新为准"]
+          ],
+          sections: ["信息从哪里来", "已经确认了什么", "可能影响谁", "仍需等待和核对"]
+        },
+        "健康养生": {
+          audience: "想改善日常状态并寻找真实生活记录的人",
+          tags: ["健康生活", "生活习惯", "状态记录", "科学养生"],
+          hint: "写身体基础、做法周期和可观察变化，不诊断疾病、不替代就医，也不承诺疗效。",
+          fields: [
+            ["身体状态与目标", "例如：久坐后肩颈紧，最近想先把睡眠和活动量稳定下来"],
+            ["具体做法与周期", "例如：连续4周每天饭后走20分钟，晚上11点前放下手机"],
+            ["可观察的变化", "例如：入睡时间从约40分钟缩短到20分钟，但周末仍会波动"],
+            ["风险与医疗边界", "例如：这只是个人生活记录；疼痛或持续异常应及时就医"]
+          ],
+          sections: ["我的基础状态", "这段时间做了什么", "实际观察到的变化", "风险和医疗边界"]
+        },
+        "音乐": {
+          audience: "正在寻找相似歌曲、专辑或现场的人",
+          tags: ["音乐分享", "听歌记录", "专辑推荐", "现场感受"],
+          hint: "写清歌曲版本、聆听场景、具体声音细节和个人感受，不堆空泛形容词。",
+          fields: [
+            ["歌曲专辑与版本", "例如：录音室版和2026巡演现场版都听过，更偏爱现场编曲"],
+            ["聆听场景", "例如：晚上戴耳机完整听了三遍，第二遍开始注意到鼓点变化"],
+            ["最有感的声音细节", "例如：副歌没有直接推满，人声后撤后反而把情绪拉得更长"],
+            ["个人感受与适合场景", "例如：不适合当热闹背景音，更适合独处或通勤结束时听"]
+          ],
+          sections: ["我听的是哪个版本", "当时的聆听场景", "最打动我的声音", "它适合什么时候听"]
+        },
+        "萌娃": {
+          audience: "喜欢真实成长记录或处在相近阶段的家长",
+          tags: ["萌娃日常", "成长记录", "亲子生活", "宝宝日常"],
+          hint: "写年龄阶段、发生的小事和真实反应，同时保护孩子隐私，不把偶然表现包装成能力结论。",
+          fields: [
+            ["年龄阶段与当天背景", "例如：宝宝1岁8个月，第一次自己参加亲子运动会"],
+            ["发生的具体小事", "例如：起跑前一直抓着我的手，看到彩球后才慢慢走过去"],
+            ["孩子的真实反应", "例如：没有完成比赛，但最后愿意把球递给旁边的小朋友"],
+            ["隐私安全与个人感受", "例如：不展示学校和位置；我更在意他愿意尝试，而不是有没有赢"]
+          ],
+          sections: ["孩子当时的阶段", "发生了一件小事", "他真实的反应", "我的感受和边界"]
+        },
+        "知识科普": {
+          audience: "想把一个概念真正弄明白的人",
+          tags: ["知识科普", "概念解释", "学习笔记", "信息差"],
+          hint: "先提出具体问题，再给来源、通俗解释、现实例子和适用边界，避免把观点写成事实。",
+          fields: [
+            ["要解释的问题或概念", "例如：为什么同样容量的充电宝，实际可用电量会更少"],
+            ["资料来源与关键依据", "例如：参考产品说明和能量转换公式，来源更新时间为2026年7月"],
+            ["通俗解释与现实例子", "例如：电芯升压和线路会有损耗，类似搬运过程中会损失一部分"],
+            ["适用边界或争议", "例如：不同电压、温度和设备效率会改变结果，不能只看标称容量"]
+          ],
+          sections: ["问题到底是什么", "依据从哪里来", "换成大白话怎么理解", "适用边界"]
+        },
         "闲置": {
           audience: "正在寻找高性价比闲置的人",
           tags: ["闲置转让", "断舍离", "二手好物", "省钱生活"],
@@ -1353,6 +1587,159 @@
           sections: ["购买与使用", "功能和配件", "成色与原因", "瑕疵和交易"]
         }
       };
+
+      function makeWritingProfile(titleLeads, titleQuestion, cover, hook, cta, boundary, reflection, metricIndex) {
+        return {
+          titleLeads: titleLeads,
+          titleQuestion: titleQuestion,
+          cover: cover,
+          hook: hook,
+          cta: cta,
+          boundary: boundary,
+          reflection: reflection,
+          metricIndex: metricIndex == null ? 2 : metricIndex
+        };
+      }
+
+      var categoryWriting = {
+        "好物测评": makeWritingProfile(
+          ["连续使用实测", "优点真有感", "劝退点也说"], "用久了还值得买吗？", "优点和劝退都说",
+          "好物值不值得留，往往不是看第一眼，而是看它能不能稳定解决那个高频小问题。",
+          "你买这类东西时最在意效果、使用感，还是价格？",
+          "购买需求和使用习惯不同，同一件东西的优先级也会完全不同。",
+          "真正让我愿意留下的，不是它每一点都完美，而是优点刚好落在我的高频需求上。", 2
+        ),
+        "情感成长": makeWritingProfile(
+          ["一件小事的转折", "情绪变化", "边界也说"], "后来我想明白了什么？", "情绪和转折都保留",
+          "关系里最消耗人的有时不是那次争执，而是彼此都在等对方先猜懂。",
+          "你更想聊当时的情绪，还是后来建立的边界？",
+          "每段关系的背景都不同，这里只分享我的经历和选择，不替任何人作决定。",
+          "我后来才明白，成长不是突然变得冷静，而是下一次情绪上来时，能多给自己一个选择。", 2
+        ),
+        "宠物": makeWritingProfile(
+          ["按年龄真实记录", "宠物实际反应", "问题也说明"], "我家实际反应怎样？", "反应和安全都说",
+          "养宠经验不能只看结果，年龄、身体状态和观察周期少一项都很难照搬。",
+          "你家宠物现在最让你困扰的是适应、饮食，还是日常护理？",
+          "宠物存在个体差异，涉及持续异常、疼痛或健康问题时应及时咨询兽医。",
+          "能被长期保留下来的做法，通常不是最复杂的，而是宠物愿意配合、主人也能稳定继续的那种。", 2
+        ),
+        "健身运动": makeWritingProfile(
+          ["训练周期实记", "身体真实变化", "不适也保留"], "坚持后身体怎么变？", "训练和调整都在",
+          "运动计划看起来再完整，也要放进体能基础、恢复速度和真实时间里才知道能不能坚持。",
+          "你现在更想改善力量、体态，还是运动习惯？",
+          "体能基础和身体状况不同，出现疼痛或持续不适时应停止训练并寻求专业意见。",
+          "这段时间最有价值的变化不是某个数字，而是我开始分得清正常疲劳和需要调整的信号。", 2
+        ),
+        "影视": makeWritingProfile(
+          ["看完后的真感受", "人物细节", "不足也说"], "它为什么让我后劲很大？", "细节和后劲都在",
+          "一部作品真正留下来的，往往不是剧情梗概，而是某个当时没说透、后来反复想起的细节。",
+          "你看作品时更容易被人物、情节，还是氛围打动？",
+          "观感很主观，下面只对应我的观看进度和偏好，也会尽量避开关键剧透。",
+          "我喜欢的不是它替人物解释了一切，而是留了一点空白，让情绪在看完以后才慢慢落下来。", 2
+        ),
+        "教育": makeWritingProfile(
+          ["按学段观察", "方法后的变化", "边界也说"], "这样陪伴真的有变化吗？", "过程和变化都记录",
+          "教育方法不能脱离年龄、基础和家庭节奏，真正值得看的，是孩子连续一段时间后的反应。",
+          "你现在更关心习惯、沟通，还是具体学习问题？",
+          "孩子的发展和学习情况存在个体差异，持续困难需要结合老师或专业人员的评估。",
+          "比起一次把问题纠正，我更在意孩子能不能逐渐知道自己下一步该怎么做。", 2
+        ),
+        "婚礼": makeWritingProfile(
+          ["真实备婚复盘", "预算去向", "遗憾也保留"], "婚礼结束后最想改哪项？", "预算效果遗憾都说",
+          "备婚清单看起来都差不多，真正决定体验的却是人数、场地、时间和现场衔接。",
+          "你备婚时最想先看预算、流程，还是供应商避坑？",
+          "城市、档期和婚礼规模都会改变报价与流程，这里只对应这一次筹备记录。",
+          "婚礼当天过去得很快，最后真正记住的不是每个环节都完美，而是重要的人都舒服地在场。", 2
+        ),
+        "摄影": makeWritingProfile(
+          ["参数现场都给", "成片真实复盘", "翻车条件也说"], "同样画面怎么拍出来？", "光线参数步骤都在",
+          "照片的感觉不是一个滤镜决定的，现场光线、人物位置和后期取舍缺一项都可能变样。",
+          "你拍这类照片时最容易卡在光线、构图，还是后期？",
+          "器材、天气和现场光线不同，参数只能作为起点，最终仍要按画面调整。",
+          "我现在更愿意先把现场光线拍对，再做少量后期，而不是把所有问题留到修图时补救。", 2
+        ),
+        "汽车": makeWritingProfile(
+          ["真实里程实测", "日常用车表现", "缺点不回避"], "开久了真实表现怎样？", "能耗空间缺点都说",
+          "选车不能只看配置表，同一辆车放进通勤、长途和家庭出行，优缺点会被重新排序。",
+          "你选车时更看重能耗、空间、驾驶感，还是补能条件？",
+          "路况、气温和驾驶习惯都会影响能耗与体验，数据只对应本次车辆和使用条件。",
+          "真正决定我每天愿不愿意开的，是那些反复遇到的小感受，而不是偶尔才用一次的配置。", 2
+        ),
+        "房产": makeWritingProfile(
+          ["实地看房记录", "通勤居住体验", "风险也核对"], "住进去真正方便吗？", "预算通勤风险都在",
+          "看房照片能修饰很多问题，但通勤、噪音、采光和真实费用必须放进同一天里判断。",
+          "你看房时最难取舍的是预算、通勤，还是居住舒适度？",
+          "房源、市场和政策信息会变化，价格、税费及资格应以当时官方信息和合同为准。",
+          "房子很难每一项都满分，我最后更看重那些每天都会发生、入住后又很难改变的条件。", 2
+        ),
+        "兴趣手作": makeWritingProfile(
+          ["新手第一次实做", "材料步骤都给", "翻车也记录"], "第一次做会翻车吗？", "成本步骤翻车都在",
+          "手作成品看着精致，真正动手后才知道材料状态和等待时间比想象中更重要。",
+          "你更想看材料清单、详细步骤，还是翻车补救？",
+          "材料品牌、环境温度和熟练度都会影响成品，第一次尝试可以先从小份量开始。",
+          "第一次做得不够整齐反而让我更快看见问题，下一次该减什么、慢在哪里都更清楚。", 2
+        ),
+        "游戏": makeWritingProfile(
+          ["当前版本实测", "阵容操作复盘", "短板也说"], "这套配置实战怎么样？", "版本配置结果都给",
+          "攻略离开版本、账号进度和资源投入就很难复现，所以我只写这次实战真正用到的部分。",
+          "你现在最卡资源分配、阵容搭配，还是具体关卡？",
+          "游戏版本和平衡调整会改变结果，配置应结合自己的账号资源，不必完全照搬。",
+          "真正好用的思路不是把数值堆到最高，而是现有资源里每个位置都能发挥作用。", 2
+        ),
+        "娱乐追星": makeWritingProfile(
+          ["公开舞台记录", "让我记住的细节", "信息边界也说"], "哪个瞬间让我反复回看？", "舞台细节感受都在",
+          "现场或舞台真正让人记住的，常常不是最热闹的一秒，而是情绪刚好落下来的那个细节。",
+          "你更想聊这次舞台、作品，还是现场感受？",
+          "这里只讨论公开可核对的作品和活动，不传播未经证实的消息或私人信息。",
+          "喜欢不需要靠夸大来证明，能把打动自己的那个具体瞬间说清楚，已经足够有分量。", 2
+        ),
+        "资讯解读": makeWritingProfile(
+          ["来源事实先核对", "影响拆开说", "未知项也标出"], "这条信息和谁有关？", "事实影响未知项分开",
+          "热点信息最容易把事实和判断混在一起，我会先确认来源、日期和原文，再谈它可能影响谁。",
+          "你更想看核心变化、适用人群，还是后续需要核对的部分？",
+          "信息可能继续更新，涉及规则、权益或决策时应以最新官方原文为准。",
+          "把已知和未知分开以后，很多焦虑会小一点，也更容易判断自己现在是否真的需要行动。", 1
+        ),
+        "健康养生": makeWritingProfile(
+          ["连续生活记录", "状态真实变化", "医疗边界说清"], "坚持后状态有变化吗？", "做法变化边界都在",
+          "健康习惯不能只看一天的感觉，我更愿意记录做法、周期和能被观察到的变化。",
+          "你现在更想改善睡眠、活动量，还是日常精力？",
+          "这只是个人生活记录，不能替代诊断或治疗；出现疼痛、持续异常或明显不适应及时就医。",
+          "真正能留下来的习惯通常不激烈，但能在忙碌和状态一般的时候继续做下去。", 2
+        ),
+        "音乐": makeWritingProfile(
+          ["听完后的真感受", "声音细节", "适合场景也说"], "为什么这一段一直留在耳边？", "版本声音情绪都在",
+          "一首歌真正打动人的地方很难只用‘好听’概括，版本、编曲和聆听场景都会改变感受。",
+          "你听歌时更容易先注意人声、旋律，还是歌词和编曲？",
+          "听感本来就很私人，下面只记录我听到的版本、设备和当时的状态。",
+          "我反复听的不是最响亮的一段，而是那些情绪没有说满、却刚好给人留下空间的地方。", 2
+        ),
+        "萌娃": makeWritingProfile(
+          ["一个成长小瞬间", "孩子真实反应", "隐私边界也保留"], "那一刻为什么让我记住？", "小事反应感受都在",
+          "成长记录最动人的往往不是完成了多大的事，而是孩子第一次愿意自己往前走了一小步。",
+          "你家孩子在相近阶段，也有过这种小变化吗？",
+          "孩子的表现存在个体差异，记录时也应保护身份、位置和其他隐私信息。",
+          "我越来越愿意把镜头留给过程，而不是只等一个漂亮结果，因为犹豫和尝试本身也很珍贵。", 2
+        ),
+        "知识科普": makeWritingProfile(
+          ["一个问题讲明白", "依据和例子都给", "适用边界也说"], "换成大白话怎么理解？", "概念依据边界都在",
+          "科普最怕名词越解释越多，我会先回答问题，再用一个现实例子把逻辑接起来。",
+          "你还想把哪个看似熟悉、其实容易混淆的概念讲明白？",
+          "资料和结论都有适用条件，遇到新数据、不同定义或专业决策时需要继续核对来源。",
+          "真正理解一个概念，不是记住一句定义，而是换个例子以后仍然知道它为什么成立。", 1
+        ),
+        "闲置": makeWritingProfile(
+          ["自用情况实说", "功能成色都给", "瑕疵不隐藏"], "这个成色值不值得收？", "购买成色瑕疵都说",
+          "闲置最重要的不是把话写得多漂亮，而是购买、使用、功能和瑕疵都能对得上实物。",
+          "你收闲置时最先确认功能、成色，还是配件？",
+          "商品状态以实物图片和双方确认的信息为准，交易只在平台内完成。",
+          "把瑕疵说在前面不一定更难卖，反而能减少来回确认，也让真正需要的人更快判断。", 2
+        )
+      };
+
+      function writingProfile(category) {
+        return categoryWriting[category] || null;
+      }
 
       var collectionFieldConfig = {
         hint: "按参考图生成分组灵感清单：先给元素，再给风格和适用场景；每一项都会写成有画面感的短描述。",
@@ -1704,6 +2091,31 @@
         return list[(seed + state.generation + (offset || 0)) % list.length];
       }
 
+      function recentOutputText(data) {
+        try {
+          return getHistory().filter(function (item) {
+            return item && item.mode === "rednote" && item.data &&
+              item.data.topic === data.topic && item.data.category === data.category;
+          }).slice(0, 9).map(function (item) {
+            var generated = item.generated || {};
+            return [generated.body, generated.cover, generated.titles, generated.hooks, generated.comment].filter(Boolean).join("\n");
+          }).join("\n");
+        } catch (error) {
+          return "";
+        }
+      }
+
+      function pickFresh(list, seed, salt, data) {
+        if (!list || !list.length) return "";
+        var start = (seed + state.generation * 5 + (salt || 0)) % list.length;
+        var recent = data ? recentOutputText(data) : "";
+        for (var i = 0; i < list.length; i += 1) {
+          var candidate = list[(start + i) % list.length];
+          if (!recent || recent.indexOf(candidate) === -1) return candidate;
+        }
+        return list[start];
+      }
+
       function compact(input, max) {
         var text = cleanSpaces(input);
         return text.length > max ? text.slice(0, max - 1) + "…" : text;
@@ -1868,7 +2280,17 @@
         return text.length > (max || 8) ? "" : text;
       }
 
+      function topicSubject(input, max) {
+        var text = cleanSpaces(input)
+          .replace(/(?:真实变化|真实体验|使用体验|经验分享|真实分享|连续实测|实测|分享|记录)$/g, "")
+          .replace(/^[“"']|[”"']$/g, "");
+        var clauses = text.split(/[，,：:。；;]/).map(function (item) { return cleanSpaces(item); }).filter(Boolean);
+        if (clauses.length && clauses[0].length >= 4 && clauses[0].length <= (max || 12)) text = clauses[0];
+        return compact(text || cleanSpaces(input), max || 12);
+      }
+
       function rednoteTitles(data, seed) {
+        var customWriting = writingProfile(data.category);
         var focusIndex = titleFocusIndex(data.category, data.goal);
         var focus = factValue(data, focusIndex) || factValue(data, 2) || factValue(data, 1) || factValue(data, 0);
         var metricIndex = {
@@ -1881,13 +2303,14 @@
           "母婴育儿": 0,
           "数码": 2
         }[data.category];
+        if (customWriting) metricIndex = customWriting.metricIndex;
         var evidence = titleEvidence(factValue(data, metricIndex == null ? focusIndex : metricIndex)) || titleEvidence(focus);
         var identity = firstClause(factValue(data, 0), 7);
-        var subject = compact(data.topic, 12);
-        var metricSubject = compact(data.topic, evidence ? 9 : 12);
-        var identitySubject = compact(data.topic, identity ? 8 : 12);
-        var questionSubject = compact(data.topic, 8);
-        var categoryLeads = {
+        var subject = topicSubject(data.topic, 12);
+        var metricSubject = topicSubject(data.topic, evidence ? 9 : 12);
+        var identitySubject = topicSubject(data.topic, identity ? 8 : 12);
+        var questionSubject = topicSubject(data.topic, 8);
+        var categoryLeads = customWriting ? customWriting.titleLeads : {
           "AI工具": ["真实工作流", "效率变化", "限制也说"],
           "职场": ["工作复盘", "前后变化", "返工点也说"],
           "学习": ["执行记录", "结果变化", "弯路也保留"],
@@ -1901,7 +2324,7 @@
           "数码": ["连续使用实测", "真实表现", "短板不省略"],
           "生活经验": ["完整经过", "处理结果", "教训也留下"]
         }[data.category] || ["真实记录", "实际变化", "问题也说"];
-        var titleQuestion = {
+        var titleQuestion = customWriting ? customWriting.titleQuestion : {
           "AI工具": "到底省了多少时间？",
           "职场": "我是怎么减少返工的？",
           "学习": "坚持下来结果怎样？",
@@ -1928,60 +2351,93 @@
           (identity ? identity + "｜" : "") + identitySubject + "，" + categoryLeads[0],
           subject + "｜" + categoryLeads[2],
           questionSubject + "｜" + titleQuestion,
-          subject + "｜" + goalLead
+          subject + "｜" + goalLead,
+          subject + "｜" + categoryLeads[0],
+          (evidence ? compact(evidence, 7) + "后｜" : "") + questionSubject + titleQuestion,
+          subject + "｜别只看结果",
+          identitySubject + "｜我的真实答案"
         ];
         var ordered = [];
         for (var i = 0; i < pool.length; i += 1) {
           ordered.push(pool[(seed + state.generation + i) % pool.length]);
         }
-        return uniqueTextLines(ordered.map(function (item) {
+        var candidates = uniqueTextLines(ordered.map(function (item) {
           return compact(item, 20);
-        })).slice(0, 5);
+        }));
+        var recent = recentOutputText(data);
+        var fresh = candidates.filter(function (item) { return !recent || recent.indexOf(item) === -1; });
+        var usedBefore = candidates.filter(function (item) { return recent && recent.indexOf(item) !== -1; });
+        return fresh.concat(usedBefore).slice(0, 5);
       }
 
       function goalOpening(data, seed) {
+        var openingSubject = topicSubject(data.topic, 12);
         if (data.tone === "清单干货") {
-          return data.topic + "不绕弯，先给结果，再把过程和限制放出来。";
+          return pickFresh([
+            openingSubject + "不绕弯，先给结果，再把过程和限制放出来。",
+            "先看" + openingSubject + "的实际结果，步骤、数据和容易出问题的地方都在后面。",
+            "这份" + openingSubject + "记录只留能直接对照的内容，空话先删掉。",
+            openingSubject + "我拆成了几个真实环节，照着自己的情况逐项看会更清楚。"
+          ], seed, 3, data);
         }
         if (data.tone === "简洁专业") {
-          return "这次直接记录" + data.topic + "的使用条件、过程与结果。";
+          return pickFresh([
+            "这次直接记录" + openingSubject + "的使用条件、过程与结果。",
+            openingSubject + "的判断需要同时看前提、执行过程和可观察结果。",
+            "下面按真实条件整理" + openingSubject + "，事实与个人感受会分开表达。",
+            "这份记录聚焦" + openingSubject + "的实际表现、限制和适用范围。"
+          ], seed, 5, data);
         }
-        var topicAction = /^(?:用|把|给|做|从|如何|怎么)/.test(data.topic) ? data.topic : "做" + data.topic;
+        var customWriting = writingProfile(data.category);
         var pools = {
           "干货教程": [
-            "我一开始也把" + data.topic + "想复杂了，真正做下来，有用的其实就几步。",
-            "这篇不讲空方法，只把我在" + topicAction + "时真正走通的部分留下来。",
-            "如果你也卡在" + data.topic + "，先别一次改全部，我是从一个小步骤开始的。"
+            "我一开始也把" + openingSubject + "想复杂了，拆开后其实只有几个关键点。",
+            "这篇不讲空方法，只把我围绕“" + openingSubject + "”真正走通的部分留下来。",
+            "如果你也卡在" + openingSubject + "，先别一次改全部，我是从一个小步骤开始的。"
           ],
           "经验分享": [
-            "原本只是想试试" + data.topic + "，没想到前后差别比我预想得更具体。",
+            "写下“" + openingSubject + "”时，我才发现前后差别比自己预想得更具体。",
             "这件事做完后，我最想记住的不是结果多漂亮，而是哪一步真的起了作用。",
-            "在" + topicAction + "时，我没有一开始就做对，真正有用的是后面那次调整。"
+            "这次尝试里，我没有一开始就做对，真正有用的是后面那次调整。"
           ],
           "避坑提醒": [
-            data.topic + "最容易踩的坑，不是大问题，反而是那个看起来无所谓的小细节。",
-            "如果能重来一次，在" + topicAction + "时有一步我一定会提前改掉。",
-            "我原本以为" + data.topic + "照着常见做法就行，真正出问题后才发现少看了一个条件。"
+            "在" + openingSubject + "这件事上，最容易踩的不是大坑，反而是那个看起来无所谓的小细节。",
+            "如果能重来一次，这件事里有一步我一定会提前改掉。",
+            "我原本以为照着常见做法就行，真正出问题后才发现少看了一个条件。"
           ],
           "产品种草": [
-            data.topic + "不是一用就惊艳的类型，但连续用下来，我留下它的理由越来越清楚。",
-            "先说在前面，" + data.topic + "有我喜欢的地方，也有会劝退一部分人的细节。",
-            "我没有因为一次感觉就给" + data.topic + "下结论，用了一段时间才敢把优缺点写出来。"
+            openingSubject + "不是一用就惊艳的类型，但连续用下来，我留下它的理由越来越清楚。",
+            "先说在前面，" + openingSubject + "有我喜欢的地方，也有会劝退一部分人的细节。",
+            "我没有因为一次感觉就给" + openingSubject + "下结论，用了一段时间才敢把优缺点写出来。"
           ],
           "使用测评": [
-            "不看宣传词，直接说" + data.topic + "放进日常以后，哪些地方真的有感。",
-            data.topic + "短时间试不出全部，所以我把连续使用后的变化和问题都留下了。",
-            "这次测" + data.topic + "，我更在意每天都会遇到的细节，而不是参数表里最好看的那一项。"
+            "先不看别人怎么说，直接讲" + openingSubject + "放进日常以后，哪些地方真的有感。",
+            openingSubject + "短时间试不出全部，所以我把连续使用后的变化和问题都留下了。",
+            "这次记录" + openingSubject + "，我更在意每天都会遇到的细节，而不是最显眼的那一项。"
           ],
           "商品介绍": [
-            "如果你正在看" + data.topic + "，先别急着只看优点，适用条件和限制也要放在一起。",
-            data.topic + "值不值得选，关键不是信息有多少，而是它和你的需求能不能对上。",
-            "我把" + data.topic + "真正会影响选择的内容放在这里，好和不好都不藏。"
+            "如果你正在看" + openingSubject + "，先别急着只看优点，适用条件和限制也要放在一起。",
+            openingSubject + "值不值得选，关键不是信息有多少，而是它和你的需求能不能对上。",
+            "我把" + openingSubject + "真正会影响选择的内容放在这里，好和不好都不藏。"
           ]
         };
-        var pool = pools[data.goal] || ["这次把" + data.topic + "的真实过程和结果完整记下来。"];
-        var opening = pool[(seed + state.generation) % pool.length];
-        if (data.tone === "轻松口语") return opening.replace(/。$/, "，说人话就是这样。");
+        var pool = (pools[data.goal] || ["这次把" + openingSubject + "的真实过程和结果完整记下来。"]).concat([
+          "我把发生过的过程重新理了一遍，顺利的地方和卡住的地方都比记忆里更具体。",
+          "真正回头看这次经历，我才发现最影响判断的不是结论，而是当时的前提条件。",
+          "这次没有急着下结论，我先把发生过的过程和看得见的变化记了下来。",
+          "如果你也是" + data.audience + "，这篇可以先拿我的条件作对照，不必直接照搬。",
+          "关于" + openingSubject + "，我更想把事实、感受和自己的判断分开说清楚。"
+        ]);
+        if (customWriting && customWriting.hook) pool.push(customWriting.hook);
+        var opening = pickFresh(pool, seed, 7, data);
+        if (data.tone === "轻松口语") {
+          return pickFresh([
+            "先说我的真实感受：" + opening,
+            opening.replace(/。$/, "。这次就不端着说了。"),
+            "我本来没打算写这么细，但" + openingSubject + "里有几个小地方确实值得聊聊。",
+            opening
+          ], seed, 11, data);
+        }
         return opening;
       }
 
@@ -1996,12 +2452,30 @@
           "家居装修": [2, 0, 1, 3],
           "母婴育儿": [2, 0, 1, 3],
           "数码": [2, 0, 1, 3],
-          "生活经验": [2, 0, 1, 3]
+          "生活经验": [2, 0, 1, 3],
+          "好物测评": [2, 0, 1, 3],
+          "情感成长": [2, 0, 1, 3],
+          "宠物": [2, 0, 1, 3],
+          "健身运动": [2, 0, 1, 3],
+          "影视": [1, 0, 2, 3],
+          "教育": [2, 0, 1, 3],
+          "婚礼": [2, 0, 1, 3],
+          "摄影": [2, 0, 1, 3],
+          "汽车": [2, 0, 1, 3],
+          "房产": [2, 0, 1, 3],
+          "兴趣手作": [2, 0, 1, 3],
+          "游戏": [2, 0, 1, 3],
+          "娱乐追星": [1, 0, 2, 3],
+          "资讯解读": [1, 0, 2, 3],
+          "健康养生": [2, 0, 1, 3],
+          "音乐": [2, 0, 1, 3],
+          "萌娃": [2, 0, 1, 3],
+          "知识科普": [0, 1, 2, 3]
         }[data.category] || [2, 0, 1, 3];
       }
 
-      function factPrefixes(category) {
-        return {
+      function factPrefixes(data) {
+        var categoryPrefixes = {
           "AI工具": ["我用它的场景很具体：", "真正落到手上，我这样做：", "最直观的变化是：", "但没省掉的工作也很明确："],
           "职场": ["当时的工作背景是：", "我真正改动的是：", "前后差别出现在这里：", "依然会返工的地方是："],
           "学习": ["我的起点和目标是：", "这段时间真正做到的是：", "目前看得见的结果是：", "中间最影响节奏的是："],
@@ -2013,9 +2487,69 @@
           "家居装修": ["房屋和预算前提是：", "尺寸和材料这样定：", "改完后最明显的变化是：", "住进去才发现的遗憾是："],
           "母婴育儿": ["孩子当时正处在这个阶段：", "我们连续做的是：", "这段时间观察到的反应是：", "需要单独说明的边界是："],
           "数码": ["我用的具体版本是：", "这段时间主要这样用：", "实际能观察到的表现是：", "短板和适合的人也很明确："],
-          "生活经验": ["事情发生时是这样：", "我当时这样处理：", "最后的结果是：", "下次我会改掉这一点："],
+          "生活经验": ["事情发生时是这样：", "我当时这样处理：", "事情最后落在这里：", "下次我会改掉这一点："],
           "闲置": ["购买和使用情况：", "配件与功能状态：", "成色和出售原因：", "瑕疵与交易限制："]
-        }[category] || ["我当时的情况是：", "真正做的是：", "最后的结果是：", "还有一个限制："];
+        }[data.category];
+        if (categoryPrefixes) return categoryPrefixes;
+        return [
+          "先把“" + data.sectionLabels[0] + "”放在前面：",
+          "说到“" + data.sectionLabels[1] + "”，我实际这样做：",
+          "“" + data.sectionLabels[2] + "”不能只凭感觉，我能确认的是：",
+          "“" + data.sectionLabels[3] + "”也不能略过："
+        ];
+      }
+
+      function semanticFactLeads(label) {
+        var text = cleanSpaces(label);
+        if (/问题或概念|要解释|概念/.test(text)) {
+          return [
+            "先把问题放在前面：", "这次真正想弄明白的是：", "别急着看答案，问题本身是：", "先确认我们在讨论什么：",
+            "这篇从一个具体疑问开始：", "最容易混淆的其实是：", "把核心问题缩成一句话：", "先把要解释的对象说准确："
+          ];
+        }
+        if (/边界|限制|风险|缺点|不足|提醒|避坑|不适用|瑕疵|遗憾|短板|失败/.test(text)) {
+          return [
+            "但这部分必须说在前面：", "真正限制选择的是：", "只说顺利的一面会漏掉这一点：", "决定要不要继续前，先看这里：",
+            "我会提前提醒身边人的一点是：", "这次没有解决好的地方是：", "另一面也要如实留下：", "如果条件不同，最先需要重看的是："
+          ];
+        }
+        if (/触发|事件|冲突|情节|人物|小事|经过|转折|现场细节|发生/.test(text)) {
+          return [
+            "事情真正转向，是从这里开始的：", "我到现在还记得这个具体节点：", "中间最关键的一幕是：", "真正改变走向的不是大道理，而是：",
+            "这段经历里最具体的是：", "事情发生到这里，前后的感觉开始不一样：", "如果只留一个细节，我会选：", "后来回想，转折其实藏在这里："
+          ];
+        }
+        if (/通俗解释|现实例子|怎么理解|解释与|例子/.test(text)) {
+          return [
+            "换成更直白的话，就是：", "拿现实里的例子来说：", "不用术语也可以这样理解：", "真正落到日常里，可以看成：",
+            "把这层逻辑拆开后，就是：", "我自己是用这个例子想明白的：", "如果只记一句，可以记住：", "说得再简单一点："
+          ];
+        }
+        if (/基础|状态|背景|年龄|学段|阶段|城市|日期|规模|型号|版本|车型|配置|作品|歌曲|专辑|器材|参数|光线|进度|需求|购买背景|使用场景/.test(text)) {
+          return [
+            "先说我的实际前提：", "这次记录对应的情况是：", "后面的感受都建立在这个条件上：", "先把背景放在这里：",
+            "为了方便对照，我的基础信息是：", "这次不是空泛讨论，具体条件是：", "判断前先看这一项：", "我当时面对的真实情况是："
+          ];
+        }
+        if (/来源|依据|官方|资料|数据/.test(text)) {
+          return [
+            "这部分可以回到原始信息：", "我核对到的内容是：", "不是凭印象，这里用到的是：", "把可以核对的内容放在这里：",
+            "支撑这个判断的材料是：", "这一步需要对照的是：", "我实际查到的是：", "先列出信息来源："
+          ];
+        }
+        if (/做法|方法|操作|步骤|训练|安排|使用方法|怎么用|拍摄|后期|路线|交通|计划|制作|点单|构图/.test(text)) {
+          return [
+            "我实际做得很具体：", "具体落到手上，是这样：", "这段时间我反复做的是：", "真正执行时，我保留了这一步：",
+            "过程没有想象中复杂，核心动作是：", "我最后把方法收成了这样：", "中间最有用的动作是：", "照着真实顺序看，我先做了："
+          ];
+        }
+        if (/变化|结果|反应|表现|效果|感受|体验|口感|反馈|成片|能耗|空间|情绪|理解/.test(text)) {
+          return [
+            "我能确认的变化是：", "最先出现的反馈是：", "真正落到日常里，表现是：", "把前后放在一起看，差别在这里：",
+            "这不是靠感觉猜的，实际情况是：", "我最后留下的判断来自：", "连续观察后，最明确的是：", "没有夸大，这次能确定的是："
+          ];
+        }
+        return [];
       }
 
       function humanFactSentence(data, index, seed) {
@@ -2023,16 +2557,37 @@
         if (!fact) return "";
         if (data.tone === "清单干货") return data.sectionLabels[index] + "｜" + ensureSentence(fact);
         if (data.length === "short") {
-          return ["当时：", "做法：", "结果：", "要注意："][index] + ensureSentence(fact);
+          var shortLeadSets = [
+            ["当时｜", "做法｜", "结果｜", "提醒｜"],
+            ["前提｜", "过程｜", "变化｜", "边界｜"],
+            ["我的情况｜", "我实际做的｜", "最明显的｜", "但要注意｜"],
+            data.sectionLabels.map(function (label) { return label + "｜"; })
+          ];
+          var shortLeads = shortLeadSets[(seed + state.generation) % shortLeadSets.length];
+          return shortLeads[index] + ensureSentence(fact);
         }
+        var sectionLabel = data.sectionLabels[index] || data.factLabels[index] || "这个部分";
         var genericLeads = [
-          ["先把前提放在这里：", "这篇对应的是一个具体场景："],
-          ["中间没有什么神操作，我真正做的是：", "具体落到手上，其实就是："],
-          ["最后留下的结果很具体：", "结果比我预想得更直观："],
-          ["还有一处我会提前说：", "这也是我不会省略的一点："]
+          [
+            "先把这次的前提放在这里：", "理解后面的内容前，先看这个条件：", "这篇要从一个具体信息说起：",
+            "“" + sectionLabel + "”先放在前面：", "这一点会影响后面的判断：", "先记录一个可以核对的事实："
+          ],
+          [
+            "过程里最关键的一段是：", "具体发生的是：", "中间真正改变走向的是：",
+            "说到“" + sectionLabel + "”，这段真实经过是：", "回头看，真正起作用的是：", "事情往前走，是从这个细节开始的："
+          ],
+          [
+            "这一部分不能只凭感觉，我能确认的是：", "把信息对在一起后，可以确定的是：", "真正落到结果上，最清楚的是：",
+            "“" + sectionLabel + "”这部分，我能说清的是：", "这次能够确认的重点是：", "没有夸大，这次能确定的只有："
+          ],
+          [
+            "还有一处我会提前说：", "这也是我不会省略的一点：", "不过真实体验里也有卡住的地方：",
+            sectionLabel + "这部分不能只说好听的：", "如果再做一次，我会先处理这个问题：", "决定前最好把这一点也算进去："
+          ]
         ];
-        var pool = [factPrefixes(data.category)[index]].concat(genericLeads[index]);
-        return pool[(seed + state.generation + index) % pool.length] + ensureSentence(fact);
+        var semanticLeads = semanticFactLeads(data.factLabels[index]);
+        var pool = [factPrefixes(data)[index]].concat(semanticLeads.length ? semanticLeads : genericLeads[index]);
+        return pickFresh(pool, seed, 17 + index * 3, data) + ensureSentence(fact);
       }
 
       function rednoteOpening(data, seed) {
@@ -2041,7 +2596,9 @@
       }
 
       function categoryBoundary(data) {
-        return {
+        var customWriting = writingProfile(data.category);
+        if (customWriting) return customWriting.boundary;
+        var categoryText = {
           "AI工具": "不同输入材料和任务复杂度会影响结果，我仍会保留人工核对这一步。",
           "职场": "岗位、团队和业务口径不同，这次做法更适合当作一个可对照的工作记录。",
           "学习": "基础、时间和目标不同，进度不必照搬，能持续执行比排得很满更重要。",
@@ -2056,10 +2613,19 @@
           "生活经验": "这是我在当时条件下的处理结果，不一定适合每个人，但过程可以用来对照。",
           "闲置": "商品状态以实物图片和双方确认的信息为准，交易只在平台内完成。"
         }[data.category] || "这只是一次真实记录，条件不同，结果也可能不同。";
+        if (["美妆护肤", "母婴育儿"].indexOf(data.category) !== -1) return categoryText;
+        return pickFresh([
+          categoryText,
+          "上面的结果都建立在这次填写的真实条件上，换了对象、时间或使用方式，需要重新判断。",
+          "我把它留作一次可以对照的个人记录，不把这次有效直接等同于人人适用。",
+          data.category + "没有统一答案，这次记录更适合结合自己的情况再取舍。"
+        ], hash(data.topic + data.category), 59, data);
       }
 
       function compactBoundary(data) {
-        return {
+        var customWriting = writingProfile(data.category);
+        if (customWriting) return customWriting.boundary;
+        var categoryText = {
           "AI工具": "这只对应本次任务，事实和数据仍要自己核对。",
           "职场": "团队和业务口径不同，做法要按实际情况调整。",
           "学习": "基础和时间不同，不用照搬我的进度。",
@@ -2074,9 +2640,16 @@
           "生活经验": "这是我的处理方式，不一定适合所有人。",
           "闲置": "状态以实物和双方确认信息为准。"
         }[data.category] || "条件不同，结果也可能不同。";
+        if (["美妆护肤", "母婴育儿"].indexOf(data.category) !== -1) return categoryText;
+        return pickFresh([
+          categoryText,
+          "这只对应本次条件，换个场景要重新判断。",
+          "把它当作个人记录参考，不用直接照搬。"
+        ], hash(data.topic + data.category), 61, data);
       }
 
       function detailedReflection(data, seed) {
+        var customWriting = writingProfile(data.category);
         var reflections = {
           "AI工具": [
             "对我来说，AI最适合接住重复、可检查的前半段；事实判断和最后表达，我还是会自己收口。",
@@ -2127,15 +2700,21 @@
             "很多问题不是一次彻底解决的，先把最影响生活的部分处理掉，秩序就会慢慢回来。"
           ]
         };
-        var pool = reflections[data.category] || ["这次最值得留下的，是能放回日常继续使用的那一步。"];
-        return pool[(seed + state.generation) % pool.length];
+        var pool = (reflections[data.category] || []).concat([
+          customWriting ? customWriting.reflection : "",
+          "回头看这次" + data.topic + "，最值得留下的不是一句好或不好，而是我终于知道下一次该先看什么。",
+          "真正有参考价值的不是结果有多漂亮，而是过程里的取舍能够解释这个结果怎么来的。",
+          "我最后保留的，都是能放回自己日常继续使用的部分；只在这一次看起来好看的做法没有硬留。",
+          "这次经历让我更确定，具体条件比标准答案重要，先看自己缺什么，再决定要不要照着做。"
+        ]).filter(Boolean);
+        return pickFresh(pool, seed, 67, data);
       }
 
       function rednoteCover(data, seed) {
-        var cleanSubject = data.topic.replace(/(?:真实体验|使用体验|经验分享|真实分享|连续实测|实测|分享|记录)$/g, "") || data.topic;
-        var subject = compact(cleanSubject, 11);
+        var customWriting = writingProfile(data.category);
+        var subject = topicSubject(data.topic, 11);
         var mainSuffix = {
-          "干货教程": "这样做",
+          "干货教程": "重点整理",
           "经验分享": "真实复盘",
           "避坑提醒": "别踩这个坑",
           "产品种草": "值不值得留",
@@ -2144,7 +2723,7 @@
         }[data.goal] || "真实记录";
         var metric = titleEvidence(factValue(data, 2)) || titleEvidence(factValue(data, 1)) || titleEvidence(factValue(data, 0));
         metric = metric.split("、")[0];
-        var categorySub = {
+        var categorySub = customWriting ? customWriting.cover : {
           "AI工具": "效率和限制都说",
           "职场": "结果和返工点都在",
           "学习": "执行结果不美化",
@@ -2161,17 +2740,29 @@
         var mainPool = [
           compact(subject, 14),
           compact(subject + "真话版", 14),
-          compact(subject + mainSuffix, 14)
+          compact(subject + mainSuffix, 14),
+          compact(subject + "我的答案", 14),
+          compact(subject + "先看真实条件", 14),
+          compact(subject + "复盘", 14)
         ];
-        var main = mainPool[(seed + state.generation) % mainPool.length];
-        var sub = compact(metric ? metric + "｜" + categorySub : categorySub, 16);
+        var main = pickFresh(mainPool, seed, 137, data);
+        var subPool = [
+          metric ? metric + "｜" + categorySub : categorySub,
+          categorySub,
+          "真实条件｜" + compact(data.category, 6),
+          "结果变化｜问题也说",
+          "过程结果｜都按真实写"
+        ];
+        var sub = compact(pickFresh(subPool, seed, 139, data), 16);
         var lines = uniqueTextLines([main, sub]);
         if (lines.length < 2) lines.push("过程和限制都说");
         return lines.slice(0, 2).join("\n");
       }
 
       function rednoteHooks(data, seed, primaryOpening) {
-        var categoryHook = {
+        var customWriting = writingProfile(data.category);
+        var subject = topicSubject(data.topic, 12);
+        var categoryHook = customWriting ? customWriting.hook : {
           "AI工具": "同一个工具换了输入和任务，效果可能完全不同，所以我只说这次实际用到的场景。",
           "职场": "真正让我省时间的不是多做一套表，而是把容易返工的环节先固定下来。",
           "学习": "我没有照搬一张很满的计划表，而是保留了自己能连续完成的部分。",
@@ -2186,34 +2777,47 @@
           "生活经验": "这件事最后解决了，但中间并不顺利，真正有用的是我后来改掉的那一步。"
         }[data.category] || "这次不只留下结果，也把实际条件和遇到的问题放在一起。";
         var pool = [
-          "如果你也是" + data.audience + "，可以先对照我的条件，再判断" + data.topic + "是否适合你。",
+          "如果你也是" + data.audience + "，可以先对照我的条件，再判断" + subject + "是否适合你。",
           categoryHook,
-          "我没有把" + data.topic + "只归结为好或不好，过程、结果和限制都放在下面。",
-          "这次记录只对应我的实际条件，换一个人、时间或使用方式，结论可能会变。"
+          "我没有把" + subject + "只归结为好或不好，过程、结果和限制都放在下面。",
+          "这次记录只对应我的实际条件，换一个人、时间或使用方式，结论可能会变。",
+          subject + "真正让我改观的，不是最显眼的优点，而是一个反复遇到的小细节。",
+          "先别急着看结论，我把" + data.factLabels[0] + "和" + data.factLabels[3] + "放在一起，判断会更完整。",
+          "同样是" + subject + "，前提一换，体验可能就完全不同；下面只写这次真实发生的部分。",
+          "我原本也担心自己只看到了好的一面，所以把不顺手、没达到预期的地方一起留了下来。"
         ];
-        var ordered = [];
+        var fresh = [];
+        var usedBefore = [];
+        var recent = recentOutputText(data);
+        var offset = (seed + state.generation * 3) % pool.length;
         for (var i = 0; i < pool.length; i += 1) {
-          ordered.push(pool[(seed + i + 1) % pool.length]);
+          var candidate = pool[(offset + i) % pool.length];
+          if (recent && recent.indexOf(candidate) !== -1) usedBefore.push(candidate);
+          else fresh.push(candidate);
         }
+        var ordered = fresh.concat(usedBefore);
         return uniqueTextBlocks(ordered, [primaryOpening]).slice(0, 3);
       }
 
       function rednotePointSection(data) {
         if (!data.points.length) return "";
-        var heading = {
-          "干货教程": "实际步骤",
-          "经验分享": "过程中的几个细节",
-          "避坑提醒": "另外遇到的问题",
-          "产品种草": "其他使用感受",
-          "使用测评": "补充观察",
-          "商品介绍": "其他信息"
-        }[data.goal] || "补充记录";
+        var headingPool = {
+          "干货教程": ["实际步骤", "照着做的几个动作", "真正用到的步骤", "过程拆开看"],
+          "经验分享": ["过程中的几个细节", "当时还发生了这些", "值得单独记下的细节", "中间的小转折"],
+          "避坑提醒": ["另外遇到的问题", "这些地方也别忽略", "后来才发现的坑", "提前知道会轻松很多"],
+          "产品种草": ["其他使用感受", "让我留下它的细节", "用久后更有感的地方", "优点之外再补几句"],
+          "使用测评": ["补充观察", "连续使用里的小变化", "参数之外的体验", "再说几个日常细节"],
+          "商品介绍": ["其他信息", "选择前还要知道的事", "容易被忽略的细节", "实际使用补充"]
+        }[data.goal] || ["补充记录", "还有几个细节", "另外想记下的事"];
+        var heading = pickFresh(headingPool, hash(data.topic + data.goal), 73, data);
         return heading + "\n" + data.points.map(function (point, index) {
           return (index + 1) + ". " + cleanSpaces(point).replace(/[。！？!?；;]+$/g, "");
         }).join("\n");
       }
 
       function categoryQuestion(data) {
+        var customWriting = writingProfile(data.category);
+        if (customWriting) return customWriting.cta;
         return {
           "AI工具": "你用AI时最想省掉的是哪一步？",
           "职场": "你工作里最容易反复返工的是哪一环？",
@@ -2228,6 +2832,57 @@
           "数码": "你买数码产品时最在意续航、性能还是影像？",
           "生活经验": "换成你遇到这件事，会先处理哪一步？"
         }[data.category] || "你遇到过类似情况吗？";
+      }
+
+      function supplementSentence(data, type, seed) {
+        var isDetail = type === "details";
+        var text = isDetail ? data.details : data.cautions;
+        if (!text) return "";
+        var leads = isDetail ? [
+          "还有个小细节也想留下：", "这段如果不写，前面的判断会少一个前提：", "补充一条没有放进上面四项的信息：",
+          "另外还有一点值得单独留下：", "只看前面容易漏掉这一点：", "再加一条会影响判断的内容：",
+          "这不是主线，但确实影响了我的判断：", "最后再补一条可以核对的事实："
+        ] : [
+          "但这里有个边界要说清楚：", "决定要不要照着做前，先看这一点：", "我不会省略的限制是：",
+          "真实情况里也有不适合的部分：", "如果条件不同，最需要重新判断的是：", "另外有一条不能省略：",
+          "判断前还要补上这一面：", "最后把容易被忽略的限制放在这里："
+        ];
+        return pickFresh(leads, seed, isDetail ? 79 : 83, data) + ensureSentence(text);
+      }
+
+      function shouldAddCategoryBoundary(data) {
+        var alwaysKeep = [
+          "美妆护肤", "母婴育儿", "宠物", "健身运动", "教育", "汽车", "房产",
+          "娱乐追星", "资讯解读", "健康养生", "萌娃", "知识科普"
+        ];
+        if (alwaysKeep.indexOf(data.category) !== -1) return true;
+        return !factValue(data, 3) && !data.cautions;
+      }
+
+      function rednoteCta(data, seed) {
+        var price = data.price ? "，当前标价" + data.price + "元" : "";
+        var pools = {
+          "收藏备用": [
+            "这份记录可以先收藏，遇到相同情况时再回来对照。",
+            "如果你暂时还没决定，先存下真实条件，真正需要时再逐项比较。",
+            "不用现在就照着做，先收藏，碰到同类问题时会更容易找到重点。",
+            "我把关键条件都留在这里了，需要的时候回来翻会比只记住结论更有用。"
+          ],
+          "评论交流": [
+            categoryQuestion(data),
+            "你看完最想继续问的是“" + data.factLabels[1] + "”，还是“" + data.factLabels[3] + "”？",
+            "如果下一篇只展开一部分，你会选“" + data.factLabels[0] + "”，还是“" + data.factLabels[2] + "”？",
+            "这个主题里，还有哪个具体问题值得单独讲清楚？"
+          ],
+          "查看店铺商品": [
+            "完整目录和预览可以在店铺商品页查看" + price + "，确认适合自己再选择。",
+            "想直接使用可修改版本，可以先去商品页看目录和预览" + price + "，合适再决定。",
+            "商品页放了完整内容与预览" + price + "，建议先看是否覆盖你的赛道，再考虑选择。",
+            "需要整套可编辑版本的话，店铺商品页可以先看清单" + price + "，不用只凭这一篇判断。"
+          ],
+          "不加引导": [""]
+        };
+        return pickFresh(pools[data.cta] || [""], seed, 89, data);
       }
 
       function rednoteBody(data, primaryTitle, opening, seed) {
@@ -2245,18 +2900,14 @@
 
         var pointSection = rednotePointSection(data);
         if (pointSection) sections.push(pointSection);
-        if (data.details) sections.push("还有一个细节：" + ensureSentence(data.details));
-        if (data.cautions) sections.push("另外要说的是：" + ensureSentence(data.cautions));
+        if (data.details) sections.push(supplementSentence(data, "details", seed));
+        if (data.cautions) sections.push(supplementSentence(data, "cautions", seed));
         if (data.length === "detailed") sections.push(detailedReflection(data, seed));
-        sections.push(data.length === "short" ? compactBoundary(data) : categoryBoundary(data));
+        if (shouldAddCategoryBoundary(data)) {
+          sections.push(data.length === "short" ? compactBoundary(data) : categoryBoundary(data));
+        }
 
-        var price = data.price ? "，当前标价" + data.price + "元" : "";
-        var ctaText = {
-          "收藏备用": "这份记录可以先收藏，遇到相同情况时再回来对照。",
-          "评论交流": categoryQuestion(data),
-          "查看店铺商品": "完整目录和预览可以在店铺商品页查看" + price + "，确认适合自己再选择。",
-          "不加引导": ""
-        }[data.cta] || "";
+        var ctaText = rednoteCta(data, seed);
         if (ctaText) sections.push(ctaText);
 
         return uniqueTextBlocks(sections).join("\n\n");
@@ -2294,8 +2945,35 @@
         return { groupCount: 3, itemsPerGroup: 3, label: "标准" };
       }
 
+      var universalCollectionLines = [
+        "先把{scene}里最常遇到的问题接住，放进{group}以后，方向会比只看名字清楚很多。",
+        "它不靠堆很多元素抢注意力，重点是让这一项在真实使用时仍然顺手。",
+        "第一次尝试可以先保留核心动作，等确认适合自己，再慢慢增加细节。",
+        "归到{group}里很合适，既能看见区别，又不会和原来的日常节奏打架。",
+        "真正有用的地方不在于看起来复杂，而是到了{scene}还能快速做出判断。",
+        "这一项适合单独拿出来试，反馈清楚，后面要继续还是调整都比较容易。",
+        "如果不想一次改变太多，从这里开始会更轻，做完也能看见具体差别。",
+        "它和同组其他方向放在一起不冲突，更像是给{group}补上一块容易漏掉的细节。",
+        "对新手来说门槛不高，但最好把自己的真实条件说明白，结果会更贴近需求。",
+        "放进{scene}时最值得观察的不是第一眼，而是连续使用以后还愿不愿意保留。",
+        "这个方向留了调整空间，不必完全照搬，换成自己的材料和场景也能继续用。",
+        "看起来只是一个小变化，却能让{group}的重点更明确，后续筛选也会省力很多。"
+      ];
+
       function getCollectionProfile(data) {
-        return collectionProfiles[data.category] || collectionProfiles["生活经验"];
+        if (collectionProfiles[data.category]) return collectionProfiles[data.category];
+        var preset = categoryData[data.category] || categoryData["生活经验"];
+        var groups = preset.sections.map(function (item) { return item + "方向"; });
+        var items = preset.fields.map(function (field) { return field[0]; })
+          .concat(preset.sections, preset.tags, ["新手入门", "日常可用", "进阶尝试", "避坑提醒"]);
+        items = Array.from(new Set(items)).slice(0, 12);
+        while (items.length < 12) items.push(data.category + "灵感" + (items.length + 1));
+        return {
+          groups: groups,
+          items: items,
+          scenes: [preset.audience, "日常分享", "新手第一次尝试", "需要做选择的时候"],
+          lines: universalCollectionLines
+        };
       }
 
       function parseCollectionIdea(input) {
@@ -2393,14 +3071,20 @@
           "想做" + subject + "先看这篇",
           subject + "怎么选？分组更直观",
           total + "个" + subject + "灵感",
-          subject + "方向都分好了"
+          subject + "方向都分好了",
+          subject + "｜一眼找到合适方向",
+          "别再乱存" + subject + "｜这样挑"
         ];
         var ordered = [];
         var offset = (seed + state.generation) % pool.length;
         for (var i = 0; i < pool.length; i += 1) {
           ordered.push(compact(pool[(offset + i) % pool.length], 20));
         }
-        return uniqueTextLines(ordered).slice(0, 5);
+        var candidates = uniqueTextLines(ordered);
+        var recent = recentOutputText(data);
+        var fresh = candidates.filter(function (item) { return !recent || recent.indexOf(item) === -1; });
+        var usedBefore = candidates.filter(function (item) { return recent && recent.indexOf(item) !== -1; });
+        return fresh.concat(usedBefore).slice(0, 5);
       }
 
       function collectionOpeningPool(data, inputs, seed) {
@@ -2413,11 +3097,22 @@
           "这次不想堆一长串冷冰冰的名字，直接把" + subject + "按" + first + "、" + second + "这些方向分开，想找哪种气质一眼就能看到。",
           "收藏夹里零零散散存了不少" + subject + "，这两天终于把它们分好组了。" + scene + "想换点感觉，可以从下面慢慢挑。",
           "如果你也常常觉得每一款都好看、真要选又拿不准，这份" + subject + "清单会直观很多。我把日常、氛围和一点小个性都放进来了。",
-          "我挑" + subject + "时不太喜欢一味堆元素，更在意整体有没有呼吸感。下面这些方向各有脾气，但都不是只能拍照看一次的款。"
+          "我挑" + subject + "时不太喜欢一味堆元素，更在意整体有没有呼吸感。下面这些方向各有脾气，但都不是只能拍照看一次的款。",
+          subject + "最难的不是没有选择，而是选择太多以后反而分不清差别。我按真实场景重新排了一遍，先找方向会轻松很多。",
+          "这份" + subject + "没有硬凑数量，我先看它放进" + scene + "是否顺手，再按" + first + "和" + second + "慢慢分开。",
+          "不想再发一串看完就忘的名字，所以这次给每个" + subject + "都留了具体感觉和适用场景，选的时候会直观一点。",
+          "同样是" + subject + "，换一个场景就可能完全不同。下面从" + first + "开始，一路放到" + second + "，可以按自己的需求挑。"
         ];
-        var ordered = [];
+        var fresh = [];
+        var usedBefore = [];
+        var recent = recentOutputText(data);
         var offset = (seed + state.generation * 2) % pool.length;
-        for (var i = 0; i < pool.length; i += 1) ordered.push(pool[(offset + i) % pool.length]);
+        for (var i = 0; i < pool.length; i += 1) {
+          var candidate = pool[(offset + i) % pool.length];
+          if (recent && recent.indexOf(candidate) !== -1) usedBefore.push(candidate);
+          else fresh.push(candidate);
+        }
+        var ordered = fresh.concat(usedBefore);
         if (inputs.preference) {
           ordered[0] += "\n这次筛选时我也留了一个小标准：" + ensureSentence(inputs.preference);
         }
@@ -2428,24 +3123,53 @@
         var first = shortGroupName(inputs.groups[0]);
         var second = shortGroupName(inputs.groups[1] || inputs.groups[0]);
         var price = data.price ? "，当前是" + data.price + "元" : "";
-        return {
-          "收藏备用": "先存着也不急着一次选定，等真正要用的时候，再回来看看自己更偏向哪一组。",
-          "评论交流": "你第一眼更喜欢" + first + "，还是" + second + "？我还挺想知道大家会怎么选。",
-          "查看店铺商品": "完整清单和可直接修改的版本放在商品页" + price + "，可以先看目录和预览，觉得用得上再选。",
-          "不加引导": "这份先整理到这里。我自己会在" + first + "和" + second + "之间反复横跳，你呢？"
-        }[data.cta] || "你第一眼更喜欢哪一组？";
+        var pools = {
+          "收藏备用": [
+            "先存着也不急着一次选定，等真正要用的时候，再回来看看自己更偏向哪一组。",
+            "选择太多时先别急着定，收藏后等场景明确了，再按分组往回筛会更快。",
+            "这份可以当作一个小目录，需要的时候直接找到对应方向，不用重新翻一遍收藏夹。"
+          ],
+          "评论交流": [
+            "你第一眼更喜欢" + first + "，还是" + second + "？我还挺想知道大家会怎么选。",
+            "如果只能先留一组，你会从" + first + "开始，还是先试" + second + "？",
+            "哪一项最像你最近正在找的感觉？也可以告诉我想继续看哪组。"
+          ],
+          "查看店铺商品": [
+            "完整清单和可直接修改的版本放在商品页" + price + "，可以先看目录和预览，觉得用得上再选。",
+            "商品页有更多分组和可编辑版本" + price + "，先看预览是否符合你的赛道，再决定就好。",
+            "想把这些方向直接改成自己的内容，可以去商品页看完整清单" + price + "，不合适不用选。"
+          ],
+          "不加引导": [
+            "这份先整理到这里。我自己会在" + first + "和" + second + "之间反复横跳。",
+            "先写到这里，真正要用时，我会从最贴近日常的一组开始试。",
+            "方向都放在上面了，最后还是回到自己的场景，挑最顺手的那一个。"
+          ]
+        };
+        return pickFresh(pools[data.cta] || ["你第一眼更喜欢哪一组？"], hash(data.topic + data.cta), 109, data);
       }
 
       function collectionComment(data, inputs) {
         var first = shortGroupName(inputs.groups[0]);
         var last = shortGroupName(inputs.groups[inputs.groups.length - 1]);
         if (data.cta === "查看店铺商品") {
-          return "完整版里保留了更多分组和可改文字，商品页可以先看目录，不合适不用勉强选。";
+          return pickFresh([
+            "完整版里保留了更多分组和可改文字，商品页可以先看目录，不合适不用勉强选。",
+            "商品页有完整清单和部分预览，先确认是否覆盖你的方向，再决定是否需要。",
+            "整套版本可以直接修改，目录和预览都在商品页，建议先看内容再选择。"
+          ], hash(data.topic), 113, data);
         }
         if (data.cta === "收藏备用") {
-          return "可以先收藏，等要做同类内容时直接按分组找，不用再从头翻灵感。";
+          return pickFresh([
+            "可以先收藏，等要做同类内容时直接按分组找，不用再从头翻灵感。",
+            "暂时选不出来也没关系，先存下分组，真正需要时会更容易判断。",
+            "这份更适合当作随时可翻的小目录，后面有新方向我也会继续补。"
+          ], hash(data.topic), 127, data);
         }
-        return "下一份你想先看“" + first + "”还是“" + last + "”？我按大家更想看的方向继续整理。";
+        return pickFresh([
+          "下一份你想先看“" + first + "”还是“" + last + "”？我按大家更想看的方向继续整理。",
+          "你最想把哪一组单独展开？我会优先整理大家反复提到的方向。",
+          "如果这几组里没有你想要的，也可以留下一个具体场景，我再按场景补。"
+        ], hash(data.topic), 131, data);
       }
 
       function collectionCover(data, inputs, settings, seed) {
@@ -2455,8 +3179,8 @@
         var total = settings.groupCount * settings.itemsPerGroup;
         var mainPool = [subject + "灵感", subject + "按风格挑", "最近喜欢的" + subject];
         var subPool = [total + "个方向｜" + first, first + "到" + last, inputs.scenes[0] + "都能用"];
-        var main = compact(mainPool[(seed + state.generation) % mainPool.length], 14);
-        var sub = compact(subPool[(seed + state.generation * 2) % subPool.length], 16);
+        var main = compact(pickFresh(mainPool, seed, 149, data), 14);
+        var sub = compact(pickFresh(subPool, seed, 151, data), 16);
         return uniqueTextLines([main, sub]).slice(0, 2).join("\n");
       }
 
@@ -2482,8 +3206,8 @@
           sections.push(lines.join("\n"));
         });
 
-        if (data.details) sections.push("我还会顺手留意这一点：" + ensureSentence(data.details));
-        if (data.cautions) sections.push("有一类我会先排除：" + ensureSentence(data.cautions));
+        if (data.details) sections.push(supplementSentence(data, "details", seed));
+        if (data.cautions) sections.push(supplementSentence(data, "cautions", seed));
         sections.push(collectionClosing(data, inputs));
 
         return {
@@ -2522,16 +3246,37 @@
 
       function rednoteComment(data) {
         var price = data.price ? "，当前价格" + data.price + "元" : "";
+        var seed = hash(data.topic + data.category + data.cta);
+        var subject = topicSubject(data.topic, 12);
         if (data.cta === "查看店铺商品") {
-          return "想看完整目录和预览，可以去商品页查看" + price + "。先确认内容适不适合自己，再决定要不要选。";
+          return pickFresh([
+            "想看完整目录和预览，可以去商品页查看" + price + "。先确认内容适不适合自己，再决定要不要选。",
+            "商品页可以先看目录和部分预览" + price + "，覆盖你的内容方向再选会更稳妥。",
+            "整套内容是可修改版本，商品页有清单和预览" + price + "，建议先看是否真的用得上。",
+            "需要同类文案时可以去商品页看完整版本" + price + "，不合适不用勉强选择。"
+          ], seed, 97, data);
         }
         if (data.cta === "评论交流") {
-          return "你更关心" + data.topic + "的“" + data.factLabels[1] + "”还是“" + data.factLabels[3] + "”？";
+          return pickFresh([
+            "关于" + subject + "，你更想继续看“" + data.factLabels[1] + "”，还是“" + data.factLabels[3] + "”？",
+            "评论区想继续聊哪一块：" + data.factLabels[0] + "，还是" + data.factLabels[2] + "？",
+            "这个主题里，还有哪个具体问题值得单独展开？",
+            "下一篇你更想看“" + data.factLabels[0] + "”的完整过程，还是把“" + data.factLabels[3] + "”讲透？"
+          ], seed, 101, data);
         }
         if (data.cta === "收藏备用") {
-          return "如果之后还会遇到同类问题，可以先收藏，真正需要时再回来对照。";
+          return pickFresh([
+            "如果之后还会遇到同类问题，可以先收藏，真正需要时再回来对照。",
+            "先存下这篇，等遇到同一场景时按真实条件逐项看，比只记住结论更有用。",
+            "暂时用不到也没关系，收藏后需要时直接找对应步骤和限制。",
+            "这份记录适合留作对照，不必一次全部照搬。"
+          ], seed, 103, data);
         }
-        return "补充说明：以上内容对应这次记录中的具体条件，其他情况可能会有不同结果。";
+        return pickFresh([
+          "以上只对应这次记录中的具体条件，其他情况可能会有不同结果。",
+          "这篇保留的是个人经历和可核对事实，不代表所有人都会得到相同结果。",
+          "如果你的前提不同，建议先调整方法，再判断结论是否仍然成立。"
+        ], seed, 107, data);
       }
 
       function generateRednote(data) {
@@ -2583,7 +3328,10 @@
         var issues = [];
         var combined = [generated.cover, generated.body, generated.titles, generated.hooks, generated.comment].join("\n");
         var comparableBody = cleanSpaces(generated.body);
-        var banned = ["把这一点写成", "先写清楚", "替换成自己的", "场景、动作、结果", "读者才知道", "写作方案"];
+        var banned = [
+          "把这一点写成", "先写清楚", "替换成自己的", "场景、动作、结果", "读者才知道", "写作方案",
+          "我当时的情况是：", "真正做的是：", "最后的结果是：", "还有一个限制："
+        ];
         banned.forEach(function (phrase) {
           if (combined.indexOf(phrase) !== -1) issues.push("包含写作提示：" + phrase);
         });
@@ -2822,7 +3570,11 @@
       }
 
       function setCategory(category) {
-        var aliases = { "美妆": "美妆护肤", "家居": "家居装修" };
+        var aliases = {
+          "美妆": "美妆护肤", "家居": "家居装修", "好物": "好物测评", "情感": "情感成长",
+          "育儿": "母婴育儿", "健身": "健身运动", "兴趣": "兴趣手作", "娱乐": "娱乐追星",
+          "资讯": "资讯解读", "健康": "健康养生", "知识": "知识科普"
+        };
         category = aliases[category] || category;
         state.category = categoryData[category] ? category : "AI工具";
         $("#category").value = state.category;
@@ -2843,16 +3595,28 @@
           $("#fact" + number).placeholder = field[1];
         });
         $("#factSectionTitle").textContent = isCollection ? "灵感素材" : "真实素材";
-        $("#factSectionRule").textContent = isCollection ? "填写元素、风格和场景，整体偏好可选" : "至少填写3项，不确定就留空";
+        $("#factSectionRule").textContent = isCollection ? "填写元素、风格和场景，整体偏好可选" : "只填真实内容；至少3项，不确定就留空";
         if (state.mode === "xianyu") {
           $("#pointsLabelText").textContent = "商品卖点";
           $("#points").placeholder = "例如：自用为主；功能正常；盒子和充电线都在";
+          $("#detailsLabelText").textContent = "其他真实信息";
+          $("#details").placeholder = "例如：购买时间、使用频率、出售原因或可补拍的细节";
+          $("#cautionsLabelText").textContent = "瑕疵与交易限制";
+          $("#cautions").placeholder = "例如：具体划痕、功能问题、是否包邮或只走平台";
         } else if (isCollection) {
           $("#pointsLabelText").textContent = "更多灵感选项";
           $("#points").placeholder = "还想加入哪些元素？可继续用逗号或换行补充";
+          $("#detailsLabelText").textContent = "额外偏好或背景";
+          $("#details").placeholder = "例如：希望整体更轻盈，适合夏日通勤，也要方便新手尝试";
+          $("#cautionsLabelText").textContent = "想避开的方向";
+          $("#cautions").placeholder = "例如：不要厚重堆砌、夸张承诺、重复元素或影楼感";
         } else {
-          $("#pointsLabelText").textContent = "补充要点";
-          $("#points").placeholder = "例如：打开工具导入原始内容；删掉没有依据的数据；人工调整开头";
+          $("#pointsLabelText").textContent = "补充细节";
+          $("#points").placeholder = "例如：再补充与“" + preset.sections[1] + "”“" + preset.sections[2] + "”有关的动作、数据或细节";
+          $("#detailsLabelText").textContent = "个人感受或其他事实";
+          $("#details").placeholder = "例如：在“" + state.category + "”这件事里，你最真实的一句感受或一个小故事";
+          $("#cautionsLabelText").textContent = "不适用情况或边界";
+          $("#cautions").placeholder = preset.fields[3][1];
         }
         $("#factSection").classList.remove("has-error");
         $("#factsError").classList.remove("show");

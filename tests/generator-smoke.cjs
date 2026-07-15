@@ -95,7 +95,7 @@ assert(scriptMatch[1].includes(exportMarker), "application export marker not fou
 const runnableScript = scriptMatch[1].replace(
   exportMarker,
   "      renderHistory();\n" +
-    "      globalThis.__generatorTest = { generateRednote: generateRednote, generateXianyu: generateXianyu, applyPolish: applyPolish, dedupeGenerated: dedupeGenerated, buildAll: buildAll, buildPublishable: buildPublishable, validateRednoteFacts: validateRednoteFacts, generatedQualityIssues: generatedQualityIssues, categoryData: categoryData, collectionProfiles: collectionProfiles, state: state };\n" +
+    "      globalThis.__generatorTest = { generateRednote: generateRednote, generateXianyu: generateXianyu, applyPolish: applyPolish, dedupeGenerated: dedupeGenerated, buildAll: buildAll, buildPublishable: buildPublishable, validateRednoteFacts: validateRednoteFacts, generatedQualityIssues: generatedQualityIssues, categoryData: categoryData, collectionProfiles: collectionProfiles, getCollectionProfile: getCollectionProfile, state: state };\n" +
     "    }());"
 );
 vm.runInNewContext(runnableScript, sandbox, { filename: "index-inline.js" });
@@ -175,6 +175,120 @@ const cases = {
     "按房间装箱并给每个纸箱编号",
     "当天搬完，但找充电线花了半小时",
     "下次会把当天用品单独装，不适合物品特别多的人"
+  ],
+  "好物测评": [
+    "为了通勤补妆入手，活动价129元",
+    "连续使用20天，工作日早上和出差时使用",
+    "上脸轻薄，下午鼻翼略出油但没有明显斑驳",
+    "色号偏少，更适合追求自然妆效的人"
+  ],
+  "情感成长": [
+    "异地半年，最近因为回复消息频率反复争执",
+    "一次临时取消见面后，我们第一次把期待说开",
+    "从反复猜测变成直接确认，情绪消耗少了一些",
+    "不再用冷处理试探，同样方法不一定适合每段关系"
+  ],
+  "宠物": [
+    "2岁短毛猫，换季掉毛明显且肠胃偶尔敏感",
+    "每周梳毛4次，连续观察3周",
+    "浮毛少了一些，也能配合梳毛约5分钟",
+    "梳齿偏硬要控制力度，持续异常会咨询兽医"
+  ],
+  "健身运动": [
+    "久坐上班族肩背容易紧，目标是每周运动3次",
+    "连续6周，每次40分钟，两次力量加一次快走",
+    "深蹲从徒手做到20kg，爬楼后的喘感减轻",
+    "膝盖不适后降低强度并请教教练调整动作"
+  ],
+  "影视": [
+    "看完12集正片和番外，尽量不涉及关键结局",
+    "第6集沉默吃饭的段落最能说明关系变化",
+    "前半段觉得慢，后面才看懂留白的作用",
+    "节奏偏慢，更适合喜欢人物成长的人"
+  ],
+  "教育": [
+    "小学三年级，写作业容易漏题且抗拒检查",
+    "连续3周只检查题号和单位，每晚不超过10分钟",
+    "漏题从一周4次降到1次，也愿意说出检查顺序",
+    "这是家庭观察，持续困难需要寻求专业评估"
+  ],
+  "婚礼": [
+    "杭州10月午宴，18桌约180人",
+    "总预算12万元，更多预算留给摄影和灯光",
+    "阴天柔光适合拍照，但迎宾区高峰时略拥挤",
+    "没有预留换装后的单独合影时间"
+  ],
+  "摄影": [
+    "35mm镜头F2.0，傍晚5点侧逆光",
+    "人物离窗约1米，背景留出三分之一空白",
+    "先压高光再提阴影，少量调整橙色明度",
+    "肤色通透，但太阳落下后噪点明显"
+  ],
+  "汽车": [
+    "2025款标准版，落地约18万元",
+    "行驶6500公里，七成城市通勤三成高速",
+    "综合电耗14.8kWh，后排坐两人空间充足",
+    "低速刹车脚感要适应，更适合有固定充电条件的人"
+  ],
+  "房产": [
+    "上海外环附近，两人自住且优先考虑通勤采光",
+    "总价预算350万元，主要看70到85平两居",
+    "步行到地铁约12分钟，晚高峰单程55分钟",
+    "临街卧室有车声，税费信息要按最新政策核对"
+  ],
+  "兴趣手作": [
+    "第一次做滴胶，材料和模具共花86元",
+    "分两层灌注，每层静置12小时",
+    "颜色比预期通透，但成品边缘有轻微溢胶",
+    "亮片放太多会下沉，下次会减少用量"
+  ],
+  "游戏": [
+    "当前2.3版本，零氪玩到第35天",
+    "主C搭配双辅助，资源优先升级关键技能",
+    "副本时间从3分钟降到1分40秒",
+    "前期资源紧张，更适合愿意慢养成的人"
+  ],
+  "娱乐追星": [
+    "7月12日公开舞台，信息来自官方直播和现场记录",
+    "第二首歌换成现场乐队后情绪更完整",
+    "收尾时的停顿让我反复回看",
+    "只讨论公开舞台，不猜测私人行程"
+  ],
+  "资讯解读": [
+    "7月15日发布的官方公告涉及平台规则调整",
+    "公告明确列出3项变化，8月1日起分阶段执行",
+    "频繁发布商品内容的创作者需要检查授权材料",
+    "细则尚未全部公布，以官方更新为准"
+  ],
+  "健康养生": [
+    "久坐后肩颈紧，最近想稳定睡眠和活动量",
+    "连续4周饭后走20分钟，晚上11点前放下手机",
+    "入睡时间从约40分钟缩短到20分钟",
+    "这只是个人记录，持续异常应及时就医"
+  ],
+  "音乐": [
+    "录音室版和巡演现场版都听过，更偏爱现场编曲",
+    "晚上戴耳机完整听了三遍",
+    "副歌人声后撤后反而把情绪拉得更长",
+    "更适合独处或通勤结束时听"
+  ],
+  "萌娃": [
+    "宝宝1岁8个月，第一次参加亲子运动会",
+    "起跑前抓着我的手，看到彩球后才慢慢走过去",
+    "没有完成比赛，但愿意把球递给旁边的小朋友",
+    "不展示学校位置，更在意他愿意尝试"
+  ],
+  "知识科普": [
+    "解释为什么充电宝实际可用电量低于标称容量",
+    "参考产品说明和能量转换公式",
+    "电芯升压和线路转换都会产生损耗",
+    "电压温度和设备效率不同会改变结果"
+  ],
+  "闲置": [
+    "去年双11购买，通勤使用约半年",
+    "盒子充电线都在，连接和降噪正常",
+    "95新，换了新设备所以出售",
+    "外壳有细小划痕，只走平台"
   ]
 };
 
@@ -189,7 +303,11 @@ const bannedPhrases = [
   "写作方案",
   "以下是",
   "先交代",
-  "给大家一个身材参考"
+  "给大家一个身材参考",
+  "我当时的情况是：",
+  "真正做的是：",
+  "最后的结果是：",
+  "还有一个限制："
 ];
 
 function allGeneratedTitles(result) {
@@ -304,10 +422,13 @@ for (const result of Object.values(narrativeByLength)) {
   assert.equal(result.cover.split("\n").length, 2, "every narrative length should retain two cover lines");
 }
 assert(/AI最适合|真正省时间/.test(narrativeByLength.detailed.body), "detailed narrative should add an author-style reflection");
-const narrativeVersions = [1, 2, 3, 4].map((generation) => generateNarrative("standard", generation));
+const narrativeVersions = [1, 2, 3, 4, 5, 6, 7, 8].map((generation) => generateNarrative("standard", generation));
 assert.equal(new Set(narrativeVersions.map((result) => result.body)).size, narrativeVersions.length, "change-version should produce distinct narrative bodies");
 assert.equal(new Set(narrativeVersions.map((result) => result.primaryTitle)).size, narrativeVersions.length, "change-version should rotate narrative titles");
-assert(new Set(narrativeVersions.map((result) => result.cover)).size >= 3, "change-version should rotate cover copy");
+assert(new Set(narrativeVersions.map((result) => result.cover)).size >= 6, "change-version should rotate cover copy broadly");
+const narrativeOpenings = narrativeVersions.map((result) => result.body.split(/\n{2,}/)[1].split("\n")[0]);
+assert(new Set(narrativeOpenings).size >= 7, "eight versions should not keep recycling the same few openings");
+assert(narrativeVersions.every((result) => !result.body.includes("还有一个细节：") && !result.body.includes("另外要说的是：")), "old fixed supplement phrases should be removed");
 assert(narrativeVersions.every((result) => allGeneratedTitles(result).every((title) => title.length <= 20)), "all narrative versions should keep titles within 20 characters");
 
 const collectionFacts = [
@@ -379,7 +500,8 @@ assert.equal(new Set(versions.map((result) => result.primaryTitle)).size, versio
 assert(versions.some((result) => /薄雾|光泽|留白|层次/.test(result.body)), "beauty collection should use vivid category language");
 
 let collectionCategoryIndex = 10;
-for (const [category, profile] of Object.entries(generator.collectionProfiles)) {
+for (const category of Object.keys(generator.categoryData)) {
+  const profile = generator.getCollectionProfile({ category });
   generator.state.generation = collectionCategoryIndex;
   const data = {
     ...collectionData,
@@ -420,14 +542,15 @@ assert.equal(xianyuResult.cover.split("\n").length, 2, "xianyu should provide tw
 assert(generator.buildAll(xianyuResult).includes("【商品主图短句】"), "xianyu export should label its product-cover copy");
 generator.state.mode = "rednote";
 
-assert(html.includes("V8 首图文案与真人节奏"), "V8 branding should be visible");
-assert((html.match(/data-category=/g) || []).length >= 13, "all major categories should be selectable");
+assert(html.includes("V9 全赛道与防重复表达"), "V9 branding should be visible");
+assert.equal(Object.keys(generator.categoryData).length, 31, "all 31 Xiaohongshu content categories should have data profiles");
+assert((html.match(/data-category=/g) || []).length >= 31, "all 31 content categories should be selectable");
 assert(html.indexOf('id="body"') < html.indexOf('id="cover"'), "publish-ready body must remain the first output");
 assert(html.indexOf('id="cover"') < html.indexOf('id="titles"'), "cover copy should appear before title alternatives");
 assert(html.includes('data-copy-target="cover"'), "cover copy action should exist");
 assert((html.match(/data-copy-body/g) || []).length >= 2, "desktop and mobile copy-body actions must exist");
 
 const serviceWorker = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-assert(serviceWorker.includes("rednote-copywriter-v8-20260715-cover-human-rhythm"), "service worker cache version was not updated");
+assert(serviceWorker.includes("rednote-copywriter-v9-20260715-all-categories-anti-repeat"), "service worker cache version was not updated");
 
-console.log("Generator smoke test passed for", Object.keys(cases).length, "narrative categories and", Object.keys(generator.collectionProfiles).length, "collection profiles, including length and variation checks.");
+console.log("Generator smoke test passed for", Object.keys(cases).length, "narrative categories and", Object.keys(generator.categoryData).length, "collection profiles, including eight-version variation checks.");
