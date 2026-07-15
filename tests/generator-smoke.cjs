@@ -95,7 +95,7 @@ assert(scriptMatch[1].includes(exportMarker), "application export marker not fou
 const runnableScript = scriptMatch[1].replace(
   exportMarker,
   "      renderHistory();\n" +
-    "      globalThis.__generatorTest = { generateRednote: generateRednote, applyPolish: applyPolish, dedupeGenerated: dedupeGenerated, buildPublishable: buildPublishable, validateRednoteFacts: validateRednoteFacts, generatedQualityIssues: generatedQualityIssues, categoryData: categoryData, collectionProfiles: collectionProfiles, state: state };\n" +
+    "      globalThis.__generatorTest = { generateRednote: generateRednote, generateXianyu: generateXianyu, applyPolish: applyPolish, dedupeGenerated: dedupeGenerated, buildAll: buildAll, buildPublishable: buildPublishable, validateRednoteFacts: validateRednoteFacts, generatedQualityIssues: generatedQualityIssues, categoryData: categoryData, collectionProfiles: collectionProfiles, state: state };\n" +
     "    }());"
 );
 vm.runInNewContext(runnableScript, sandbox, { filename: "index-inline.js" });
@@ -179,20 +179,6 @@ const cases = {
 };
 
 const goals = ["干货教程", "经验分享", "避坑提醒", "产品种草", "使用测评", "商品介绍"];
-const naturalPhrases = {
-  "AI工具": "最后最直观的变化是",
-  "职场": "前后最明显的变化是",
-  "学习": "目前能看到的结果是",
-  "美妆护肤": "用下来最明显的感受是",
-  "穿搭": "真实上身后",
-  "美食": "出锅后的口感和问题是",
-  "旅行": "我最想提醒的一点是",
-  "探店": "吃完最直接的感受是",
-  "家居装修": "改完以后最明显的变化是",
-  "母婴育儿": "这段时间观察到的反应是",
-  "数码": "实际能观察到的表现是",
-  "生活经验": "最后的结果是"
-};
 const bannedPhrases = [
   "把这一点写成",
   "先写清楚",
@@ -200,8 +186,15 @@ const bannedPhrases = [
   "发布前",
   "读者才知道",
   "场景、动作、结果",
-  "写作方案"
+  "写作方案",
+  "以下是",
+  "先交代",
+  "给大家一个身材参考"
 ];
+
+function allGeneratedTitles(result) {
+  return [result.primaryTitle].concat(result.titles.split("\n").map((line) => line.replace(/^\d+\.\s*/, ""))).filter(Boolean);
+}
 
 let caseIndex = 0;
 for (const [category, facts] of Object.entries(cases)) {
@@ -238,7 +231,12 @@ for (const [category, facts] of Object.entries(cases)) {
     assert(result.body.includes(fact), category + " should include every supplied fact: " + fact);
     assert.equal((result.body.match(new RegExp(fact.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")) || []).length, 1, category + " should use each fact once");
   });
-  assert(result.body.includes(naturalPhrases[category]), category + " should use its category-specific natural phrasing");
+  const coverLines = result.cover.split("\n");
+  assert.equal(coverLines.length, 2, category + " should provide a two-line cover copy");
+  assert(coverLines.every((line) => line.length <= 17), category + " cover lines should stay short enough for a cover");
+  assert(/[｜：，？]/.test(selectedTitle), category + " selected title should have a readable title rhythm");
+  assert(allGeneratedTitles(result).every((title) => title.length <= 20), category + " titles should fit the 20-character publishing limit");
+  assert(!result.body.includes("关于" + data.topic + "，结果和中间的细节都值得记一下"), category + " should not use the old report-like opening");
   assert(result.body.includes(data.details), category + " should include extra real details");
   assert(result.body.includes(data.cautions), category + " should include extra cautions");
   assert(result.extras.includes("#" + profile.tags[0]), category + " should include a category tag");
@@ -248,8 +246,9 @@ for (const [category, facts] of Object.entries(cases)) {
   assert(result.body.split(/\n{2,}/).length >= 6, category + " should produce readable short paragraphs");
   assert(result.titles.split("\n").length >= 3, category + " should keep title alternatives on separate lines");
   assert.deepEqual(Array.from(generator.generatedQualityIssues(result, data)), [], category + " should pass the quality gate");
+  assert(generator.buildAll(result).includes(result.cover), category + " full export should include cover copy");
   bannedPhrases.forEach((phrase) => {
-    assert(![result.body, result.titles, result.hooks, result.comment].join("\n").includes(phrase), category + " should not contain meta-writing phrase " + phrase);
+    assert(![result.cover, result.body, result.titles, result.hooks, result.comment].join("\n").includes(phrase), category + " should not contain stiff or meta-writing phrase " + phrase);
   });
 
   const sentences = result.body.match(/[^。！？!?\n]+[。！？!?]/g) || [];
@@ -265,6 +264,51 @@ const invalid = generator.validateRednoteFacts({
 });
 assert.equal(invalid.valid, false, "two facts should not pass validation");
 assert(invalid.message.includes("还差1项真实素材"), "validation should explain exactly what is missing");
+
+const narrativeProfile = generator.categoryData["AI工具"];
+const narrativeData = {
+  mode: "rednote",
+  category: "AI工具",
+  topic: "用AI整理口播稿",
+  audience: narrativeProfile.audience,
+  goal: "经验分享",
+  facts: cases["AI工具"],
+  factLabels: narrativeProfile.fields.map((field) => field[0]),
+  sectionLabels: narrativeProfile.sections,
+  points: [],
+  details: "",
+  cautions: "",
+  tone: "真实自然",
+  cta: "评论交流",
+  price: "",
+  naturalMode: true,
+  safeMode: true,
+  tags: narrativeProfile.tags
+};
+
+function generateNarrative(length, generation = 6) {
+  generator.state.generation = generation;
+  const data = { ...narrativeData, length };
+  return generator.dedupeGenerated(generator.applyPolish(generator.generateRednote(data), data));
+}
+
+const narrativeByLength = {
+  short: generateNarrative("short"),
+  standard: generateNarrative("standard"),
+  detailed: generateNarrative("detailed")
+};
+assert(narrativeByLength.short.body.length < narrativeByLength.standard.body.length, "standard narrative should be longer than short");
+assert(narrativeByLength.standard.body.length < narrativeByLength.detailed.body.length, "detailed narrative should be longer than standard");
+for (const result of Object.values(narrativeByLength)) {
+  narrativeData.facts.forEach((fact) => assert(result.body.includes(fact), "every narrative length should retain all supplied facts"));
+  assert.equal(result.cover.split("\n").length, 2, "every narrative length should retain two cover lines");
+}
+assert(/AI最适合|真正省时间/.test(narrativeByLength.detailed.body), "detailed narrative should add an author-style reflection");
+const narrativeVersions = [1, 2, 3, 4].map((generation) => generateNarrative("standard", generation));
+assert.equal(new Set(narrativeVersions.map((result) => result.body)).size, narrativeVersions.length, "change-version should produce distinct narrative bodies");
+assert.equal(new Set(narrativeVersions.map((result) => result.primaryTitle)).size, narrativeVersions.length, "change-version should rotate narrative titles");
+assert(new Set(narrativeVersions.map((result) => result.cover)).size >= 3, "change-version should rotate cover copy");
+assert(narrativeVersions.every((result) => allGeneratedTitles(result).every((title) => title.length <= 20)), "all narrative versions should keep titles within 20 characters");
 
 const collectionFacts = [
   "牛乳雾面白、海盐冰蓝、桃粉微珠光、月光贝母、碎钻猫眼、莓果酒红、奶油小花、粉紫晕染、水果涂鸦、银色镜面、苔绿撞色、极细几何",
@@ -317,6 +361,9 @@ assert(collectionByLength.detailed.body.includes("• 银色镜面：银色镜�
 
 for (const result of Object.values(collectionByLength)) {
   assert(result.body.startsWith(result.primaryTitle), "collection body should start with one selected title");
+  assert.equal(result.cover.split("\n").length, 2, "collection should provide two cover lines");
+  assert(result.cover.split("\n").every((line) => line.length <= 17), "collection cover lines should stay concise");
+  assert(allGeneratedTitles(result).every((title) => title.length <= 20), "collection titles should fit the 20-character publishing limit");
   assert(!result.body.split(/\n{2,}/)[0].includes(","), "collection title should not be joined to other titles");
   assert(result.body.includes("• "), "collection should use scannable bullet items");
   assert(!result.body.includes("以下是"), "collection should not sound like a generated report");
@@ -347,17 +394,40 @@ for (const [category, profile] of Object.entries(generator.collectionProfiles)) 
   const descriptions = result.body.split("\n").filter((line) => line.startsWith("• ")).map((line) => line.slice(line.indexOf("：") + 1));
   assert.equal(descriptions.length, 12, category + " detailed collection should contain twelve ideas");
   assert.equal(new Set(descriptions).size, descriptions.length, category + " collection descriptions should not repeat");
+  assert.equal(result.cover.split("\n").length, 2, category + " collection should provide two cover lines");
+  assert(allGeneratedTitles(result).every((title) => title.length <= 20), category + " collection titles should stay within 20 characters");
   assert(!result.body.includes("undefined"), category + " collection should never leak undefined values");
   assert.deepEqual(Array.from(generator.generatedQualityIssues(result, data)), [], category + " collection should pass the quality gate");
   collectionCategoryIndex += 1;
 }
 
-assert(html.includes("V7 灵感合集与真人文案"), "V7 branding should be visible");
+generator.state.mode = "xianyu";
+const xianyuData = {
+  mode: "xianyu",
+  topic: "Sony WH-1000XM5降噪耳机",
+  condition: "95新",
+  sellPrice: "1399",
+  city: "上海",
+  trade: "只走平台，支持邮寄",
+  points: ["降噪和连接正常", "盒子和充电线都在"],
+  details: "自用通勤约半年",
+  cautions: "外壳有轻微使用痕迹",
+  naturalMode: true,
+  safeMode: true
+};
+const xianyuResult = generator.dedupeGenerated(generator.applyPolish(generator.generateXianyu(xianyuData), xianyuData));
+assert.equal(xianyuResult.cover.split("\n").length, 2, "xianyu should provide two product-cover lines");
+assert(generator.buildAll(xianyuResult).includes("【商品主图短句】"), "xianyu export should label its product-cover copy");
+generator.state.mode = "rednote";
+
+assert(html.includes("V8 首图文案与真人节奏"), "V8 branding should be visible");
 assert((html.match(/data-category=/g) || []).length >= 13, "all major categories should be selectable");
-assert(html.indexOf('id="body"') < html.indexOf('id="titles"'), "publish-ready body must appear before title alternatives");
+assert(html.indexOf('id="body"') < html.indexOf('id="cover"'), "publish-ready body must remain the first output");
+assert(html.indexOf('id="cover"') < html.indexOf('id="titles"'), "cover copy should appear before title alternatives");
+assert(html.includes('data-copy-target="cover"'), "cover copy action should exist");
 assert((html.match(/data-copy-body/g) || []).length >= 2, "desktop and mobile copy-body actions must exist");
 
 const serviceWorker = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-assert(serviceWorker.includes("rednote-copywriter-v7-20260714-human-collection"), "service worker cache version was not updated");
+assert(serviceWorker.includes("rednote-copywriter-v8-20260715-cover-human-rhythm"), "service worker cache version was not updated");
 
 console.log("Generator smoke test passed for", Object.keys(cases).length, "narrative categories and", Object.keys(generator.collectionProfiles).length, "collection profiles, including length and variation checks.");

@@ -604,6 +604,13 @@
       max-height: 500px;
     }
 
+    .output-card.compact-output .output-content {
+      min-height: 92px;
+      max-height: 180px;
+      font-size: 17px;
+      line-height: 1.8;
+    }
+
     .output-content.placeholder {
       color: #98a2b3;
     }
@@ -881,7 +888,7 @@
         <div class="brand-mark" aria-hidden="true">文</div>
         <div class="brand-copy">
           小红书文案工作台
-          <small>V7 灵感合集与真人文案</small>
+          <small>V8 首图文案与真人节奏</small>
         </div>
       </div>
 
@@ -1114,6 +1121,14 @@
             <button class="copy-button" type="button" data-copy-target="body">复制</button>
           </div>
           <div class="output-content placeholder" id="body" contenteditable="true" role="textbox" aria-label="完整发布稿">生成后显示一篇包含标题、正文和结尾的完整小红书笔记。</div>
+        </article>
+
+        <article class="output-card wide compact-output">
+          <div class="card-head">
+            <h2><span id="coverLabel">首图短文案</span></h2>
+            <button class="copy-button" type="button" data-copy-target="cover">复制</button>
+          </div>
+          <div class="output-content placeholder" id="cover" contenteditable="true" role="textbox" aria-label="首图短文案">生成后显示两行适合放在首图上的短文案。</div>
         </article>
 
         <article class="output-card wide">
@@ -1602,6 +1617,7 @@
 
       var labels = {
         rednote: {
+          cover: "首图短文案",
           titles: "标题备选",
           hooks: "开头备选",
           extras: "话题标签",
@@ -1609,6 +1625,7 @@
           comment: "置顶评论"
         },
         xianyu: {
+          cover: "商品主图短句",
           titles: "闲鱼标题",
           hooks: "卖点摘要",
           extras: "买家问答",
@@ -1619,6 +1636,7 @@
 
       var placeholders = {
         rednote: {
+          cover: "生成后显示两行适合放在首图上的短文案。",
           titles: "生成后显示没有写进完整发布稿的标题备选。",
           hooks: "生成后显示没有写进完整发布稿的开头备选。",
           extras: "生成后显示与正文对应且不重复的话题标签。",
@@ -1626,6 +1644,7 @@
           comment: "生成后显示自然的评论区承接话术。"
         },
         xianyu: {
+          cover: "生成后显示商品主图可用的两行短句。",
           titles: "生成后显示5个闲鱼标题。",
           hooks: "生成后显示3种卖点摘要。",
           extras: "生成后显示常见买家问答。",
@@ -1864,20 +1883,24 @@
         }[data.category];
         var evidence = titleEvidence(factValue(data, metricIndex == null ? focusIndex : metricIndex)) || titleEvidence(focus);
         var identity = firstClause(factValue(data, 0), 7);
+        var subject = compact(data.topic, 12);
+        var metricSubject = compact(data.topic, evidence ? 9 : 12);
+        var identitySubject = compact(data.topic, identity ? 8 : 12);
+        var questionSubject = compact(data.topic, 8);
         var categoryLeads = {
           "AI工具": ["真实工作流", "效率变化", "限制也说"],
-          "职场": ["一次工作复盘", "前后变化", "返工点也说"],
-          "学习": ["执行记录", "从起点到结果", "弯路也保留"],
+          "职场": ["工作复盘", "前后变化", "返工点也说"],
+          "学习": ["执行记录", "结果变化", "弯路也保留"],
           "美妆护肤": ["按肤质实测", "用后感受", "缺点不省略"],
-          "穿搭": ["身材数据实穿", "尺码参考", "上身问题也说"],
-          "美食": ["克数时间都在", "实做步骤", "失败点也说"],
+          "穿搭": ["身材数据实穿", "尺码版型", "上身问题也说"],
+          "美食": ["克数时间都在", "成品口感", "失败点也说"],
           "旅行": ["路线花费实记", "真实行程", "避坑也说"],
-          "探店": ["真实消费记录", "点单和人均", "排队缺点也说"],
-          "家居装修": ["尺寸预算实记", "入住后复盘", "遗憾也保留"],
-          "母婴育儿": ["按月龄记录", "连续观察", "个体差异也说"],
+          "探店": ["真实消费记录", "点单感受", "排队缺点也说"],
+          "家居装修": ["尺寸预算实记", "入住变化", "遗憾也保留"],
+          "母婴育儿": ["按月龄记录", "观察结果", "个体差异也说"],
           "数码": ["连续使用实测", "真实表现", "短板不省略"],
-          "生活经验": ["事情完整经过", "实际处理结果", "教训也留下"]
-        }[data.category] || ["真实记录", "实际体验", "问题也说"];
+          "生活经验": ["完整经过", "处理结果", "教训也留下"]
+        }[data.category] || ["真实记录", "实际变化", "问题也说"];
         var titleQuestion = {
           "AI工具": "到底省了多少时间？",
           "职场": "我是怎么减少返工的？",
@@ -1893,47 +1916,73 @@
           "生活经验": "最后我是怎么解决的？"
         }[data.category] || "实际结果怎么样？";
         var goalLead = {
-          "干货教程": "实际步骤和关键点",
-          "经验分享": "一次真实经历",
-          "避坑提醒": "我遇到的问题",
-          "产品种草": "优点缺点都说",
-          "使用测评": "用后再评价",
-          "商品介绍": "信息和限制"
-        }[data.goal] || "真实记录";
+          "干货教程": "真正有用的几步",
+          "经验分享": "结果和教训都在",
+          "避坑提醒": "我踩过的坑",
+          "产品种草": "喜欢和劝退都说",
+          "使用测评": "连续用后再说",
+          "商品介绍": "买前先看"
+        }[data.goal] || "真实结果都在";
         var pool = [
-          data.topic + "｜" + (evidence ? evidence + "，" : "") + categoryLeads[2],
-          (identity ? identity + "｜" : "") + data.topic + categoryLeads[0],
-          data.topic + "：" + categoryLeads[1] + "，" + categoryLeads[2],
-          data.topic + titleQuestion,
-          data.topic + "｜" + goalLead
+          metricSubject + "｜" + (evidence ? evidence + "后" : "") + categoryLeads[1],
+          (identity ? identity + "｜" : "") + identitySubject + "，" + categoryLeads[0],
+          subject + "｜" + categoryLeads[2],
+          questionSubject + "｜" + titleQuestion,
+          subject + "｜" + goalLead
         ];
         var ordered = [];
         for (var i = 0; i < pool.length; i += 1) {
           ordered.push(pool[(seed + state.generation + i) % pool.length]);
         }
         return uniqueTextLines(ordered.map(function (item) {
-          return compact(item, 26);
+          return compact(item, 20);
         })).slice(0, 5);
       }
 
-      function goalOpening(data) {
+      function goalOpening(data, seed) {
         if (data.tone === "清单干货") {
-          return data.topic + "的实际条件、过程和结果都在这里。";
+          return data.topic + "不绕弯，先给结果，再把过程和限制放出来。";
         }
         if (data.tone === "简洁专业") {
-          return "以下是" + data.topic + "在本次条件下的实际记录。";
+          return "这次直接记录" + data.topic + "的使用条件、过程与结果。";
         }
-        if (data.tone === "轻松口语") {
-          return "最近刚好在做" + data.topic + "，把这次真实体验记一下。";
-        }
-        return {
-          "干货教程": "这次做" + data.topic + "，我只保留了自己真正用过的步骤。",
-          "经验分享": "关于" + data.topic + "，结果和中间的细节都值得记一下。",
-          "避坑提醒": "关于" + data.topic + "，我确实踩到过一个不太起眼的问题。",
-          "产品种草": data.topic + "没有让我立刻下结论，用过以后感受更具体。",
-          "使用测评": "不只看介绍，直接说" + data.topic + "在我这里的实际表现。",
-          "商品介绍": "先把" + data.topic + "的实际内容、适用条件和限制放在一起。"
-        }[data.goal] || "这是我关于" + data.topic + "的一次实际记录。";
+        var topicAction = /^(?:用|把|给|做|从|如何|怎么)/.test(data.topic) ? data.topic : "做" + data.topic;
+        var pools = {
+          "干货教程": [
+            "我一开始也把" + data.topic + "想复杂了，真正做下来，有用的其实就几步。",
+            "这篇不讲空方法，只把我在" + topicAction + "时真正走通的部分留下来。",
+            "如果你也卡在" + data.topic + "，先别一次改全部，我是从一个小步骤开始的。"
+          ],
+          "经验分享": [
+            "原本只是想试试" + data.topic + "，没想到前后差别比我预想得更具体。",
+            "这件事做完后，我最想记住的不是结果多漂亮，而是哪一步真的起了作用。",
+            "在" + topicAction + "时，我没有一开始就做对，真正有用的是后面那次调整。"
+          ],
+          "避坑提醒": [
+            data.topic + "最容易踩的坑，不是大问题，反而是那个看起来无所谓的小细节。",
+            "如果能重来一次，在" + topicAction + "时有一步我一定会提前改掉。",
+            "我原本以为" + data.topic + "照着常见做法就行，真正出问题后才发现少看了一个条件。"
+          ],
+          "产品种草": [
+            data.topic + "不是一用就惊艳的类型，但连续用下来，我留下它的理由越来越清楚。",
+            "先说在前面，" + data.topic + "有我喜欢的地方，也有会劝退一部分人的细节。",
+            "我没有因为一次感觉就给" + data.topic + "下结论，用了一段时间才敢把优缺点写出来。"
+          ],
+          "使用测评": [
+            "不看宣传词，直接说" + data.topic + "放进日常以后，哪些地方真的有感。",
+            data.topic + "短时间试不出全部，所以我把连续使用后的变化和问题都留下了。",
+            "这次测" + data.topic + "，我更在意每天都会遇到的细节，而不是参数表里最好看的那一项。"
+          ],
+          "商品介绍": [
+            "如果你正在看" + data.topic + "，先别急着只看优点，适用条件和限制也要放在一起。",
+            data.topic + "值不值得选，关键不是信息有多少，而是它和你的需求能不能对上。",
+            "我把" + data.topic + "真正会影响选择的内容放在这里，好和不好都不藏。"
+          ]
+        };
+        var pool = pools[data.goal] || ["这次把" + data.topic + "的真实过程和结果完整记下来。"];
+        var opening = pool[(seed + state.generation) % pool.length];
+        if (data.tone === "轻松口语") return opening.replace(/。$/, "，说人话就是这样。");
+        return opening;
       }
 
       function storyOrder(data) {
@@ -1953,31 +2002,42 @@
 
       function factPrefixes(category) {
         return {
-          "AI工具": ["我真正用到它的场景是：", "实际操作时，我是这样跑的：", "最后最直观的变化是：", "但它没有省掉所有工作："],
-          "职场": ["先交代工作背景：", "我具体做了这件事：", "前后最明显的变化是：", "仍然会返工的地方是："],
-          "学习": ["我的起点和目标是：", "这段时间我实际执行的是：", "目前能看到的结果是：", "中间走过的弯路是："],
-          "美妆护肤": ["先交代我的肤质：", "我的使用频率是：", "用下来最明显的感受是：", "不太满意的地方也有："],
-          "穿搭": ["给大家一个身材参考：", "这套我主要穿去：", "单品和尺码是：", "真实上身后，我最在意的是："],
+          "AI工具": ["我用它的场景很具体：", "真正落到手上，我这样做：", "最直观的变化是：", "但没省掉的工作也很明确："],
+          "职场": ["当时的工作背景是：", "我真正改动的是：", "前后差别出现在这里：", "依然会返工的地方是："],
+          "学习": ["我的起点和目标是：", "这段时间真正做到的是：", "目前看得见的结果是：", "中间最影响节奏的是："],
+          "美妆护肤": ["我的肤质前提是：", "我实际这样用：", "连续用后最明显的是：", "会让我犹豫的地方也有："],
+          "穿搭": ["我的身材参考是：", "这套主要穿去：", "单品和尺码是：", "真正上身后，我最在意的是："],
           "美食": ["这次用到的食材是：", "温度和时间我设成：", "做的时候最关键的一步是：", "出锅后的口感和问题是："],
           "旅行": ["这趟的时间和同行人是：", "路线我这样排：", "花费和耗时大概是：", "我最想提醒的一点是："],
-          "探店": ["先说到店信息：", "我们这次点了：", "吃完最直接的感受是：", "排队、停车和缺点也说一下："],
-          "家居装修": ["先交代房屋和预算：", "这次用到的尺寸和材料是：", "改完以后最明显的变化是：", "住进去才发现的遗憾是："],
-          "母婴育儿": ["先说孩子当时的阶段：", "我们连续做了这件事：", "这段时间观察到的反应是：", "需要单独说明的边界是："],
+          "探店": ["到店时的真实情况是：", "我们这次点了：", "吃完最直接的感受是：", "排队、停车和缺点也要算进去："],
+          "家居装修": ["房屋和预算前提是：", "尺寸和材料这样定：", "改完后最明显的变化是：", "住进去才发现的遗憾是："],
+          "母婴育儿": ["孩子当时正处在这个阶段：", "我们连续做的是：", "这段时间观察到的反应是：", "需要单独说明的边界是："],
           "数码": ["我用的具体版本是：", "这段时间主要这样用：", "实际能观察到的表现是：", "短板和适合的人也很明确："],
-          "生活经验": ["事情发生时的情况是：", "我当时这样处理：", "最后的结果是：", "下次我会改掉这一点："],
+          "生活经验": ["事情发生时是这样：", "我当时这样处理：", "最后的结果是：", "下次我会改掉这一点："],
           "闲置": ["购买和使用情况：", "配件与功能状态：", "成色和出售原因：", "瑕疵与交易限制："]
-        }[category] || ["先说我的情况：", "实际过程是：", "最后的结果是：", "还有一个限制："];
+        }[category] || ["我当时的情况是：", "真正做的是：", "最后的结果是：", "还有一个限制："];
       }
 
-      function naturalFactSentence(data, index) {
+      function humanFactSentence(data, index, seed) {
         var fact = factValue(data, index);
         if (!fact) return "";
-        return factPrefixes(data.category)[index] + ensureSentence(fact);
+        if (data.tone === "清单干货") return data.sectionLabels[index] + "｜" + ensureSentence(fact);
+        if (data.length === "short") {
+          return ["当时：", "做法：", "结果：", "要注意："][index] + ensureSentence(fact);
+        }
+        var genericLeads = [
+          ["先把前提放在这里：", "这篇对应的是一个具体场景："],
+          ["中间没有什么神操作，我真正做的是：", "具体落到手上，其实就是："],
+          ["最后留下的结果很具体：", "结果比我预想得更直观："],
+          ["还有一处我会提前说：", "这也是我不会省略的一点："]
+        ];
+        var pool = [factPrefixes(data.category)[index]].concat(genericLeads[index]);
+        return pool[(seed + state.generation + index) % pool.length] + ensureSentence(fact);
       }
 
-      function rednoteOpening(data) {
+      function rednoteOpening(data, seed) {
         var firstIndex = storyOrder(data).filter(function (index) { return factValue(data, index); })[0];
-        return [goalOpening(data), naturalFactSentence(data, firstIndex)].filter(Boolean).join("\n");
+        return [goalOpening(data, seed), humanFactSentence(data, firstIndex, seed)].filter(Boolean).join("\n");
       }
 
       function categoryBoundary(data) {
@@ -1996,6 +2056,118 @@
           "生活经验": "这是我在当时条件下的处理结果，不一定适合每个人，但过程可以用来对照。",
           "闲置": "商品状态以实物图片和双方确认的信息为准，交易只在平台内完成。"
         }[data.category] || "这只是一次真实记录，条件不同，结果也可能不同。";
+      }
+
+      function compactBoundary(data) {
+        return {
+          "AI工具": "这只对应本次任务，事实和数据仍要自己核对。",
+          "职场": "团队和业务口径不同，做法要按实际情况调整。",
+          "学习": "基础和时间不同，不用照搬我的进度。",
+          "美妆护肤": "肤质不同感受会变，有明显不适就停用。",
+          "穿搭": "身材和面料会影响上身，尺码只作参考。",
+          "美食": "设备火力不同，时间要看成品状态调整。",
+          "旅行": "客流和营业信息会变，出发前再确认一次。",
+          "探店": "口味很主观，这里只对应我这次到店体验。",
+          "家居装修": "户型和习惯不同，尺寸不能直接照搬。",
+          "母婴育儿": "孩子反应不同，健康和安全问题及时问专业人员。",
+          "数码": "版本和使用强度不同，数据只作参考。",
+          "生活经验": "这是我的处理方式，不一定适合所有人。",
+          "闲置": "状态以实物和双方确认信息为准。"
+        }[data.category] || "条件不同，结果也可能不同。";
+      }
+
+      function detailedReflection(data, seed) {
+        var reflections = {
+          "AI工具": [
+            "对我来说，AI最适合接住重复、可检查的前半段；事实判断和最后表达，我还是会自己收口。",
+            "真正省时间的不是让它一次写完，而是把整理、发散和核对拆开，各自放到合适的位置。"
+          ],
+          "职场": [
+            "这次最有用的不是多做一张表，而是让每个人都能看见结论、责任人和时间点。",
+            "工作流程能长期留下来，靠的不是做得漂亮，而是忙起来以后依然有人愿意照着用。"
+          ],
+          "学习": [
+            "现在回看，真正拉开差距的不是某一天学得特别久，而是中断以后还能继续接上。",
+            "我最后留下的都是能重复执行的小动作，排得很满却做不下去的计划已经删掉了。"
+          ],
+          "美妆护肤": [
+            "我更愿意把它当成一段连续观察，而不是用一两次就急着判断好不好。",
+            "对我来说，能稳定放进日常、没有明显负担，比某一次看起来特别惊艳更重要。"
+          ],
+          "穿搭": [
+            "最后决定我会不会常穿的，不是镜子前站着那一分钟，而是坐下、走路和通勤时舒不舒服。",
+            "我现在挑衣服会先看比例和活动感，再看照片里够不够抢眼，留下来的反而更多。"
+          ],
+          "美食": [
+            "这次做完我更确定，味道不是调料越多越好，火候和食材状态才是最难照抄的部分。",
+            "能让我愿意再做一次的配方，步骤一定不能太绕，失败后也要知道从哪里调整。"
+          ],
+          "旅行": [
+            "这趟最舒服的地方不是打卡数量，而是路线没有一直拉扯，临时想停下来也有余地。",
+            "我现在排旅行会先保住体力和返程，再往里面放景点，实际体验比清单长度重要。"
+          ],
+          "探店": [
+            "一家店值不值得再去，我会把味道、人均、等待和舒服程度一起算，不只看照片够不够好看。",
+            "真正留下印象的通常不是摆盘最满的一道，而是吃完以后还会想起的味道和细节。"
+          ],
+          "家居装修": [
+            "住进去以后才发现，真正影响每天心情的是拿取、清洁和走动，不是刚完工时那张照片。",
+            "我现在更愿意为顺手和耐用留预算，造型可以以后慢慢加，尺寸做错却很难补。"
+          ],
+          "母婴育儿": [
+            "我会把这次变化当作一段个人观察，不拿它追赶别人的进度，也不急着复制到下一个阶段。",
+            "比起一次做得很完美，我更在意孩子能不能慢慢适应，大人能不能稳定地继续。"
+          ],
+          "数码": [
+            "参数决定上限，真正每天影响体验的却是续航、发热、重量和那些会反复碰到的小细节。",
+            "我现在看数码产品会先想自己的高频场景，再看配置，不为很少用到的能力多付代价。"
+          ],
+          "生活经验": [
+            "这件事让我真正留下的不是一套标准答案，而是下次再遇到时，我知道先动哪一步。",
+            "很多问题不是一次彻底解决的，先把最影响生活的部分处理掉，秩序就会慢慢回来。"
+          ]
+        };
+        var pool = reflections[data.category] || ["这次最值得留下的，是能放回日常继续使用的那一步。"];
+        return pool[(seed + state.generation) % pool.length];
+      }
+
+      function rednoteCover(data, seed) {
+        var cleanSubject = data.topic.replace(/(?:真实体验|使用体验|经验分享|真实分享|连续实测|实测|分享|记录)$/g, "") || data.topic;
+        var subject = compact(cleanSubject, 11);
+        var mainSuffix = {
+          "干货教程": "这样做",
+          "经验分享": "真实复盘",
+          "避坑提醒": "别踩这个坑",
+          "产品种草": "值不值得留",
+          "使用测评": "连续实测",
+          "商品介绍": "买前先看"
+        }[data.goal] || "真实记录";
+        var metric = titleEvidence(factValue(data, 2)) || titleEvidence(factValue(data, 1)) || titleEvidence(factValue(data, 0));
+        metric = metric.split("、")[0];
+        var categorySub = {
+          "AI工具": "效率和限制都说",
+          "职场": "结果和返工点都在",
+          "学习": "执行结果不美化",
+          "美妆护肤": "按肤质说真实感受",
+          "穿搭": "身材尺码都给参考",
+          "美食": "克数火候不藏着",
+          "旅行": "路线花费避坑都在",
+          "探店": "人均排队一起算",
+          "家居装修": "入住后再说好不好",
+          "母婴育儿": "只记录我家真实反应",
+          "数码": "参数之外看日常",
+          "生活经验": "过程和教训都留下"
+        }[data.category] || "过程和限制都说";
+        var mainPool = [
+          compact(subject, 14),
+          compact(subject + "真话版", 14),
+          compact(subject + mainSuffix, 14)
+        ];
+        var main = mainPool[(seed + state.generation) % mainPool.length];
+        var sub = compact(metric ? metric + "｜" + categorySub : categorySub, 16);
+        var lines = uniqueTextLines([main, sub]);
+        if (lines.length < 2) lines.push("过程和限制都说");
+        return lines.slice(0, 2).join("\n");
       }
 
       function rednoteHooks(data, seed, primaryOpening) {
@@ -2058,25 +2230,25 @@
         }[data.category] || "你遇到过类似情况吗？";
       }
 
-      function rednoteBody(data, primaryTitle, opening) {
+      function rednoteBody(data, primaryTitle, opening, seed) {
         var sections = [primaryTitle, opening];
         var orderedIndexes = storyOrder(data).filter(function (index) { return factValue(data, index); });
         var firstIndex = orderedIndexes[0];
+        var factSections = [];
 
         orderedIndexes.forEach(function (index) {
           if (index === firstIndex) return;
-          if (data.tone === "清单干货") {
-            sections.push(data.sectionLabels[index] + "\n" + ensureSentence(factValue(data, index)));
-          } else {
-            sections.push(naturalFactSentence(data, index));
-          }
+          factSections.push(humanFactSentence(data, index, seed));
         });
+        if (data.length === "short") sections.push(factSections.join("\n"));
+        else sections = sections.concat(factSections);
 
         var pointSection = rednotePointSection(data);
         if (pointSection) sections.push(pointSection);
         if (data.details) sections.push("还有一个细节：" + ensureSentence(data.details));
         if (data.cautions) sections.push("另外要说的是：" + ensureSentence(data.cautions));
-        sections.push(categoryBoundary(data));
+        if (data.length === "detailed") sections.push(detailedReflection(data, seed));
+        sections.push(data.length === "short" ? compactBoundary(data) : categoryBoundary(data));
 
         var price = data.price ? "，当前标价" + data.price + "元" : "";
         var ctaText = {
@@ -2210,23 +2382,23 @@
       }
 
       function collectionTitles(data, inputs, settings, seed) {
-        var subject = collectionSubject(data.topic);
+        var subject = compact(collectionSubject(data.topic), 10);
         var total = settings.groupCount * settings.itemsPerGroup;
-        var first = shortGroupName(inputs.groups[0]);
-        var second = shortGroupName(inputs.groups[1] || inputs.groups[0]);
+        var first = compact(shortGroupName(inputs.groups[0]), 6);
+        var second = compact(shortGroupName(inputs.groups[1] || inputs.groups[0]), 6);
         var pool = [
           subject + "｜" + total + "个灵感按风格挑",
-          subject + "灵感清单｜从" + first + "到" + second,
-          "别再乱翻了｜" + subject + "分成" + settings.groupCount + "种感觉",
-          "想做" + subject + "的先看｜每一种都分好组了",
-          subject + "怎么选？这份分组清单更直观",
-          total + "个" + subject + "灵感｜日常和出片都照顾到",
-          "最近很喜欢的" + subject + "方向，都替你分好了"
+          subject + "｜从" + first + "到" + second,
+          subject + "分成" + settings.groupCount + "种感觉",
+          "想做" + subject + "先看这篇",
+          subject + "怎么选？分组更直观",
+          total + "个" + subject + "灵感",
+          subject + "方向都分好了"
         ];
         var ordered = [];
         var offset = (seed + state.generation) % pool.length;
         for (var i = 0; i < pool.length; i += 1) {
-          ordered.push(compact(pool[(offset + i) % pool.length], 26));
+          ordered.push(compact(pool[(offset + i) % pool.length], 20));
         }
         return uniqueTextLines(ordered).slice(0, 5);
       }
@@ -2276,6 +2448,18 @@
         return "下一份你想先看“" + first + "”还是“" + last + "”？我按大家更想看的方向继续整理。";
       }
 
+      function collectionCover(data, inputs, settings, seed) {
+        var subject = collectionSubject(data.topic);
+        var first = shortGroupName(inputs.groups[0]);
+        var last = shortGroupName(inputs.groups[inputs.groups.length - 1]);
+        var total = settings.groupCount * settings.itemsPerGroup;
+        var mainPool = [subject + "灵感", subject + "按风格挑", "最近喜欢的" + subject];
+        var subPool = [total + "个方向｜" + first, first + "到" + last, inputs.scenes[0] + "都能用"];
+        var main = compact(mainPool[(seed + state.generation) % mainPool.length], 14);
+        var sub = compact(subPool[(seed + state.generation * 2) % subPool.length], 16);
+        return uniqueTextLines([main, sub]).slice(0, 2).join("\n");
+      }
+
       function generateCollectionRednote(data) {
         var profile = getCollectionProfile(data);
         var settings = collectionSettings(data.length);
@@ -2304,6 +2488,7 @@
 
         return {
           primaryTitle: primaryTitle,
+          cover: collectionCover(data, inputs, settings, seed),
           titles: titles.slice(1).map(function (item, index) { return (index + 1) + ". " + item; }).join("\n"),
           hooks: uniqueTextBlocks(openings.slice(1)).slice(0, 3).join("\n\n"),
           extras: rednoteExtras(data),
@@ -2354,15 +2539,16 @@
         var seed = hash(data.topic + data.audience + data.goal + data.category);
         var titles = rednoteTitles(data, seed);
         var primaryTitle = titles[0] || data.topic;
-        var opening = rednoteOpening(data);
+        var opening = rednoteOpening(data, seed);
         var hooks = rednoteHooks(data, seed, opening);
         var extras = rednoteExtras(data);
         return {
           primaryTitle: primaryTitle,
+          cover: rednoteCover(data, seed),
           titles: titles.slice(1).map(function (item, index) { return (index + 1) + ". " + item; }).join("\n"),
           hooks: hooks.join("\n\n"),
           extras: extras,
-          body: rednoteBody(data, primaryTitle, opening),
+          body: rednoteBody(data, primaryTitle, opening, seed),
           comment: rednoteComment(data)
         };
       }
@@ -2395,7 +2581,7 @@
 
       function generatedQualityIssues(generated, data) {
         var issues = [];
-        var combined = [generated.body, generated.titles, generated.hooks, generated.comment].join("\n");
+        var combined = [generated.cover, generated.body, generated.titles, generated.hooks, generated.comment].join("\n");
         var comparableBody = cleanSpaces(generated.body);
         var banned = ["把这一点写成", "先写清楚", "替换成自己的", "场景、动作、结果", "读者才知道", "写作方案"];
         banned.forEach(function (phrase) {
@@ -2456,8 +2642,10 @@
         ].join("\n\n");
 
         var comment = "交易说明：" + data.trade + "。不私下转账，不脱离平台交易；商品状态以详情、图片和双方沟通内容为准。";
+        var cover = compact(data.topic, 14) + "\n" + compact(data.condition + " · " + price, 18);
 
         return {
+          cover: cover,
           titles: titles.map(function (item, index) { return (index + 1) + ". " + item; }).join("\n"),
           hooks: hooks.join("\n\n"),
           extras: extras,
@@ -2487,8 +2675,9 @@
         generated.body = dedupeBodySentences(generated.body);
         var bodyBlocks = uniqueTextBlocks(generated.body);
         generated.body = bodyBlocks.join("\n\n");
+        generated.cover = uniqueTextLines(generated.cover).slice(0, 2).join("\n");
 
-        var used = bodyBlocks.slice();
+        var used = bodyBlocks.concat(uniqueTextLines(generated.cover));
         generated.titles = uniqueTextLines(generated.titles, used).join("\n");
         used = used.concat(uniqueTextLines(generated.titles));
         generated.hooks = uniqueTextBlocks(generated.hooks, used).join("\n\n");
@@ -2514,12 +2703,13 @@
       function buildAll(generated) {
         var currentLabels = labels[state.mode];
         return [
+          generated.cover ? "【" + currentLabels.cover + "】\n" + generated.cover : "",
           "【" + currentLabels.titles + "】\n" + generated.titles,
           "【" + currentLabels.hooks + "】\n" + generated.hooks,
           "【" + currentLabels.body + "】\n" + generated.body,
           "【" + currentLabels.extras + "】\n" + generated.extras,
           "【" + currentLabels.comment + "】\n" + generated.comment
-        ].join("\n\n");
+        ].filter(Boolean).join("\n\n");
       }
 
       function buildPublishable(generated) {
@@ -2527,9 +2717,9 @@
       }
 
       function renderGenerated(generated) {
-        ["titles", "hooks", "extras", "body", "comment"].forEach(function (key) {
+        ["cover", "titles", "hooks", "extras", "body", "comment"].forEach(function (key) {
           var node = $("#" + key);
-          node.textContent = generated[key];
+          node.textContent = generated[key] || "";
           node.classList.remove("placeholder");
         });
       }
@@ -2595,6 +2785,7 @@
 
       function updateLabels() {
         var currentLabels = labels[state.mode];
+        $("#coverLabel").textContent = currentLabels.cover;
         $("#titlesLabel").textContent = currentLabels.titles;
         $("#hooksLabel").textContent = currentLabels.hooks;
         $("#extrasLabel").textContent = currentLabels.extras;
@@ -2894,7 +3085,7 @@
           showToast("请先生成文案");
           return;
         }
-        ["titles", "hooks", "extras", "body", "comment"].forEach(syncEditedResult);
+        ["cover", "titles", "hooks", "extras", "body", "comment"].forEach(syncEditedResult);
         copyText(state.current.generated.all);
       }
 
@@ -2908,7 +3099,7 @@
       }
 
       function currentFile() {
-        ["titles", "hooks", "extras", "body", "comment"].forEach(syncEditedResult);
+        ["cover", "titles", "hooks", "extras", "body", "comment"].forEach(syncEditedResult);
         var filename = (state.current.data.topic || "文案") + "-" + (state.mode === "rednote" ? "小红书" : "闲鱼") + ".txt";
         filename = filename.replace(/[\\/:*?"<>|]/g, "-");
         return {
