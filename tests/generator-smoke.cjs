@@ -52,6 +52,7 @@ const document = {
   }
 };
 
+const storage = new Map();
 const sandbox = {
   console,
   Date,
@@ -66,9 +67,9 @@ const sandbox = {
   Promise,
   document,
   localStorage: {
-    getItem() { return null; },
-    setItem() {},
-    removeItem() {}
+    getItem(key) { return storage.has(key) ? storage.get(key) : null; },
+    setItem(key, value) { storage.set(key, String(value)); },
+    removeItem(key) { storage.delete(key); }
   },
   navigator: {
     userAgent: "",
@@ -95,7 +96,7 @@ assert(scriptMatch[1].includes(exportMarker), "application export marker not fou
 const runnableScript = scriptMatch[1].replace(
   exportMarker,
   "      renderHistory();\n" +
-    "      globalThis.__generatorTest = { generateRednote: generateRednote, generateXianyu: generateXianyu, applyPolish: applyPolish, dedupeGenerated: dedupeGenerated, buildAll: buildAll, buildPublishable: buildPublishable, validateRednoteFacts: validateRednoteFacts, generatedQualityIssues: generatedQualityIssues, categoryData: categoryData, collectionProfiles: collectionProfiles, getCollectionProfile: getCollectionProfile, state: state };\n" +
+    "      globalThis.__generatorTest = { generateRednote: generateRednote, generateXianyu: generateXianyu, applyPolish: applyPolish, dedupeGenerated: dedupeGenerated, buildAll: buildAll, buildPublishable: buildPublishable, validateRednoteFacts: validateRednoteFacts, generatedQualityIssues: generatedQualityIssues, qualityReport: qualityReport, contentSimilarity: contentSimilarity, hookStyleOpening: hookStyleOpening, categoryData: categoryData, collectionProfiles: collectionProfiles, getCollectionProfile: getCollectionProfile, state: state };\n" +
     "    }());"
 );
 vm.runInNewContext(runnableScript, sandbox, { filename: "index-inline.js" });
@@ -330,7 +331,7 @@ for (const [category, facts] of Object.entries(cases)) {
     points: ["第一项实际操作", "第二项实际观察"],
     details: "补充事实只在这次测试条件下成立",
     cautions: "不同条件下结果可能变化",
-    tone: "真实自然",
+    tone: "真人碎碎念",
     length: "standard",
     cta: "评论交流",
     price: "",
@@ -430,6 +431,43 @@ const narrativeOpenings = narrativeVersions.map((result) => result.body.split(/\
 assert(new Set(narrativeOpenings).size >= 7, "eight versions should not keep recycling the same few openings");
 assert(narrativeVersions.every((result) => !result.body.includes("还有一个细节：") && !result.body.includes("另外要说的是：")), "old fixed supplement phrases should be removed");
 assert(narrativeVersions.every((result) => allGeneratedTitles(result).every((title) => title.length <= 20)), "all narrative versions should keep titles within 20 characters");
+
+const voiceResults = ["真人碎碎念", "克制种草", "情绪共鸣"].map((tone, index) => {
+  generator.state.generation = 20 + index;
+  const data = { ...narrativeData, tone, length: "standard", hookStyle: "自动匹配" };
+  return generator.dedupeGenerated(generator.applyPolish(generator.generateRednote(data), data));
+});
+assert.equal(new Set(voiceResults.map((result) => result.body)).size, 3, "new writing voices should produce distinct bodies");
+assert(/说实话|先说下|没白试|不端着|前后看|标准答案|只想记|只说一句|怕大家/.test(voiceResults[0].body), "human voice should read conversationally");
+assert(/不把|劝退|使用前提|不先说清|连续使用|喜欢归喜欢|短板/.test(voiceResults[1].body), "restrained recommendation voice should keep pros and limits together");
+assert(/回头看|真正让我|松一口气|悄悄|标准答案|想明白|没有突然|真正被我记住|那段时间/.test(voiceResults[2].body), "emotional voice should carry a personal reflection");
+
+const hookBodies = ["先给结果", "痛点代入", "反差转折", "故事开场", "数字证据"].map((hookStyle, index) => {
+  generator.state.generation = 30 + index;
+  const data = { ...narrativeData, tone: "真实自然", hookStyle };
+  return generator.dedupeGenerated(generator.applyPolish(generator.generateRednote(data), data));
+});
+assert.equal(new Set(hookBodies.map((result) => result.body.split(/\n{2,}/)[1])).size, 5, "each opening strategy should create a different opening");
+assert(hookBodies[4].body.split(/\n{2,}/)[1].match(/\d/), "numeric-evidence opening should use supplied numeric facts");
+
+const qualityData = { ...narrativeData, hookStyle: "自动匹配", searchWord: "AI写作" };
+generator.state.generation = 40;
+const qualityResult = generator.dedupeGenerated(generator.applyPolish(generator.generateRednote(qualityData), qualityData));
+const quality = generator.qualityReport(qualityResult, qualityData);
+assert(quality.score >= 85 && quality.score <= 98, "quality self-check should return a useful bounded score");
+assert.equal(quality.facts, "4/4 已写入", "quality self-check should report used facts");
+assert(qualityResult.extras.includes("#AI写作"), "custom search word should lead the generated tags");
+assert(generator.contentSimilarity("这是一段完全相同的测试文案", "这是一段完全相同的测试文案") > 0.95, "similarity should recognize identical text");
+assert(generator.contentSimilarity("夏日通勤穿搭", "宠物日常喂养") < 0.35, "similarity should separate unrelated text");
+sandbox.localStorage.setItem("rednoteCopywriterV2History", JSON.stringify([{
+  id: 9001,
+  mode: "rednote",
+  data: qualityData,
+  generated: qualityResult,
+  createdAt: new Date().toISOString()
+}]));
+assert.equal(generator.qualityReport(qualityResult, qualityData).freshness, "0%", "freshness check should flag a repeated body");
+sandbox.localStorage.removeItem("rednoteCopywriterV2History");
 
 const collectionFacts = [
   "牛乳雾面白、海盐冰蓝、桃粉微珠光、月光贝母、碎钻猫眼、莓果酒红、奶油小花、粉紫晕染、水果涂鸦、银色镜面、苔绿撞色、极细几何",
@@ -542,15 +580,19 @@ assert.equal(xianyuResult.cover.split("\n").length, 2, "xianyu should provide tw
 assert(generator.buildAll(xianyuResult).includes("【商品主图短句】"), "xianyu export should label its product-cover copy");
 generator.state.mode = "rednote";
 
-assert(html.includes("V9 全赛道与防重复表达"), "V9 branding should be visible");
+assert(html.includes("V10 真人口吻与发布自检"), "V10 branding should be visible");
 assert.equal(Object.keys(generator.categoryData).length, 31, "all 31 Xiaohongshu content categories should have data profiles");
 assert((html.match(/data-category=/g) || []).length >= 31, "all 31 content categories should be selectable");
+assert((html.match(/data-demo=/g) || []).length >= 5, "five cross-category instant demos should be available");
+assert((html.match(/data-rewrite=/g) || []).length >= 3, "title, opening, and ending should support focused rewrites");
+assert(html.includes('id="qualityPanel"'), "publish quality self-check should be visible");
+assert(html.includes('id="hookStyle"'), "opening strategy selector should exist");
 assert(html.indexOf('id="body"') < html.indexOf('id="cover"'), "publish-ready body must remain the first output");
 assert(html.indexOf('id="cover"') < html.indexOf('id="titles"'), "cover copy should appear before title alternatives");
 assert(html.includes('data-copy-target="cover"'), "cover copy action should exist");
 assert((html.match(/data-copy-body/g) || []).length >= 2, "desktop and mobile copy-body actions must exist");
 
 const serviceWorker = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-assert(serviceWorker.includes("rednote-copywriter-v9-20260715-all-categories-anti-repeat"), "service worker cache version was not updated");
+assert(serviceWorker.includes("rednote-copywriter-v10-20260716-human-voice-quality"), "service worker cache version was not updated");
 
 console.log("Generator smoke test passed for", Object.keys(cases).length, "narrative categories and", Object.keys(generator.categoryData).length, "collection profiles, including eight-version variation checks.");

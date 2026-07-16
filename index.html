@@ -267,6 +267,57 @@
       padding: 18px;
     }
 
+    .sample-strip {
+      margin-bottom: 16px;
+      padding: 12px;
+      border: 1px solid #d9e2f1;
+      border-radius: 8px;
+      background: #f8fbff;
+    }
+
+    .sample-strip-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 9px;
+    }
+
+    .sample-strip-head strong {
+      color: #344054;
+      font-size: 13px;
+    }
+
+    .sample-strip-head span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .sample-buttons {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: thin;
+    }
+
+    .sample-button {
+      min-height: 34px;
+      flex: 0 0 auto;
+      padding: 0 11px;
+      border: 1px solid #cbd8ec;
+      border-radius: 7px;
+      background: var(--surface);
+      color: #344054;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .sample-button:hover {
+      border-color: #9eb5d8;
+      background: #f2f7ff;
+    }
+
     .field {
       margin-bottom: 16px;
     }
@@ -525,6 +576,82 @@
       font-weight: 650;
     }
 
+    .quality-panel {
+      display: grid;
+      grid-template-columns: 94px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 12px;
+      padding: 12px 14px;
+      border: 1px solid #dce3ed;
+      border-radius: 8px;
+      background: var(--surface);
+    }
+
+    .quality-score {
+      min-height: 64px;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      border-right: 1px solid var(--line);
+    }
+
+    .quality-score strong {
+      color: var(--green);
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .quality-score span {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .quality-main {
+      min-width: 0;
+    }
+
+    .quality-summary {
+      margin-bottom: 9px;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .quality-items {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .quality-item {
+      min-width: 0;
+      padding: 7px 8px;
+      border-radius: 7px;
+      background: var(--surface-soft);
+    }
+
+    .quality-item span,
+    .quality-item strong {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .quality-item span {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .quality-item strong {
+      margin-top: 3px;
+      color: #273142;
+      font-size: 12px;
+    }
+
     .output-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -572,6 +699,31 @@
       margin: 0;
       font-size: 14px;
       letter-spacing: 0;
+    }
+
+    .card-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .rewrite-button {
+      min-height: 32px;
+      padding: 0 9px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface);
+      color: #475467;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .rewrite-button:hover {
+      border-color: #f1aeb8;
+      background: #fff7f8;
+      color: var(--primary-dark);
     }
 
     .edit-hint {
@@ -745,8 +897,13 @@
       }
 
       .output-grid,
-      .history-list {
+      .history-list,
+      .quality-items {
         grid-template-columns: 1fr;
+      }
+
+      .quality-panel {
+        grid-template-columns: 78px minmax(0, 1fr);
       }
     }
 
@@ -865,6 +1022,41 @@
       .edit-hint {
         display: none;
       }
+
+      .sample-strip-head span {
+        display: none;
+      }
+
+      .quality-panel {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .quality-score {
+        min-height: auto;
+        display: flex;
+        justify-content: flex-start;
+        gap: 8px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 10px;
+      }
+
+      .quality-score span {
+        margin-top: 0;
+      }
+
+      .quality-items {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .primary-output .card-head {
+        align-items: flex-start;
+      }
+
+      .primary-output .card-actions {
+        max-width: 190px;
+      }
     }
 
     @media (display-mode: standalone) {
@@ -888,7 +1080,7 @@
         <div class="brand-mark" aria-hidden="true">文</div>
         <div class="brand-copy">
           小红书文案工作台
-          <small>V9 全赛道与防重复表达</small>
+          <small>V10 真人口吻与发布自检</small>
         </div>
       </div>
 
@@ -914,6 +1106,20 @@
       </div>
 
       <div class="form-body">
+        <section class="sample-strip" data-mode-only="rednote" aria-label="示例试写">
+          <div class="sample-strip-head">
+            <strong>示例试写</strong>
+            <span>五种赛道，直接生成完整作品</span>
+          </div>
+          <div class="sample-buttons">
+            <button class="sample-button" type="button" data-demo="ai">AI实测</button>
+            <button class="sample-button" type="button" data-demo="review">好物测评</button>
+            <button class="sample-button" type="button" data-demo="outfit">穿搭分享</button>
+            <button class="sample-button" type="button" data-demo="emotion">情感故事</button>
+            <button class="sample-button" type="button" data-demo="shop">真实探店</button>
+          </div>
+        </section>
+
         <div class="field">
           <div class="field-label">内容赛道 <span class="optional">31类可选</span></div>
           <div class="chips" id="categoryChips">
@@ -967,9 +1173,9 @@
             <div class="field">
               <label for="goal">笔记形式</label>
               <select id="goal">
-                <option selected>灵感合集</option>
+                <option>灵感合集</option>
                 <option>干货教程</option>
-                <option>经验分享</option>
+                <option selected>经验分享</option>
                 <option>避坑提醒</option>
                 <option>产品种草</option>
                 <option>使用测评</option>
@@ -1028,10 +1234,12 @@
             <div class="field">
               <label for="tone">表达风格</label>
               <select id="tone">
+                <option selected>真人碎碎念</option>
                 <option>真实自然</option>
+                <option>克制种草</option>
+                <option>情绪共鸣</option>
                 <option>清单干货</option>
                 <option>简洁专业</option>
-                <option>轻松口语</option>
               </select>
             </div>
             <div class="field">
@@ -1046,6 +1254,17 @@
 
           <div class="field-row">
             <div class="field">
+              <label for="hookStyle">开头方式</label>
+              <select id="hookStyle">
+                <option selected>自动匹配</option>
+                <option>先给结果</option>
+                <option>痛点代入</option>
+                <option>反差转折</option>
+                <option>故事开场</option>
+                <option>数字证据</option>
+              </select>
+            </div>
+            <div class="field">
               <label for="cta">结尾动作</label>
               <select id="cta">
                 <option>收藏备用</option>
@@ -1054,9 +1273,16 @@
                 <option>不加引导</option>
               </select>
             </div>
+          </div>
+
+          <div class="field-row">
             <div class="field">
               <label for="price">商品价格 <span class="optional">选填</span></label>
               <input id="price" inputmode="decimal" autocomplete="off" placeholder="例如：19.9">
+            </div>
+            <div class="field">
+              <label for="searchWord">核心搜索词 <span class="optional">选填</span></label>
+              <input id="searchWord" autocomplete="off" placeholder="例如：小红书文案">
             </div>
           </div>
         </div>
@@ -1132,11 +1358,32 @@
         内容在当前设备生成和保存
       </div>
 
+      <section class="quality-panel" id="qualityPanel" aria-label="发布前自检" aria-live="polite">
+        <div class="quality-score">
+          <strong id="qualityScore">--</strong>
+          <span>内容完整度</span>
+        </div>
+        <div class="quality-main">
+          <div class="quality-summary" id="qualitySummary">生成后检查素材、标题、重复度和篇幅</div>
+          <div class="quality-items">
+            <div class="quality-item"><span>真实素材</span><strong id="qualityFacts">--</strong></div>
+            <div class="quality-item"><span>表达新鲜度</span><strong id="qualityFreshness">--</strong></div>
+            <div class="quality-item"><span>主标题</span><strong id="qualityTitle">--</strong></div>
+            <div class="quality-item"><span>正文篇幅</span><strong id="qualityLength">--</strong></div>
+          </div>
+        </div>
+      </section>
+
       <div class="output-grid">
         <article class="output-card wide primary-output">
           <div class="card-head">
             <h2><span id="bodyLabel">完整发布稿</span><span class="edit-hint">结果可直接修改</span></h2>
-            <button class="copy-button" type="button" data-copy-target="body">复制</button>
+            <div class="card-actions">
+              <button class="rewrite-button" type="button" data-rewrite="title">换标题</button>
+              <button class="rewrite-button" type="button" data-rewrite="opening">换开头</button>
+              <button class="rewrite-button" type="button" data-rewrite="ending">换结尾</button>
+              <button class="copy-button" type="button" data-copy-target="body">复制</button>
+            </div>
           </div>
           <div class="output-content placeholder" id="body" contenteditable="true" role="textbox" aria-label="完整发布稿">生成后显示一篇包含标题、正文和结尾的完整小红书笔记。</div>
         </article>
@@ -1210,7 +1457,8 @@
         mode: "rednote",
         category: "AI工具",
         current: null,
-        generation: 0
+        generation: 0,
+        sampleIndex: 0
       };
 
       var categoryData = {
@@ -2091,11 +2339,51 @@
         return list[(seed + state.generation + (offset || 0)) % list.length];
       }
 
+      function textNgrams(input) {
+        var text = outputKey(input);
+        var grams = {};
+        if (!text) return grams;
+        if (text.length < 2) {
+          grams[text] = true;
+          return grams;
+        }
+        for (var i = 0; i < text.length - 1; i += 1) {
+          grams[text.slice(i, i + 2)] = true;
+        }
+        return grams;
+      }
+
+      function contentSimilarity(left, right) {
+        var leftSet = textNgrams(left);
+        var rightSet = textNgrams(right);
+        var leftKeys = Object.keys(leftSet);
+        var rightKeys = Object.keys(rightSet);
+        if (!leftKeys.length || !rightKeys.length) return 0;
+        var intersection = leftKeys.filter(function (key) { return rightSet[key]; }).length;
+        var union = new Set(leftKeys.concat(rightKeys)).size;
+        return union ? intersection / union : 0;
+      }
+
+      function recentTextUnits(input) {
+        return String(input || "")
+          .split(/[\n。！？!?]+/)
+          .map(function (item) { return cleanSpaces(item); })
+          .filter(function (item) { return outputKey(item).length >= 5; });
+      }
+
+      function isNearDuplicate(candidate, recent) {
+        if (!recent) return false;
+        var candidateLength = outputKey(candidate).length;
+        var threshold = candidateLength <= 20 ? 0.74 : 0.68;
+        return recentTextUnits(recent).some(function (unit) {
+          return contentSimilarity(candidate, unit) >= threshold;
+        });
+      }
+
       function recentOutputText(data) {
         try {
           return getHistory().filter(function (item) {
-            return item && item.mode === "rednote" && item.data &&
-              item.data.topic === data.topic && item.data.category === data.category;
+            return item && item.mode === "rednote";
           }).slice(0, 9).map(function (item) {
             var generated = item.generated || {};
             return [generated.body, generated.cover, generated.titles, generated.hooks, generated.comment].filter(Boolean).join("\n");
@@ -2111,7 +2399,7 @@
         var recent = data ? recentOutputText(data) : "";
         for (var i = 0; i < list.length; i += 1) {
           var candidate = list[(start + i) % list.length];
-          if (!recent || recent.indexOf(candidate) === -1) return candidate;
+          if (!recent || (recent.indexOf(candidate) === -1 && !isNearDuplicate(candidate, recent))) return candidate;
         }
         return list[start];
       }
@@ -2119,6 +2407,20 @@
       function compact(input, max) {
         var text = cleanSpaces(input);
         return text.length > max ? text.slice(0, max - 1) + "…" : text;
+      }
+
+      function compactTitle(input, max) {
+        var text = cleanSpaces(input);
+        if (text.length <= max) return text;
+        if (text.indexOf("｜") !== -1) {
+          var parts = text.split("｜");
+          var left = parts.shift();
+          var right = parts.join("｜");
+          var leftMax = Math.min(left.length, Math.max(6, max - Math.min(right.length, 9) - 1));
+          var rightMax = Math.max(4, max - leftMax - 1);
+          return (left.slice(0, leftMax) + "｜" + right.slice(0, rightMax)).replace(/[，：｜、]$/g, "");
+        }
+        return text.slice(0, max).replace(/[，：｜、]$/g, "");
       }
 
       function naturalize(input) {
@@ -2169,7 +2471,7 @@
       function collectData() {
         var preset = categoryData[state.category] || categoryData["AI工具"];
         var selectedLength = value("length") || "standard";
-        var selectedGoal = value("goal") || "灵感合集";
+        var selectedGoal = value("goal") || "经验分享";
         var fieldPreset = selectedGoal === "灵感合集" ? collectionFieldConfig : preset;
         var pointLimit = selectedGoal === "灵感合集" ? 20 : selectedLength === "short" ? 2 : selectedLength === "detailed" ? 6 : 4;
         return {
@@ -2181,10 +2483,12 @@
           points: pointsFrom(value("points"), pointLimit),
           details: value("details"),
           cautions: value("cautions"),
-          tone: value("tone") || "真实自然",
+          tone: value("tone") || "真人碎碎念",
+          hookStyle: value("hookStyle") || "自动匹配",
           length: selectedLength,
           cta: value("cta") || "不加引导",
           price: numberValue(value("price")),
+          searchWord: value("searchWord"),
           condition: value("condition") || "正常使用痕迹",
           sellPrice: numberValue(value("sellPrice")),
           city: value("city"),
@@ -2362,16 +2666,66 @@
           ordered.push(pool[(seed + state.generation + i) % pool.length]);
         }
         var candidates = uniqueTextLines(ordered.map(function (item) {
-          return compact(item, 20);
+          return compactTitle(item, 20);
         }));
         var recent = recentOutputText(data);
-        var fresh = candidates.filter(function (item) { return !recent || recent.indexOf(item) === -1; });
-        var usedBefore = candidates.filter(function (item) { return recent && recent.indexOf(item) !== -1; });
+        var fresh = candidates.filter(function (item) {
+          return !recent || (recent.indexOf(item) === -1 && !isNearDuplicate(item, recent));
+        });
+        var usedBefore = candidates.filter(function (item) {
+          return recent && (recent.indexOf(item) !== -1 || isNearDuplicate(item, recent));
+        });
         return fresh.concat(usedBefore).slice(0, 5);
+      }
+
+      function hookStyleOpening(data, seed) {
+        if (!data.hookStyle || data.hookStyle === "自动匹配") return "";
+        var subject = topicSubject(data.topic, 12);
+        var evidence = titleEvidence((data.facts || []).join(" "));
+        var firstFact = factValue(data, storyOrder(data).filter(function (index) {
+          return factValue(data, index);
+        })[0]);
+        var pools = {
+          "先给结果": [
+            "先说结果，" + subject + "没有一句话答案，真正影响判断的是实际变化和限制。",
+            "结论先放前面：" + subject + "有值得留下的部分，也有我不会回避的问题。",
+            "不用看到最后才找答案，" + subject + "这次最明确的变化和劝退点我都放在下面。",
+            "先交底，" + subject + "并不是越复杂越好，适不适合要看真实条件。"
+          ],
+          "痛点代入": [
+            "如果你也总在" + subject + "上反复试、又不知道问题卡在哪，这次的真实过程可以先拿来对照。",
+            "真正让人累的往往不是不会做" + subject + "，而是试了很多次以后，还是不知道哪一步出了问题。",
+            "如果你也是" + data.audience + "，先别急着照搬结论，下面这些细节可能更有用。",
+            subject + "最难受的地方，是看了很多答案，轮到自己时依然不知道怎么选。"
+          ],
+          "反差转折": [
+            "我原本以为" + subject + "最重要的是最后结果，真正做完才发现，前提条件更影响体验。",
+            subject + "看起来最显眼的优点，反而不是我最后留下它的理由。",
+            "一开始我最担心的并没有发生，真正让我改判断的是另一个不起眼的小细节。",
+            "这次" + subject + "和我预想的不太一样：好用的地方很具体，麻烦也同样具体。"
+          ],
+          "故事开场": [
+            "这篇得从“" + titleFragment(firstFact || data.topic, 16) + "”说起，后面的变化也是从这里慢慢出现的。",
+            "事情真正有了变化，是在我把" + subject + "放进真实日常以后。",
+            "我后来回看才发现，" + subject + "的转折点并不大，只是一个当时差点忽略的细节。",
+            "最开始我没有想着要总结" + subject + "，只是把当时发生的过程一项项记了下来。"
+          ],
+          "数字证据": evidence ? [
+            "真正让我重新判断" + subject + "的，是记录里出现了“" + compact(evidence, 10) + "”这个变化。",
+            "先不谈感觉，" + subject + "这次至少有“" + compact(evidence, 10) + "”可以拿来对照。",
+            "我最后敢写这篇，是因为过程里留下了“" + compact(evidence, 10) + "”这组真实信息。",
+            subject + "好不好不能只靠形容词，这次先从“" + compact(evidence, 10) + "”这个数字说起。"
+          ] : []
+        };
+        var pool = pools[data.hookStyle] || [];
+        if (!pool.length) return "";
+        return pickFresh(pool, seed, 1, data);
       }
 
       function goalOpening(data, seed) {
         var openingSubject = topicSubject(data.topic, 12);
+        var controlledOpening = hookStyleOpening(data, seed);
+        if (controlledOpening) return controlledOpening;
         if (data.tone === "清单干货") {
           return pickFresh([
             openingSubject + "不绕弯，先给结果，再把过程和限制放出来。",
@@ -2387,6 +2741,34 @@
             "下面按真实条件整理" + openingSubject + "，事实与个人感受会分开表达。",
             "这份记录聚焦" + openingSubject + "的实际表现、限制和适用范围。"
           ], seed, 5, data);
+        }
+        if (data.tone === "真人碎碎念" || data.tone === "轻松口语") {
+          return pickFresh([
+            "说实话，我本来没打算把" + openingSubject + "写这么细，但真正用下来，有几个小地方一直想补充。",
+            "我前后看了几次自己的记录，发现" + openingSubject + "最值得说的不是一句好不好，而是那些每天都会碰到的细节。",
+            "先不端着讲方法，" + openingSubject + "这件事我也有过拿不准的时候，下面只说真实发生的部分。",
+            "这篇不是标准答案。我把" + openingSubject + "里自己做过、改过和犹豫过的地方都留了下来。",
+            "我原本只想记个结果，写着写着才发现，" + openingSubject + "真正有参考价值的都藏在过程里。",
+            "如果只说一句值不值得，" + openingSubject + "会被讲得太简单，所以我还是把前因后果写完整了。"
+          ], seed, 7, data);
+        }
+        if (data.tone === "克制种草") {
+          return pickFresh([
+            "不把" + openingSubject + "说成谁都需要，它只是刚好解决了我日常里一个很具体的问题。",
+            openingSubject + "有让我愿意继续用的地方，但我不会因为喜欢就把不顺手的细节省掉。",
+            "这不是一篇只夸优点的" + openingSubject + "分享，留下它的理由和劝退点都在。",
+            "如果你的需求和我不同，" + openingSubject + "未必是答案；先看真实条件再决定更合适。",
+            "我没有急着给" + openingSubject + "贴上好用标签，连续放进日常以后才慢慢有了结论。"
+          ], seed, 9, data);
+        }
+        if (data.tone === "情绪共鸣") {
+          return pickFresh([
+            "真正让我想写下" + openingSubject + "的，不是结果有多漂亮，而是我终于不再反复怀疑自己哪一步做错了。",
+            "有些变化当下并不明显，回头看" + openingSubject + "，才发现自己已经悄悄换了一种处理方式。",
+            "我很长时间都以为" + openingSubject + "需要一个标准答案，后来才接受，真实感受本来就会有差别。",
+            openingSubject + "留给我的不只是一条结论，还有那段从犹豫到慢慢想明白的过程。",
+            "这件事真正被我记住的，不是最热闹的那一刻，而是" + openingSubject + "里那个让我改了想法的小细节。"
+          ], seed, 11, data);
         }
         var customWriting = writingProfile(data.category);
         var pools = {
@@ -2430,14 +2812,6 @@
         ]);
         if (customWriting && customWriting.hook) pool.push(customWriting.hook);
         var opening = pickFresh(pool, seed, 7, data);
-        if (data.tone === "轻松口语") {
-          return pickFresh([
-            "先说我的真实感受：" + opening,
-            opening.replace(/。$/, "。这次就不端着说了。"),
-            "我本来没打算写这么细，但" + openingSubject + "里有几个小地方确实值得聊聊。",
-            opening
-          ], seed, 11, data);
-        }
         return opening;
       }
 
@@ -2552,10 +2926,74 @@
         return [];
       }
 
+      function voiceFactLead(data, index, seed) {
+        var voices = {
+          "真人碎碎念": [
+            [
+              "先说下我当时是什么情况。", "怕大家没法对照，我先把自己的前提放这儿。", "后面的感受都和这个条件有关。",
+              "这件事得从我的实际情况说起。", "先别急着看结论，我当时面对的是这个情况。", "我不是空着聊，最开始的条件是这样的。"
+            ],
+            [
+              "我没有弄得特别复杂，实际就是这么做的。", "真正落到手上以后，我只保留了这几步。", "中间没有什么神操作，我做的是这件事。",
+              "说起来很普通，但真正有用的是这个动作。", "我试下来最顺手的过程是这样。", "实际做的时候，我把重点放在了这里。"
+            ],
+            [
+              "变化不是一下子来的，但这个结果最明显。", "真正让我觉得没白试的是这一点。", "前后放一起看，我最有感的是这个变化。",
+              "我后来愿意继续做，主要就是因为看到了这个结果。", "没有夸张到脱胎换骨，但这点确实变了。", "最后能确定的不是感觉，而是这个具体结果。"
+            ],
+            [
+              "当然也不是全都顺手，这里得说实话。", "但有个地方我用着一直不太舒服。", "如果只写好的一面，这篇就不完整了。",
+              "真要劝退的话，最可能卡在这一点。", "我犹豫过要不要继续，主要也是因为这个问题。", "这部分不算小毛病，决定前最好先看。"
+            ]
+          ],
+          "克制种草": [
+            [
+              "先交代我的使用前提，需求不同不用照搬。", "它适不适合我，先看当时的真实需求。", "我是在这个具体场景里开始用它的。",
+              "下面的判断都建立在这个条件上。", "不先说清使用背景，很容易把体验说偏。"
+            ],
+            [
+              "我实际的使用方式很简单。", "真正放进日常后，我主要这样用。", "没有为了写分享增加额外步骤，平时怎么用就怎么记。",
+              "这部分是我反复用到的过程。", "它能不能留下来，关键看这一步顺不顺手。"
+            ],
+            [
+              "让我愿意继续留下它的是这个具体表现。", "优点不需要堆很多，这一点对我最有用。", "连续使用后，最稳定的反馈出现在这里。",
+              "不是第一眼惊艳，但这个变化确实影响了我的选择。", "如果只留一个优点，我会留下这一项。"
+            ],
+            [
+              "喜欢归喜欢，这个问题也不能省略。", "它不是没有劝退点，最明显的是这里。", "换一种需求，这一点可能会直接影响选择。",
+              "我不会因为留下它就把短板轻轻带过。", "决定要不要选之前，最好先确认能不能接受这个限制。"
+            ]
+          ],
+          "情绪共鸣": [
+            [
+              "现在回头看，很多感受都和当时的处境有关。", "那段时间我面对的真实情况是这样。", "故事从这个很具体的状态开始。",
+              "如果不先说当时的背景，后面的变化就少了一层原因。", "我那时真正卡住的是这个情况。"
+            ],
+            [
+              "事情真正往前走，是从这个动作开始的。", "我没有突然想通，只是先做了这件很小的事。", "中间真正改变节奏的是这一段。",
+              "后来我不再只在脑子里反复想，而是这样做了。", "那次转折没有很戏剧化，实际过程是这样。"
+            ],
+            [
+              "我也是过了一段时间，才看见这个变化。", "真正让我松一口气的是这个结果。", "前后差别没有那么轰烈，但我自己能感觉到。",
+              "现在再想起这件事，我最想留下的是这个变化。", "它没有解决全部问题，却让我第一次看见事情在往前走。"
+            ],
+            [
+              "但这并不代表事情从此就变得简单。", "我也有没处理好的地方，这一点一直都在。", "写到这里，还是要把真实的边界放回来。",
+              "同样的方法未必适合所有人，我最在意的限制是这个。", "这段经历里最难承认的，其实是这一点。"
+            ]
+          ]
+        };
+        var sets = voices[data.tone];
+        if (!sets || !sets[index]) return "";
+        return pickFresh(sets[index], seed, 13 + index * 7, data);
+      }
+
       function humanFactSentence(data, index, seed) {
         var fact = factValue(data, index);
         if (!fact) return "";
         if (data.tone === "清单干货") return data.sectionLabels[index] + "｜" + ensureSentence(fact);
+        var voiceLead = voiceFactLead(data, index, seed);
+        if (voiceLead) return voiceLead + ensureSentence(fact);
         if (data.length === "short") {
           var shortLeadSets = [
             ["当时｜", "做法｜", "结果｜", "提醒｜"],
@@ -2792,7 +3230,7 @@
         var offset = (seed + state.generation * 3) % pool.length;
         for (var i = 0; i < pool.length; i += 1) {
           var candidate = pool[(offset + i) % pool.length];
-          if (recent && recent.indexOf(candidate) !== -1) usedBefore.push(candidate);
+          if (recent && (recent.indexOf(candidate) !== -1 || isNearDuplicate(candidate, recent))) usedBefore.push(candidate);
           else fresh.push(candidate);
         }
         var ordered = fresh.concat(usedBefore);
@@ -3078,12 +3516,16 @@
         var ordered = [];
         var offset = (seed + state.generation) % pool.length;
         for (var i = 0; i < pool.length; i += 1) {
-          ordered.push(compact(pool[(offset + i) % pool.length], 20));
+          ordered.push(compactTitle(pool[(offset + i) % pool.length], 20));
         }
         var candidates = uniqueTextLines(ordered);
         var recent = recentOutputText(data);
-        var fresh = candidates.filter(function (item) { return !recent || recent.indexOf(item) === -1; });
-        var usedBefore = candidates.filter(function (item) { return recent && recent.indexOf(item) !== -1; });
+        var fresh = candidates.filter(function (item) {
+          return !recent || (recent.indexOf(item) === -1 && !isNearDuplicate(item, recent));
+        });
+        var usedBefore = candidates.filter(function (item) {
+          return recent && (recent.indexOf(item) !== -1 || isNearDuplicate(item, recent));
+        });
         return fresh.concat(usedBefore).slice(0, 5);
       }
 
@@ -3109,7 +3551,7 @@
         var offset = (seed + state.generation * 2) % pool.length;
         for (var i = 0; i < pool.length; i += 1) {
           var candidate = pool[(offset + i) % pool.length];
-          if (recent && recent.indexOf(candidate) !== -1) usedBefore.push(candidate);
+          if (recent && (recent.indexOf(candidate) !== -1 || isNearDuplicate(candidate, recent))) usedBefore.push(candidate);
           else fresh.push(candidate);
         }
         var ordered = fresh.concat(usedBefore);
@@ -3233,7 +3675,7 @@
           "商品介绍": ["商品信息", "购买参考"]
         }[data.goal] || [];
         var seen = {};
-        var tags = [topicTag].concat(goalTags, data.tags).map(function (tag) {
+        var tags = [data.searchWord, topicTag].concat(goalTags, data.tags).map(function (tag) {
           return cleanSpaces(tag).replace(/[^\u4e00-\u9fa5A-Za-z0-9]/g, "");
         }).filter(function (tag) {
           var key = outputKey(tag);
@@ -3464,12 +3906,145 @@
         return uniqueTextBlocks([generated.body, generated.extras].filter(Boolean).join("\n\n")).join("\n\n");
       }
 
+      function expressionText(input, data) {
+        var text = String(input || "");
+        [data.topic].concat(data.facts || []).filter(Boolean).forEach(function (value) {
+          text = text.split(cleanSpaces(value)).join("");
+        });
+        return text;
+      }
+
+      function freshnessAgainstHistory(generated, data, ignoreId) {
+        try {
+          var source = expressionText(generated.body, data);
+          var maxSimilarity = getHistory().filter(function (item) {
+            return item && item.mode === "rednote" && item.generated && item.id !== ignoreId;
+          }).slice(0, 9).reduce(function (max, item) {
+            var itemData = item.data || { topic: "", facts: [] };
+            var comparison = expressionText(item.generated.body || "", itemData);
+            return Math.max(max, contentSimilarity(source, comparison));
+          }, 0);
+          return Math.max(0, Math.min(100, Math.round((1 - maxSimilarity) * 100)));
+        } catch (error) {
+          return 100;
+        }
+      }
+
+      function qualityReport(generated, data, ignoreId) {
+        var facts = (data.facts || []).filter(function (fact) { return cleanSpaces(fact).length >= 4; });
+        var title = generated.primaryTitle || uniqueTextBlocks(generated.body)[0] || "";
+        var paragraphs = uniqueTextBlocks(generated.body).length;
+        var bodyLength = cleanSpaces(generated.body).length;
+        var freshness = freshnessAgainstHistory(generated, data, ignoreId);
+        var evidenceCount = (facts.join(" ").match(/\d+(?:\.\d+)?/g) || []).length;
+        var score = 52;
+        score += Math.min(16, facts.length * 4);
+        score += Math.min(4, evidenceCount * 2);
+        score += data.points && data.points.length ? 2 : 0;
+        score += data.details ? 2 : 0;
+        score += data.cautions ? 2 : 0;
+        score += title.length > 7 && title.length <= 20 ? 5 : 2;
+        score += paragraphs >= 6 ? 4 : paragraphs >= 4 ? 2 : 0;
+        score += freshness >= 78 ? 6 : freshness >= 60 ? 4 : 1;
+        score += generatedQualityIssues(generated, data).length ? 0 : 4;
+        score = Math.max(0, Math.min(98, score));
+        return {
+          score: score,
+          facts: facts.length + "/4 已写入",
+          freshness: freshness + "%",
+          title: title.length + "字",
+          length: bodyLength + "字",
+          summary: score >= 92 ? "素材具体、表达自然，可以进入发布前核对" :
+            score >= 86 ? "已经可发布，再核对事实与商品信息" :
+              "结构已完整，补一条数字或个人细节会更有说服力"
+        };
+      }
+
+      function renderQuality(report) {
+        if (state.mode !== "rednote") return;
+        report = report || {};
+        $("#qualityScore").textContent = report.score == null ? "--" : report.score;
+        $("#qualitySummary").textContent = report.summary || "生成后检查素材、标题、重复度和篇幅";
+        $("#qualityFacts").textContent = report.facts || "--";
+        $("#qualityFreshness").textContent = report.freshness || "--";
+        $("#qualityTitle").textContent = report.title || "--";
+        $("#qualityLength").textContent = report.length || "--";
+      }
+
+      function resetQuality() {
+        renderQuality(null);
+      }
+
       function renderGenerated(generated) {
         ["cover", "titles", "hooks", "extras", "body", "comment"].forEach(function (key) {
           var node = $("#" + key);
           node.textContent = generated[key] || "";
           node.classList.remove("placeholder");
         });
+      }
+
+      function replaceBodyPart(body, part, replacementBody) {
+        var blocks = uniqueTextBlocks(body);
+        var replacement = uniqueTextBlocks(replacementBody);
+        if (!blocks.length || !replacement.length) return replacementBody;
+        if (part === "title") {
+          blocks[0] = replacement[0];
+        } else if (part === "opening") {
+          if (blocks.length < 2 || replacement.length < 2) return replacementBody;
+          blocks[1] = replacement[1];
+        } else if (part === "ending") {
+          blocks[blocks.length - 1] = replacement[replacement.length - 1];
+        }
+        return uniqueTextBlocks(blocks).join("\n\n");
+      }
+
+      function rewritePart(part) {
+        if (!state.current || state.mode !== "rednote") {
+          showToast("请先生成小红书文案");
+          return;
+        }
+        var labelsByPart = { title: "标题", opening: "开头", ending: "结尾" };
+        var data = state.current.data;
+        var current = state.current.generated;
+        var previousQuality = state.current.quality || qualityReport(current, data, state.current.id);
+        state.generation += 1;
+        var next = dedupeGenerated(applyPolish(generateRednote(data), data));
+        var updated = Object.assign({}, current);
+        updated.body = replaceBodyPart(current.body, part, next.body);
+        if (part === "title") {
+          updated.primaryTitle = next.primaryTitle;
+          updated.titles = next.titles;
+          updated.cover = next.cover;
+        } else if (part === "opening") {
+          updated.hooks = next.hooks;
+        } else if (part === "ending") {
+          updated.comment = next.comment;
+        }
+        updated = dedupeGenerated(updated);
+        updated.all = buildAll(updated);
+
+        var title = updated.primaryTitle || uniqueTextBlocks(updated.body)[0] || "";
+        var partialQuality = Object.assign({}, previousQuality, {
+          title: title.length + "字",
+          length: cleanSpaces(updated.body).length + "字",
+          summary: "已单独重写" + labelsByPart[part] + "，真实素材和其他段落保持不变"
+        });
+        state.current = {
+          id: Date.now(),
+          mode: "rednote",
+          category: data.category,
+          data: data,
+          form: serializeForm(),
+          generated: updated,
+          quality: partialQuality,
+          createdAt: new Date().toISOString()
+        };
+        renderGenerated(updated);
+        renderQuality(partialQuality);
+        $("#resultMeta").textContent = data.topic + " · 已换" + labelsByPart[part] + " · 其他内容未改";
+        saveHistory(state.current);
+        renderHistory();
+        showToast(labelsByPart[part] + "已换一版");
       }
 
       function generate() {
@@ -3508,6 +4083,7 @@
           }
         }
         generated.all = buildAll(generated);
+        var report = state.mode === "rednote" ? qualityReport(generated, data) : null;
 
         state.current = {
           id: Date.now(),
@@ -3516,10 +4092,12 @@
           data: data,
           form: serializeForm(),
           generated: generated,
+          quality: report,
           createdAt: new Date().toISOString()
         };
 
         renderGenerated(generated);
+        if (report) renderQuality(report);
         $("#resultMeta").textContent = data.topic + " · " + (state.mode === "rednote" ? data.category + " · 已使用" + data.facts.filter(Boolean).length + "项真实素材" : data.condition) + " · 刚刚生成";
         saveHistory(state.current);
         renderHistory();
@@ -3549,6 +4127,7 @@
           node.classList.add("placeholder");
         });
         $("#resultMeta").textContent = "等待输入素材";
+        resetQuality();
         state.current = null;
       }
 
@@ -3561,6 +4140,10 @@
         });
         $$("[data-mode-only]").forEach(function (node) {
           node.hidden = node.dataset.modeOnly !== state.mode;
+        });
+        $("#qualityPanel").hidden = state.mode !== "rednote";
+        $$("[data-rewrite]").forEach(function (button) {
+          button.hidden = state.mode !== "rednote";
         });
         $("#pointsLabelText").textContent = state.mode === "xianyu" ? "商品卖点" : "补充要点";
         updateCategoryFields();
@@ -3622,24 +4205,137 @@
         $("#factsError").classList.remove("show");
       }
 
-      function fillSample() {
+      var samplePresets = {
+        ai: {
+          category: "AI工具",
+          topic: "我用AI整理口播稿，40分钟缩到15分钟",
+          audience: "每天要写内容、但总卡在整理素材的人",
+          goal: "经验分享",
+          facts: [
+            "每天要整理3篇口播稿，原来一篇从逐字稿到初稿大约要40分钟",
+            "先导入逐字稿提炼3个观点，再由我核对事实、调整顺序和标题",
+            "现在一篇初稿大约15分钟完成，一天能稳定省下1个多小时",
+            "长文本偶尔会漏信息，数据、案例和最后表达仍然要人工检查"
+          ],
+          points: "先给反例让它知道不要什么\n每次只处理一个任务\n保留最后人工核对",
+          details: "真正轻松的不是少打几个字，而是面对一堆零散素材时没那么难开始了",
+          cautions: "不适合直接生成后原样发布，涉及事实、数据和个人经历必须自己核对",
+          tone: "真人碎碎念",
+          hookStyle: "数字证据",
+          length: "standard",
+          cta: "评论交流",
+          price: "",
+          searchWord: "AI写作"
+        },
+        review: {
+          category: "好物测评",
+          topic: "129元通勤粉底液用了20天",
+          audience: "想找自然妆效、又担心下午脱妆的人",
+          goal: "使用测评",
+          facts: [
+            "为了通勤补妆入手，活动价129元，我最在意轻薄和持妆",
+            "连续用了20天，工作日早上和出差时都会用，薄涂一层再局部叠加",
+            "上脸轻薄，下午鼻翼会略出油，但没有明显斑驳，近看仍然自然",
+            "色号偏少，干皮妆前保湿不够时会卡纹，更适合混合皮和自然妆效"
+          ],
+          points: "泵头一次半够全脸\n纸巾按压后掉色不明显\n卸妆需要正常乳化",
+          details: "它不是第一眼很惊艳的粉底，但忙一天以后照镜子，妆面没有让我后悔",
+          cautions: "肤质和妆前产品会影响结果，敏感肌先做局部测试",
+          tone: "克制种草",
+          hookStyle: "先给结果",
+          length: "standard",
+          cta: "评论交流",
+          price: "129",
+          searchWord: "通勤粉底液"
+        },
+        outfit: {
+          category: "穿搭",
+          topic: "158小个子夏日通勤穿搭",
+          audience: "想显比例、又要坐办公室一整天的小个子女生",
+          goal: "经验分享",
+          facts: [
+            "158cm、52kg，肩宽，腰腹有肉，平时最怕上短下短显局促",
+            "18到24度通勤加周末逛街，办公室空调偏冷，外面走路会出汗",
+            "衬衫M码129元，半裙S码89元，鞋跟3cm，包能放下折叠伞",
+            "正面能拉长腰线，坐下腰部略紧，肩线位置需要把袖口挽一折才利落"
+          ],
+          points: "衬衫前摆只塞一小角\n裙长到脚踝上方\n鞋包不同时抢颜色",
+          details: "这套拍照不是最抢眼，但从早高峰坐到下班都没有一直想整理衣服",
+          cautions: "尺寸只对应我的身材和这次面料批次，购买前仍要看实测数据",
+          tone: "真人碎碎念",
+          hookStyle: "反差转折",
+          length: "standard",
+          cta: "收藏备用",
+          price: "",
+          searchWord: "小个子通勤穿搭"
+        },
+        emotion: {
+          category: "情感成长",
+          topic: "异地半年后，我们不再猜对方为什么不回消息",
+          audience: "在关系里容易反复猜测、又不知道怎么开口的人",
+          goal: "经验分享",
+          facts: [
+            "异地半年，最近因为回复消息的频率反复争执，我常把沉默理解成不在意",
+            "一次临时取消见面后，我们第一次把各自真正期待的联系频率说开",
+            "从反复猜测变成直接确认，情绪消耗少了一些，也不再靠冷处理试探",
+            "同样的方法不一定适合每段关系，无法尊重边界和持续伤害不能只靠沟通解决"
+          ],
+          points: "先说感受而不是给对方定性\n确认具体期待\n允许对方给出不同答案",
+          details: "我后来才发现，自己需要的不是随时被回复，而是临时变化时能收到一句明确说明",
+          cautions: "这只是个人经历，不替任何关系下结论；涉及控制、威胁或伤害时应优先保护自己",
+          tone: "情绪共鸣",
+          hookStyle: "故事开场",
+          length: "detailed",
+          cta: "评论交流",
+          price: "",
+          searchWord: "异地恋沟通"
+        },
+        shop: {
+          category: "探店",
+          topic: "杭州湖滨这家川菜，人均86到底值不值",
+          audience: "想在湖滨商圈找一顿不只适合拍照的正餐的人",
+          goal: "使用测评",
+          facts: [
+            "杭州湖滨商圈，周六12点20分到店，两个人，店在商场4楼",
+            "点了招牌鱼、辣子鸡和一份青菜，人均86元，米饭可以免费续",
+            "招牌鱼偏辣但很下饭，鸡肉不是全骨头，出餐大约20分钟，服务响应快",
+            "等位35分钟，附近停车12元一小时，怕辣的人点单前要主动确认辣度"
+          ],
+          points: "招牌鱼适合两个人分\n青菜份量正常\n工作日午市可能更省时间",
+          details: "环境不是我去过最精致的，但吃完以后真正记住的是鱼的香味，不是门口那面打卡墙",
+          cautions: "口味和等位会随时间变化，这里只对应本次到店体验",
+          tone: "真人碎碎念",
+          hookStyle: "先给结果",
+          length: "standard",
+          cta: "收藏备用",
+          price: "86",
+          searchWord: "杭州探店"
+        }
+      };
+
+      function fillSample(sampleKey) {
         if (state.mode === "rednote") {
-          setCategory("美妆护肤");
-          $("#topic").value = "夏日显白美甲灵感";
-          $("#audience").value = "想做通勤、约会都耐看的夏日美甲的人";
-          $("#goal").value = "灵感合集";
+          var sampleKeys = Object.keys(samplePresets);
+          var key = samplePresets[sampleKey] ? sampleKey : sampleKeys[state.sampleIndex % sampleKeys.length];
+          state.sampleIndex += 1;
+          var sample = samplePresets[key];
+          setCategory(sample.category);
+          $("#topic").value = sample.topic;
+          $("#audience").value = sample.audience;
+          $("#goal").value = sample.goal;
           updateCategoryFields();
-          $("#fact1").value = "牛乳雾面白、海盐冰蓝、桃粉微珠光、月光贝母、碎钻猫眼、莓果酒红、奶油小花、粉紫晕染、水果涂鸦、银色镜面、苔绿撞色、极细几何";
-          $("#fact2").value = "清透氛围感、高级气质款、甜美元素、个性酷飒风";
-          $("#fact3").value = "夏日通勤、约会出游、日常拍照、想显白又不张扬的时候";
-          $("#fact4").value = "轻盈、有画面，不要厚重堆钻和影楼感";
-          $("#points").value = "";
-          $("#details").value = "";
-          $("#cautions").value = "";
-          $("#tone").value = "真实自然";
-          $("#length").value = "standard";
-          $("#cta").value = "评论交流";
-          $("#price").value = "";
+          sample.facts.forEach(function (fact, index) {
+            $("#fact" + (index + 1)).value = fact;
+          });
+          $("#points").value = sample.points;
+          $("#details").value = sample.details;
+          $("#cautions").value = sample.cautions;
+          $("#tone").value = sample.tone;
+          $("#hookStyle").value = sample.hookStyle;
+          $("#length").value = sample.length;
+          $("#cta").value = sample.cta;
+          $("#price").value = sample.price;
+          $("#searchWord").value = sample.searchWord;
         } else {
           setCategory("闲置");
           $("#topic").value = "Sony WH-1000XM5降噪耳机";
@@ -3659,7 +4355,7 @@
       function serializeForm() {
         var ids = [
           "topic", "audience", "goal", "fact1", "fact2", "fact3", "fact4", "points", "details", "cautions", "tone",
-          "length", "cta", "price", "condition", "sellPrice", "city", "trade"
+          "hookStyle", "length", "cta", "price", "searchWord", "condition", "sellPrice", "city", "trade"
         ];
         var form = {
           mode: state.mode,
@@ -3680,7 +4376,9 @@
         Object.keys(form).forEach(function (key) {
           var node = $("#" + key);
           if (!node || key === "naturalMode" || key === "safeMode") return;
-          node.value = form[key] == null ? "" : form[key];
+          var restoredValue = form[key] == null ? "" : form[key];
+          if (key === "tone" && restoredValue === "轻松口语") restoredValue = "真人碎碎念";
+          node.value = restoredValue;
         });
         updateCategoryFields();
         $("#naturalMode").checked = form.naturalMode !== false;
@@ -3779,6 +4477,7 @@
             restoreForm(item.form);
             state.current = item;
             renderGenerated(item.generated);
+            renderQuality(item.quality || qualityReport(item.generated, item.data || collectData(), item.id));
             $("#resultMeta").textContent = (item.data.topic || "文案") + " · 已恢复";
             window.scrollTo({ top: 0, behavior: "smooth" });
             showToast("历史文案已恢复");
@@ -3994,6 +4693,18 @@
 
       $$("[data-fill-sample]").forEach(function (button) {
         button.addEventListener("click", fillSample);
+      });
+
+      $$("[data-demo]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          fillSample(button.dataset.demo);
+        });
+      });
+
+      $$("[data-rewrite]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          rewritePart(button.dataset.rewrite);
+        });
       });
 
       $$("[data-clear]").forEach(function (button) {
